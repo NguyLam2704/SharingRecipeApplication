@@ -7,4 +7,5 @@
     <color name="green1">#ADD3AA</color>
     <color name="green2">#59AB52</color>
     <color name="colorPrimary">#FFFFFFFF</color>
+    <color name="text_color">#15284C</color>
 </resources>
