@@ -33,15 +33,6 @@
                 android:textSize="35sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/btn_search_background"
-                android:src="@drawable/baseline_search"
-                android:visibility="visible" />
-
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

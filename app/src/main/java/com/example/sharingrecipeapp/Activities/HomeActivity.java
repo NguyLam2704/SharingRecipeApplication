@@ -38,7 +38,7 @@ public class HomeActivity extends AppCompatActivity {
                   replaceFragment(new PlanFragment());
               } else if (item.getItemId() == R.id.mall_menu) {
                   replaceFragment(new GroceriesFragment());
-              } else if (item.getItemId() == R.id.more_menu) {
+              } else if (item.getItemId() == R.id.user_menu) {
                   replaceFragment(new MoreFragment());
               }
                 return true;
