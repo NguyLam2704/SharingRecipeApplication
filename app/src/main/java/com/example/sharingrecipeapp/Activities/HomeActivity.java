@@ -12,8 +12,8 @@ import android.view.MenuItem;
 import com.example.sharingrecipeapp.Fragments.ExploreFragment;
 import com.example.sharingrecipeapp.Fragments.GroceriesFragment;
 import com.example.sharingrecipeapp.Fragments.HomeFragment;
-import com.example.sharingrecipeapp.Fragments.MoreFragment;
 import com.example.sharingrecipeapp.Fragments.PlanFragment;
+import com.example.sharingrecipeapp.Fragments.UserFragment;
 import com.example.sharingrecipeapp.R;
 import com.example.sharingrecipeapp.databinding.ActivityHomeBinding;
 import com.google.android.material.navigation.NavigationBarView;
@@ -38,8 +38,8 @@ public class HomeActivity extends AppCompatActivity {
                   replaceFragment(new PlanFragment());
               } else if (item.getItemId() == R.id.mall_menu) {
                   replaceFragment(new GroceriesFragment());
-              } else if (item.getItemId() == R.id.more_menu) {
-                  replaceFragment(new MoreFragment());
+              } else if (item.getItemId() == R.id.user_menu) {
+                  replaceFragment(new UserFragment());
               }
                 return true;
             }
