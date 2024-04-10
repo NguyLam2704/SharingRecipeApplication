@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tittle_Createuser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:lineHeight="28sp"
+        android:lineSpacingExtra="1sp"
+        android:text="Create new account"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/returns"
+        android:layout_width="48dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="52dp"
+        android:background="@color/white"
+        android:src="@drawable/arrow_back"
+        app:layout_constraintBottom_toBottomOf="@+id/tittle_Createuser"
+        app:layout_constraintEnd_toStartOf="@+id/tittle_Createuser"
+        app:layout_constraintHorizontal_bias="0.941"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tittle_Createuser"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/inputusername"
+        android:layout_width="377dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edittext_bound"
+        android:drawablePadding="8dp"
+        android:hint="Type username"
+        android:inputType="text"
+        android:textColor="@color/black"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:padding="12dp"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center_vertical"
+        android:lineHeight="26sp"
+        android:lineSpacingExtra="7sp"
+        android:text="Username"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tittle_Createuser" />
+
+    <TextView
+        android:id="@+id/tittle_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="324dp"
+        android:gravity="center_vertical"
+        android:lineHeight="26sp"
+        android:lineSpacingExtra="7sp"
+        android:text="Password"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputusername"
+        app:layout_constraintTop_toBottomOf="@+id/inputusername" />
+
+    <EditText
+        android:id="@+id/inputpassword"
+        android:layout_width="377dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edittext_bound"
+        android:drawablePadding="8dp"
+        android:hint="Type password"
+        android:textColor="@color/black"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:textCursorDrawable="@drawable/color_cursor"
+        app:layout_constraintStart_toStartOf="@+id/tittle_password"
+        app:layout_constraintTop_toBottomOf="@+id/tittle_password" />
+
+    <Button
+        android:id="@+id/continued_btn"
+        android:layout_width="324dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="44dp"
+        android:backgroundTint="@color/green"
+        android:gravity="center"
+        android:text="Continue"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:circularflow_radiusInDP="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/inputpassword"
+        app:layout_constraintStart_toStartOf="@+id/inputpassword"
+        app:layout_constraintTop_toBottomOf="@+id/inputpassword" />
+
+    <include layout="@layout/privacy"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

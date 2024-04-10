@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SharingRecipeApp</string>
     <string name="api_key">1ce348cb24884f4490ec4f83e3732cd3</string>
+    <string name="hello_blank_fragment">blank_fragment</string>
 </resources>
