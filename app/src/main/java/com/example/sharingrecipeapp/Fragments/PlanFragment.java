@@ -55,7 +55,7 @@ public class PlanFragment extends Fragment {
 
     private void lightCurrentDate(View view) {
         Calendar calendar = Calendar.getInstance();
-        int color = requireContext().getColor(R.color.colorPrimary);
+        int color = requireContext().getColor(R.color.color_primary);
         TextView date;
         switch (calendar.get(Calendar.DAY_OF_WEEK)){
             case Calendar.MONDAY:
@@ -106,7 +106,7 @@ public class PlanFragment extends Fragment {
 
         String date = dateFormat.format(calendar.getTime());
 
-        calendar.add(Calendar.DATE,7);
+        calendar.add(Calendar.DATE,6);
         String nextWeek = dateFormat.format(calendar.getTime());
 
         datetime.setText(date +" - " + nextWeek );
