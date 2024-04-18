@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/grey_background">
 
     <TextView
         android:id="@+id/tittle_Login"
@@ -27,7 +27,7 @@
         android:layout_width="48dp"
         android:layout_height="26dp"
         android:layout_marginEnd="52dp"
-        android:background="@color/white"
+        android:background="@drawable/oval_btn_background"
         android:src="@drawable/arrow_back"
         app:layout_constraintBottom_toBottomOf="@+id/tittle_Login"
         app:layout_constraintEnd_toStartOf="@+id/tittle_Login"
@@ -107,7 +107,7 @@
         android:layout_width="324dp"
         android:layout_height="60dp"
         android:layout_marginTop="44dp"
-        android:backgroundTint="@color/green"
+        android:backgroundTint="@color/color_primary"
         android:gravity="center_vertical|center_horizontal"
         android:text="Log in"
         android:textColor="@color/white"

@@ -16,12 +16,6 @@
             android:name=".Activities.FoodDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".PlanActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activities.PlanActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activities.WelcomeActivity"
             android:exported="true">
             <intent-filter>
