@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="Setting"
+        android:icon="@drawable/baseline_settings"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/update"
+                android:title="Chỉnh sửa hồ sơ"
+                app:showAsAction="never"
+                />
+            <item
+                android:id="@+id/display"
+                android:title="Chế độ màn hình"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/language"
+                android:title="Ngôn ngữ"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/logout"
+                android:title="Đăng xuất"
+                app:showAsAction="never"/>
+        </menu>
+
+    </item>
+
+
+</menu>
