@@ -1,36 +1,30 @@
 package com.example.sharingrecipeapp.Fragments;
 
-import static java.time.LocalDate.now;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CalendarView;
-import android.widget.TextView;
-
 import com.example.sharingrecipeapp.R;
-
+import com.example.sharingrecipeapp.databinding.FragmentPlanBinding;
 
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
 
 
 public class PlanFragment extends Fragment {
+    private  FragmentPlanBinding binding;
+    private Calendar calendar;
 
     public PlanFragment() {
         // Required empty public constructor
@@ -48,16 +42,69 @@ public class PlanFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setDateTime(view);
-        lightCurrentDate(view);
 
     }
 
+
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+
+    private ImageView prev;
+    private ImageView next;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        binding = FragmentPlanBinding.inflate(inflater,container,false);
+
+        InitUI();
+
+        prev = binding.prevWeek;
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendar.add(Calendar.DATE,-7);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setDateTime(binding.DateTime);
+                }
+            }
+        });
+
+        next = binding.nextWeek;
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendar.add(Calendar.DATE,7);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setDateTime(binding.DateTime);
+                }
+            }
+        });
+
+        return binding.getRoot();
+    }
+
+    private void InitUI() {
+        calendar = Calendar.getInstance();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setDateTime(binding.getRoot());
+        }
+        lightCurrentDate(binding.getRoot());
+    }
+
+
     private void lightCurrentDate(View view) {
-        Calendar calendar = Calendar.getInstance();
+        Calendar cur = calendar;
+        cur.add(Calendar.HOUR,-24);
         int color = requireContext().getColor(R.color.color_primary);
         TextView date;
-        switch (calendar.get(Calendar.DAY_OF_WEEK)){
+        switch (cur.get(Calendar.DAY_OF_WEEK)){
             case Calendar.MONDAY:
                 date = view.findViewById(R.id.Thu2);
                 date.setTextColor(color);
@@ -83,7 +130,7 @@ public class PlanFragment extends Fragment {
                 date.setTextColor(color);
                 break;
             case Calendar.SUNDAY:
-                 date = view.findViewById(R.id.ChuNhat);
+                date = view.findViewById(R.id.ChuNhat);
                 date.setTextColor(color);
                 break;
             default:
@@ -93,8 +140,6 @@ public class PlanFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setDateTime(View view) {
-
-        Calendar calendar = Calendar.getInstance();
 
         TextView datetime = view.findViewById(R.id.DateTime);
 
@@ -110,21 +155,15 @@ public class PlanFragment extends Fragment {
         String nextWeek = dateFormat.format(calendar.getTime());
 
         datetime.setText(date +" - " + nextWeek );
-
     }
 
-
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void setCalendar(Calendar cal){
+        this.calendar = cal;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_plan, container, false);
+    public Calendar getCalendar(){
+        return calendar;
     }
+
 }
+
