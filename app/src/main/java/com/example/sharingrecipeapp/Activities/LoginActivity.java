@@ -20,7 +20,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         if (v.getId() == R.id.Login_btn)
         {
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            startActivity(new Intent(LoginActivity.this, BottomNavigationCustomActivity.class));
         }
     }
 

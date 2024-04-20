@@ -19,7 +19,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FoodDetailActivity.this, HomeActivity.class);
+                Intent intent = new Intent(FoodDetailActivity.this, BottomNavigationCustomActivity.class);
                 startActivity(intent);
             }
         });
