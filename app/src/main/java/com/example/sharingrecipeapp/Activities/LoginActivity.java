@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(task.isSuccessful())
                         {
                             Login_progressbar.setVisibility(View.GONE);
-                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                            startActivity(new Intent(LoginActivity.this, BottomNavigationCustomActivity.class));
                         }
                         else {
                             Login_progressbar.setVisibility(View.GONE);

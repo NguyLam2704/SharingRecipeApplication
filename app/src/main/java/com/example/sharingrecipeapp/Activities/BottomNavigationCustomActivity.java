@@ -18,7 +18,7 @@ import com.example.sharingrecipeapp.R;
 import com.example.sharingrecipeapp.databinding.ActivityHomeBinding;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class HomeActivity extends AppCompatActivity {
+public class BottomNavigationCustomActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
     @Override
