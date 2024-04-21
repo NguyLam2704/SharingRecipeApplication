@@ -1,2 +1,1 @@
 # SharingRecipeApplication
-ahcjy
