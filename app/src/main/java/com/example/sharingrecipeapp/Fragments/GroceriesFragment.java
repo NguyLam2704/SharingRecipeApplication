@@ -1,14 +1,16 @@
 package com.example.sharingrecipeapp.Fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import com.example.sharingrecipeapp.databinding.FragmentGroceriesBinding;
+import androidx.fragment.app.Fragment;
 
 import com.example.sharingrecipeapp.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +50,10 @@ public class GroceriesFragment extends Fragment {
         return fragment;
     }
 
+    ListView ingListView;
+    ArrayList<ListIngredient> arrayListIng;
+    ListInAdapter adapter;
+    private FragmentGroceriesBinding binding;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +61,35 @@ public class GroceriesFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+        AnhXa();
+        adapter = new ListInAdapter(binding.getRoot().getContext(), R.layout.list_ingredients, arrayListIng);
+        ingListView.setAdapter(adapter);
+
+        // Xac nhan xoa het tat ca cac item
+
+
+
     }
+
+    private void AnhXa(){
+        ingListView = (ListView) binding.getRoot().findViewById(R.id.list_groceries);
+        arrayListIng =new ArrayList<>();
+        arrayListIng.add(new ListIngredient("avocado","4", R.drawable.avocado, false));
+        arrayListIng.add(new ListIngredient("baguette","2", R.drawable.baguette, false));
+        arrayListIng.add(new ListIngredient("broccoli", "5", R.drawable.broccoli, false));
+        arrayListIng.add(new ListIngredient("cabbage","3", R.drawable.cabbage, false));
+        arrayListIng.add(new ListIngredient("carrot","2", R.drawable.carrot, false));
+        arrayListIng.add(new ListIngredient("cheese","4", R.drawable.cheese, false));
+        arrayListIng.add(new ListIngredient("corn","3", R.drawable.corn, false));
+        arrayListIng.add(new ListIngredient("crab","4", R.drawable.crab,false));
+        arrayListIng.add(new ListIngredient("eggs","4", R.drawable.eggs, false));
+        arrayListIng.add(new ListIngredient("fish", "2", R.drawable.fish,false));
+        arrayListIng.add(new ListIngredient("milk", "3", R.drawable.milk, false));
+
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,4 +97,6 @@ public class GroceriesFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_groceries, container, false);
     }
+
+
 }
