@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/WelcomeView"
     android:layout_alignParentTop="true"
-    android:background="@drawable/salmon">
+    android:background="@drawable/background">
 
     <TextView
         android:id="@+id/WelcomeText"
@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.819" />
+        app:layout_constraintVertical_bias="0.789" />
 
     <TextView
         android:id="@+id/textView"
@@ -46,7 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/white"
-        android:text="Đăng nhập"
+        android:text="Đăng kí"
+        android:textSize="18sp"
         android:textColor="@color/color_primary"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintHorizontal_bias="0.511"
@@ -60,7 +61,7 @@
         android:gravity="top"
         android:lineHeight="26sp"
         android:lineSpacingExtra="7sp"
-        android:text="Already have an account?"
+        android:text="Bạn đã có tài khoản?"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +75,7 @@
         android:layout_height="wrap_content"
         android:gravity="top"
         android:lineSpacingExtra="7sp"
-        android:text="Đăng kí"
+        android:text="Đăng nhập"
         android:textColor="@color/color_primary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/CreateUser"
