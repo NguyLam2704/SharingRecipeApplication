@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/returns"
+        android:id="@+id/signup_returns"
         android:layout_width="48dp"
         android:layout_height="26dp"
         android:layout_marginEnd="52dp"
@@ -37,85 +37,138 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:id="@+id/inputusername"
+        android:id="@+id/signup_edt_email"
         android:layout_width="377dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/edittext_bound"
         android:drawablePadding="8dp"
-        android:hint="Type username"
+        android:hint="Nhập email"
         android:inputType="text"
+        android:padding="12dp"
         android:textColor="@color/black"
         android:textCursorDrawable="@drawable/color_cursor"
+        app:layout_constraintEnd_toEndOf="@+id/tittle_Createuser"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/tittle_Createuser"
+        app:layout_constraintTop_toBottomOf="@+id/textemail" />
+
+    <TextView
+        android:id="@+id/textemail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="44dp"
+        android:gravity="center_vertical"
+        android:lineHeight="26sp"
+        android:lineSpacingExtra="7sp"
+        android:text="Email"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.002"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tittle_Createuser" />
+
+    <EditText
+        android:id="@+id/signup_edt_username"
+        android:layout_width="377dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_bound"
+        android:drawablePadding="8dp"
+        android:hint="Nhập tên người dùng"
+        android:inputType="text"
         android:padding="12dp"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
+        android:textColor="@color/black"
+        android:textCursorDrawable="@drawable/color_cursor"
+        app:layout_constraintEnd_toEndOf="@+id/signup_edt_email"
+        app:layout_constraintStart_toStartOf="@+id/signup_edt_email"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="24dp"
         android:gravity="center_vertical"
         android:lineHeight="26sp"
         android:lineSpacingExtra="7sp"
-        android:text="Username"
+        android:text="Tên đăng nhập"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tittle_Createuser" />
+        app:layout_constraintStart_toStartOf="@+id/signup_edt_email"
+        app:layout_constraintTop_toBottomOf="@+id/signup_edt_email" />
 
     <TextView
         android:id="@+id/tittle_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="324dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="328dp"
         android:gravity="center_vertical"
         android:lineHeight="26sp"
         android:lineSpacingExtra="7sp"
-        android:text="Password"
+        android:text="Mật khẩu"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/inputusername"
-        app:layout_constraintTop_toBottomOf="@+id/inputusername" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/signup_edt_username"
+        app:layout_constraintTop_toBottomOf="@+id/signup_edt_username" />
 
     <EditText
-        android:id="@+id/inputpassword"
+        android:id="@+id/signup_edt_password"
         android:layout_width="377dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/edittext_bound"
         android:drawablePadding="8dp"
-        android:hint="Type password"
-        android:textColor="@color/black"
+        android:hint="Nhập mật khẩu"
         android:inputType="textPassword"
         android:padding="12dp"
+        android:textColor="@color/black"
         android:textCursorDrawable="@drawable/color_cursor"
-        app:layout_constraintStart_toStartOf="@+id/tittle_password"
+        app:layout_constraintEnd_toEndOf="@+id/signup_edt_username"
+        app:layout_constraintStart_toStartOf="@+id/signup_edt_username"
         app:layout_constraintTop_toBottomOf="@+id/tittle_password" />
 
     <Button
-        android:id="@+id/continued_btn"
+        android:id="@+id/signup_btn"
         android:layout_width="324dp"
         android:layout_height="60dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="28dp"
         android:backgroundTint="@color/color_primary"
         android:gravity="center"
-        android:text="Continue"
+        android:text="Đăng kí"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:circularflow_radiusInDP="30dp"
-        app:layout_constraintEnd_toEndOf="@+id/inputpassword"
-        app:layout_constraintStart_toStartOf="@+id/inputpassword"
-        app:layout_constraintTop_toBottomOf="@+id/inputpassword" />
+        app:layout_constraintEnd_toEndOf="@+id/signup_edt_password"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="@+id/signup_edt_password"
+        app:layout_constraintTop_toBottomOf="@+id/signup_edt_password" />
+
+    <!--        android:visibility="gone"/>-->
+
+    <ProgressBar
+        android:id="@+id/signup_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressTint="#FF9800"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/signup_btn"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/signup_btn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.734"
+        android:visibility="gone"/>
 
     <include layout="@layout/privacy"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
