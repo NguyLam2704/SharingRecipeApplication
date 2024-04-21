@@ -5,31 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:text="Chỉnh sửa hồ sơ"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
-        app:layout_constraintStart_toEndOf="@+id/returns"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.218" />
-
-    <ImageButton
-        android:id="@+id/returns"
-        android:layout_width="48dp"
-        android:layout_height="26dp"
-        android:backgroundTint="@color/white"
-        android:src="@drawable/arrow_back"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
-        app:layout_constraintHorizontal_bias="0.216"
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#E8E9EF">
 
+        <ImageButton
+            android:id="@+id/returns"
+            android:layout_width="48dp"
+            android:layout_height="26dp"
+            android:backgroundTint="#E8E9EF"
+            android:src="@drawable/arrow_back" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chỉnh sửa hồ sơ"
+            android:layout_gravity="center"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </Toolbar>
     <EditText
         android:id="@+id/editText2"
         android:layout_width="335dp"

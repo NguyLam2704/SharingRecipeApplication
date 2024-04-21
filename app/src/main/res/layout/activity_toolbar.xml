@@ -6,16 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ToolbarActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="@color/grey_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.008">
+        app:layout_constraintVertical_bias="0.0">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -30,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:background="@drawable/account_background"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/grey_background"
                 android:src="@drawable/round_account_circle" />
 
             <TextView
