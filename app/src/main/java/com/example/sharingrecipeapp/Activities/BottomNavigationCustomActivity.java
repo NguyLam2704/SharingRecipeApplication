@@ -3,9 +3,6 @@ package com.example.sharingrecipeapp.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
@@ -13,6 +10,7 @@ import android.view.MenuItem;
 
 import com.example.sharingrecipeapp.Adapters.ViewPagerAdapter;
 import com.example.sharingrecipeapp.Fragments.ExploreFragment;
+import com.example.sharingrecipeapp.Fragments.GroceriesFragment;
 import com.example.sharingrecipeapp.Fragments.HomeFragment;
 import com.example.sharingrecipeapp.Fragments.PlanFragment;
 import com.example.sharingrecipeapp.Fragments.UserFragment;
@@ -39,7 +37,7 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         fragmentArrayList.add(new HomeFragment());
         fragmentArrayList.add(new ExploreFragment());
         fragmentArrayList.add(new PlanFragment());
-        fragmentArrayList.add(new ExploreFragment());
+        fragmentArrayList.add(new GroceriesFragment());
         fragmentArrayList.add(new UserFragment());
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentArrayList);
