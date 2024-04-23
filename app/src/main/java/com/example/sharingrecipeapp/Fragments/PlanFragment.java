@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 public class PlanFragment extends Fragment {
     private  FragmentPlanBinding binding;
-    private Calendar calendar;
+    private Calendar calendar = Calendar.getInstance();
 
     public PlanFragment() {
         // Required empty public constructor
@@ -59,7 +59,6 @@ public class PlanFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentPlanBinding.inflate(inflater,container,false);
-
         InitUI();
 
         prev = binding.prevWeek;
@@ -89,7 +88,7 @@ public class PlanFragment extends Fragment {
     }
 
     private void InitUI() {
-        calendar = Calendar.getInstance();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setDateTime(binding.getRoot());
         }
@@ -99,7 +98,7 @@ public class PlanFragment extends Fragment {
 
     private void lightCurrentDate(View view) {
         Calendar cur = calendar;
-        cur.add(Calendar.HOUR,-24);
+        cur.setTimeInMillis(System.currentTimeMillis());
         int color = requireContext().getColor(R.color.color_primary);
         TextView date;
         switch (cur.get(Calendar.DAY_OF_WEEK)){
