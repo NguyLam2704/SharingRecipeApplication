@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="My Grocery List"
+            android:text="Danh sách nguyên liệu"
             android:textSize="35dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,16 +37,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/plus"
             android:layout_width="39dp"
             android:layout_height="29dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="32dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView3"
+            app:layout_constraintEnd_toStartOf="@+id/btn"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/plan_btn_add" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/btn"
             android:layout_width="32dp"
             android:layout_height="27dp"
             android:layout_marginEnd="16dp"

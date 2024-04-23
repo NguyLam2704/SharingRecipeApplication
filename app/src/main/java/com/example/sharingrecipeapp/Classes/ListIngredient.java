@@ -1,6 +1,8 @@
-package com.example.sharingrecipeapp.Fragments;
+package com.example.sharingrecipeapp.Classes;
 
 import android.widget.CheckBox;
+
+import com.example.sharingrecipeapp.R;
 
 public class ListIngredient {
     private String NameIn;
@@ -24,6 +26,12 @@ public class ListIngredient {
         QuantityIn = quantityIn;
         ImageIn = imageIn;
         Check = check;
+    }
+    public ListIngredient(String nameIn, String quantityIn) {
+        NameIn = nameIn;
+        QuantityIn = quantityIn;
+        ImageIn = R.drawable.diet;
+        Check = false;
     }
 
     public String getNameIn() {
