@@ -5,12 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 
-
-
-
-import androidx.lifecycle.Lifecycle;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 
@@ -45,11 +39,15 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.view_pager);
         mBottomNavigationView = findViewById(R.id.bottomNavigationView);
 
+//        fragmentArrayList.add(new TestFragment());
+
         fragmentArrayList.add(new HomeFragment());
         fragmentArrayList.add(new ExploreFragment());
         fragmentArrayList.add(new PlanFragment());
         fragmentArrayList.add(new GroceriesFragment());
         fragmentArrayList.add(new UserFragment());
+
+
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentArrayList);
         mViewPager.setAdapter(viewPagerAdapter);
