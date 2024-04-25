@@ -35,13 +35,8 @@ public class UserActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.update) {
-            Intent update = new Intent(UserActivity.this, UpdateProfileActivity.class);
-            startActivity(update);
-        } else if (item.getItemId() == R.id.display) {
+        if (item.getItemId() == R.id.display) {
             Toast.makeText(this, "you click display", Toast.LENGTH_LONG).show();
-        } else if (item.getItemId() == R.id.language) {
-            Toast.makeText(this, "you click language", Toast.LENGTH_LONG).show();
         }else if(item.getItemId()==R.id.logout) {
             logoutAccount(UserActivity.this);
         }

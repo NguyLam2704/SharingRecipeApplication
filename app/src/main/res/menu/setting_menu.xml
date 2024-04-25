@@ -17,10 +17,6 @@
                 android:title="Chế độ màn hình"
                 app:showAsAction="never"/>
             <item
-                android:id="@+id/language"
-                android:title="Ngôn ngữ"
-                app:showAsAction="never"/>
-            <item
                 android:id="@+id/logout"
                 android:title="Đăng xuất"
                 app:showAsAction="never"/>
