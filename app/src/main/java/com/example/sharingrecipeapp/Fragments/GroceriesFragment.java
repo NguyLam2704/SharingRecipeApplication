@@ -86,7 +86,6 @@ public class GroceriesFragment extends Fragment {
 
         binding = FragmentGroceriesBinding.inflate(inflater,container,false);
         AnhXa();
-        makeText(binding.getRoot().getContext(), "happy", Toast.LENGTH_SHORT).show();
         adapter = new ListInAdapter(binding.getRoot().getContext(), R.layout.list_ingredients, arrayListIng);
         ingListView.setAdapter(adapter);
 
