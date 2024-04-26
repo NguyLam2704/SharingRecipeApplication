@@ -110,11 +110,12 @@ public class GroceriesFragment extends Fragment {
             }
         });
 
-        ingListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+        ingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 UpdateDelete(position);
-                return false;
+
             }
         });
 
