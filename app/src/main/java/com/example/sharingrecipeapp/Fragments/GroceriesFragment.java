@@ -86,7 +86,6 @@ public class GroceriesFragment extends Fragment {
 
         binding = FragmentGroceriesBinding.inflate(inflater,container,false);
         AnhXa();
-        makeText(binding.getRoot().getContext(), "happy", Toast.LENGTH_SHORT).show();
         adapter = new ListInAdapter(binding.getRoot().getContext(), R.layout.list_ingredients, arrayListIng);
         ingListView.setAdapter(adapter);
 
@@ -110,11 +109,12 @@ public class GroceriesFragment extends Fragment {
             }
         });
 
-        ingListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+        ingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 UpdateDelete(position);
-                return false;
+
             }
         });
 

@@ -42,10 +42,6 @@ public class PlanFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
     }
-
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

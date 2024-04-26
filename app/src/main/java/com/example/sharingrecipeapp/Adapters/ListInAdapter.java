@@ -41,21 +41,37 @@ public class ListInAdapter extends BaseAdapter {
         return 0;
     }
 
+    static class ViewHolder{
+        ImageView img;
+        TextView txtName, txtQuan;
+        CheckBox cbIn;
+
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(layout, null);
+        ViewHolder holder;
+        if(convertView==null){
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(layout, null);
+            holder = new ViewHolder();
+            convertView.setTag(holder);
+        } else {
+            holder= (ViewHolder) convertView.getTag();
+        }
         // anh xa view
-        TextView txtName = (TextView) convertView.findViewById(R.id.namein);
-        TextView txtQuant= (TextView) convertView.findViewById(R.id.quantityin);
-        ImageView imgIn= (ImageView) convertView.findViewById(R.id.imgin);
-        CheckBox cbIn = (CheckBox) convertView.findViewById(R.id.checkIn);
+        holder.txtName = (TextView) convertView.findViewById(R.id.namein);
+        holder.txtQuan = (TextView) convertView.findViewById(R.id.quantityin);
+        holder.img= (ImageView) convertView.findViewById(R.id.imgin);
+        holder.cbIn   = (CheckBox) convertView.findViewById(R.id.checkIn);
         //Gan gia tri
         ListIngredient ingredient = ingList.get(position);
-        txtName.setText(ingredient.getNameIn());
-        txtQuant.setText(ingredient.getQuantityIn());
-        imgIn.setImageResource(ingredient.getImageIn());
-        cbIn.setChecked(ingredient.isCheck());
+
+        if (ingredient !=null) {
+            holder.txtName.setText(ingredient.getNameIn());
+            holder.txtQuan.setText(ingredient.getQuantityIn());
+            holder.img.setImageResource(ingredient.getImageIn());
+            holder.cbIn.setChecked(ingredient.isCheck());
+        }
         return convertView;
     }
 }

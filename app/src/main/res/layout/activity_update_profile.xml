@@ -2,85 +2,159 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_update"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="#E8E9EF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="#E8E9EF">
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageButton
-            android:id="@+id/returns"
+            android:id="@+id/returns1"
             android:layout_width="48dp"
             android:layout_height="26dp"
-            android:backgroundTint="#E8E9EF"
-            android:src="@drawable/arrow_back" />
+            android:src="@drawable/arrow_back"
+            android:background="@drawable/oval_btn_background"
+            android:layout_gravity="left"/>
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chỉnh sửa hồ sơ"
             android:layout_gravity="center"
+            android:text="Chỉnh sửa hồ sơ"
             android:textSize="25sp"
             android:textStyle="bold" />
-    </Toolbar>
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/text_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:gravity="center_vertical"
+        android:lineHeight="26sp"
+        android:lineSpacingExtra="7sp"
+        android:text="Email"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.033"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+    <TextView
+        android:id="@+id/text_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:gravity="center_vertical"
+        android:lineHeight="26sp"
+        android:lineSpacingExtra="7sp"
+        android:text="Mật khẩu"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.024"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_email" />
+
+    <TextView
+        android:id="@+id/text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:gravity="center_vertical"
+        android:lineHeight="26sp"
+        android:lineSpacingExtra="7sp"
+        android:text="Tên"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
     <EditText
         android:id="@+id/editText2"
-        android:layout_width="335dp"
-        android:layout_height="60dp"
-        android:layout_margin="10dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/edittext_bound"
+        android:layout_width="370dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_background"
+        android:backgroundTint="@color/white"
         android:drawablePadding="8dp"
         android:elevation="5dp"
         android:hint="Mật khẩu"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.644"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/text_password" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="166dp"
         android:layout_height="142dp"
         android:layout_gravity="center"
-        android:layout_marginTop="176dp"
+        android:layout_marginTop="72dp"
         android:src="@drawable/round_account_circle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+    </ImageView>
 
     <EditText
         android:id="@+id/editText"
-        android:layout_width="335dp"
-        android:layout_height="60dp"
-        android:layout_margin="10dp"
+        android:layout_width="370dp"
+        android:layout_height="45dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/edittext_bound"
+        android:background="@drawable/edittext_background"
+        android:backgroundTint="@color/white"
         android:drawablePadding="8dp"
         android:elevation="5dp"
         android:hint="Tên người dùng"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.644"
+        app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/text_name" />
+
+    <EditText
+        android:id="@+id/edt_email"
+        android:layout_width="370dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_background"
+        android:backgroundTint="@color/white"
+        android:drawablePadding="8dp"
+        android:elevation="5dp"
+        android:hint="Email"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.439"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_email" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="40dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText2">
 
