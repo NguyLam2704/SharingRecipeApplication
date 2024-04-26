@@ -1,4 +1,4 @@
-package com.example.sharingrecipeapp.Adapters;
+package com.example.sharingrecipeapp.Classes;
 
 public class Recipes {
     String id, image, name, save, timecook;

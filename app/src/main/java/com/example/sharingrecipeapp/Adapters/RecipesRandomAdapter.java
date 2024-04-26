@@ -15,9 +15,11 @@ import com.example.sharingrecipeapp.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class RecipesAdapter extends FirestoreRecyclerAdapter<Recipes, RecipesAdapter.RecipesViewHolder> {
+public class RecipesRandomAdapter extends FirestoreRecyclerAdapter<Recipes, RecipesRandomAdapter.RecipesViewHolder> {
 
-    public RecipesAdapter(@NonNull FirestoreRecyclerOptions<Recipes> options) {
+
+
+    public RecipesRandomAdapter(@NonNull FirestoreRecyclerOptions<Recipes> options) {
         super(options);
     }
 
