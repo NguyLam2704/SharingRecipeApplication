@@ -41,7 +41,6 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.view_pager);
         mBottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-//        fragmentArrayList.add(new TestFragment());
 
         fragmentArrayList.add(new HomeFragment());
         fragmentArrayList.add(new ExploreFragment());
@@ -51,7 +50,6 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
 
         defaultFragment();
         replaceFragment();
-
 
   }
 

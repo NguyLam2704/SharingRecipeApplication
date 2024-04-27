@@ -30,10 +30,10 @@
             android:name=".Activities.UserActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.WelcomeActivity"
+            android:name=".Activities.BottomNavigationCustomActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.BottomNavigationCustomActivity"
+            android:name=".Activities.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
