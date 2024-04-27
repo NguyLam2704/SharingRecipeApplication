@@ -40,7 +40,6 @@ public class ThemeAdapter extends FirestoreRecyclerAdapter<Theme, ThemeAdapter.T
         ImageView img;
         public ThemeViewHolder(@NonNull View itemView) {
             super(itemView);
-
             name = itemView.findViewById(R.id.textView_title_theme);
             img = itemView.findViewById(R.id.imageView_theme);
 

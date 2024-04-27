@@ -27,7 +27,15 @@
             android:name=".UpdateProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.FoodDetailActivity"
+
+            android:name=".ToolbarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.UserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.BottomNavigationCustomActivity"
+
             android:exported="false" />
         <activity
             android:name=".Activities.WelcomeActivity"
@@ -39,9 +47,7 @@
             </intent-filter>
         </activity>
 
-
-        <activity android:name=".Activities.BottomNavigationCustomActivity"
-            />
+        <activity android:name=".Activities.FoodDetailActivity" />
 
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.SignupActivity" />

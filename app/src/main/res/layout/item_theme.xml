@@ -23,6 +23,7 @@
                 android:id="@+id/imageView_theme"
                 android:layout_width="150dp"
                 android:layout_height="80dp"
+                android:scaleType="fitXY"
                 android:layout_gravity="center"
                 android:background="@drawable/image_detail_backgroud"
                 android:src="@mipmap/ic_launcher_round"

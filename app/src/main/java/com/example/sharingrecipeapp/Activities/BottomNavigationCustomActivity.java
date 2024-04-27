@@ -9,14 +9,17 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 
+
 import android.content.Context;
 import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 
 import com.example.sharingrecipeapp.Adapters.ViewPagerAdapter;
+import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Fragments.ExploreFragment;
 import com.example.sharingrecipeapp.Fragments.GroceriesFragment;
 import com.example.sharingrecipeapp.Fragments.HomeFragment;
@@ -45,15 +48,12 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.view_pager);
         mBottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-//        fragmentArrayList.add(new TestFragment());
 
         fragmentArrayList.add(new HomeFragment());
         fragmentArrayList.add(new ExploreFragment());
         fragmentArrayList.add(new PlanFragment());
         fragmentArrayList.add(new GroceriesFragment());
         fragmentArrayList.add(new UserFragment());
-
-
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentArrayList);
         mViewPager.setAdapter(viewPagerAdapter);
@@ -98,58 +98,18 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.user_menu) {
                     mViewPager.setCurrentItem(4);
                 }
-
-//                switch (item.getItemId())
-//                {
-//                    case R.id.home_menu:
-//                        mViewPager.setCurrentItem(0);
-//                        break;
-//                    case R.id.search_menu:
-//                        mViewPager.setCurrentItem(1);
-//                        break;
-//                    case R.id.plan_menu:
-//                        mViewPager.setCurrentItem(2);
-//                        break;
-//                    case R.id.mall_menu:
-//                        mViewPager.setCurrentItem(3);
-//                        break;
-//                    case R.id.user_menu:
-//                        mViewPager.setCurrentItem(4);
-//                        break;
-//                    default:
-//                        break;
-//                }
                 return true;
             }
         });
-
-
-//        replaceFragment(new HomeFragment());
-//        binding.bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//              if(item.getItemId() == R.id.home_menu){
-//                replaceFragment(new HomeFragment());
-//              } else if (item.getItemId() == R.id.search_menu) {
-//                  replaceFragment(new ExploreFragment());
-//              } else if (item.getItemId() == R.id.plan_menu) {
-//                  replaceFragment(new PlanFragment());
-//              } else if (item.getItemId() == R.id.mall_menu) {
-//                  replaceFragment(new GroceriesFragment());
-//              } else if (item.getItemId() == R.id.user_menu) {
-//                  replaceFragment(new UserFragment());
-//              }
-//                return true;
-//            }
-//        });
-//    }
-//
-//    private void replaceFragment(Fragment fragment){
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.view_pager,fragment);
-//        fragmentTransaction.commit();
   }
+
+
+    public void gotoFoodDetail(Recipes recipes)
+    {
+        Intent intent = new Intent(BottomNavigationCustomActivity.this, FoodDetailActivity.class);
+        intent.putExtra("id", recipes.getId());
+        startActivity(intent);
+
 
   public void gotoSaved(){
       Intent intent=new Intent(this, SaveListActivity.class);
@@ -186,6 +146,7 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         });
         builder.create().show();
     }
+
 
 
 }
