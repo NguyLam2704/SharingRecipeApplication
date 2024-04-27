@@ -48,17 +48,6 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         fragmentArrayList.add(new GroceriesFragment());
         fragmentArrayList.add(new UserFragment());
 
-        defaultFragment();
-        replaceFragment();
-
-  }
-
-    public void defaultFragment() {
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentArrayList);
-        mViewPager.setAdapter(viewPagerAdapter);
-    }
-
-    private void replaceFragment() {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentArrayList);
         mViewPager.setAdapter(viewPagerAdapter);
         mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -105,7 +94,8 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
                 return true;
             }
         });
-    }
+  }
+
 
     public void gotoFoodDetail(Recipes recipes)
     {
@@ -114,5 +104,4 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-
 }

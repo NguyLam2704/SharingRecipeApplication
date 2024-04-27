@@ -111,6 +111,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                     heart.setText(String.valueOf(snapshot.get("like")));
                     save.setText(String.valueOf(snapshot.get("save")));
 
+
                 } else {
                     Log.d(TAG, "Current data: null");
                 }
