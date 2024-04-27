@@ -3,6 +3,9 @@ package com.example.sharingrecipeapp.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,10 +23,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import io.github.muddz.styleabletoast.StyleableToast;
+
 
 public class LoginActivity extends AppCompatActivity {
 
     EditText email,password;
+    boolean passwordVisible;
     Button Login_btn;
 
     ProgressBar Login_progressbar;
@@ -68,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(Login_getpassword.length() < 6)
                 {
                     password.setError("Mật khẩu tối thiểu 6 kí tự");
+                    return;
                 }
 
                 Login_progressbar.setVisibility(View.VISIBLE);
@@ -81,12 +88,39 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else {
                             Login_progressbar.setVisibility(View.GONE);
-                            Toast.makeText(LoginActivity.this, "Email hoặc mật khẩu không dúng", Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(LoginActivity.this,"Email hoặc mật khẩu không đúng",R.style.errortoast).show();
                         }
                     }
                 });
 
 
+            }
+        });
+        password.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int Right = 2;
+                if(event.getAction() == MotionEvent.ACTION_UP)
+                {
+                    if(event.getRawX() >= password.getRight()-password.getCompoundDrawables()[Right].getBounds().width()){
+                        int selection = password.getSelectionEnd();
+                        if(passwordVisible)
+                        {
+                            password.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.baseline_visibility_off_24,0);
+                            password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            passwordVisible = false;
+                        }
+                        else
+                        {
+                            password.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.baseline_visibility_24,0);
+                            password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            passwordVisible = true;
+                        }
+                        password.setSelection(selection);
+                        return true;
+                    }
+                }
+                return false;
             }
         });
 

@@ -58,7 +58,7 @@ dependencies {
 
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.code.gson:gson:2.9.1")
-
+    implementation ("io.github.muddz:styleabletoast:2.4.0")
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     // TODO: Add the dependencies for Firebase products you want to use
