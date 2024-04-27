@@ -1,6 +1,7 @@
 package com.example.sharingrecipeapp.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -8,6 +9,9 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -21,6 +25,8 @@ import com.example.sharingrecipeapp.Fragments.UserFragment;
 import com.example.sharingrecipeapp.R;
 
 //import com.example.sharingrecipeapp.databinding.ActivityHomeBinding;
+import com.example.sharingrecipeapp.SaveListActivity;
+import com.example.sharingrecipeapp.UpdateProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -144,5 +150,42 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
 //        fragmentTransaction.replace(R.id.view_pager,fragment);
 //        fragmentTransaction.commit();
   }
+
+  public void gotoSaved(){
+      Intent intent=new Intent(this, SaveListActivity.class);
+      startActivity(intent);
+  }
+    public void gotoChangeProfile(){
+        Intent intent=new Intent(this, UpdateProfileActivity.class);
+        startActivity(intent);
+    }
+    public void gotoSetting(){
+        Intent intent=new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
+    public void gotoLogout(){
+       logoutAccount();
+    }
+    private void logoutAccount() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Đăng xuất");
+        builder.setMessage("Bạn có chắc chắn muốn đăng xuất không?");
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(BottomNavigationCustomActivity.this, BottomNavigationCustomActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
 
 }
