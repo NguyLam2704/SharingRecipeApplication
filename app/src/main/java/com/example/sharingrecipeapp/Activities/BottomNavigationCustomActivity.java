@@ -104,12 +104,11 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
   }
 
 
-    public void gotoFoodDetail(Recipes recipes)
-    {
+    public void gotoFoodDetail(Recipes recipes) {
         Intent intent = new Intent(BottomNavigationCustomActivity.this, FoodDetailActivity.class);
         intent.putExtra("id", recipes.getId());
         startActivity(intent);
-
+    }
 
   public void gotoSaved(){
       Intent intent=new Intent(this, SaveListActivity.class);
