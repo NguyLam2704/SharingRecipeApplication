@@ -15,6 +15,9 @@
         android:theme="@style/Theme.SharingRecipeApp"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.SettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".SaveListActivity"
             android:exported="false" />
         <activity
@@ -24,6 +27,7 @@
             android:name=".UpdateProfileActivity"
             android:exported="false" />
         <activity
+
             android:name=".ToolbarActivity"
             android:exported="false" />
         <activity
@@ -31,6 +35,7 @@
             android:exported="false" />
         <activity
             android:name=".Activities.BottomNavigationCustomActivity"
+
             android:exported="false" />
         <activity
             android:name=".Activities.WelcomeActivity"
@@ -43,9 +48,9 @@
         </activity>
 
         <activity android:name=".Activities.FoodDetailActivity" />
+
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.SignupActivity" />
-
     </application>
 
 </manifest>

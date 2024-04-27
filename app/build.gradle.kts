@@ -50,6 +50,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
@@ -57,7 +58,7 @@ dependencies {
 
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.code.gson:gson:2.9.1")
-
+    implementation ("io.github.muddz:styleabletoast:2.4.0")
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     // TODO: Add the dependencies for Firebase products you want to use

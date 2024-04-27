@@ -14,7 +14,7 @@
         android:gravity="center_horizontal|center_vertical"
         android:lineHeight="28sp"
         android:lineSpacingExtra="1sp"
-        android:text="Create new account"
+        android:text="Tạo tài khoản"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -134,6 +134,7 @@
         android:inputType="textPassword"
         android:padding="12dp"
         android:textColor="@color/black"
+        android:drawableRight="@drawable/baseline_visibility_off_24"
         android:textCursorDrawable="@drawable/color_cursor"
         app:layout_constraintEnd_toEndOf="@+id/signup_edt_username"
         app:layout_constraintStart_toStartOf="@+id/signup_edt_username"
@@ -168,7 +169,8 @@
         app:layout_constraintStart_toStartOf="@+id/signup_btn"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.734"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:indeterminateTint="@color/color_primary"/>
 
     <include layout="@layout/privacy"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
