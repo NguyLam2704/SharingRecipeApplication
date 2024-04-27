@@ -22,7 +22,8 @@
             <ImageView
                 android:id="@+id/imageView_food"
                 android:layout_width="170dp"
-                android:layout_height="170dp"
+                android:layout_height="190dp"
+                android:scaleType="fitXY"
                 android:layout_gravity="center"
                 android:background="@drawable/image_detail_backgroud"
                 android:src="@mipmap/ic_launcher_round"

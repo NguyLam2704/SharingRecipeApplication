@@ -8,11 +8,13 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 
 import com.example.sharingrecipeapp.Adapters.ViewPagerAdapter;
+import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Fragments.ExploreFragment;
 import com.example.sharingrecipeapp.Fragments.GroceriesFragment;
 import com.example.sharingrecipeapp.Fragments.HomeFragment;
@@ -47,8 +49,18 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         fragmentArrayList.add(new GroceriesFragment());
         fragmentArrayList.add(new UserFragment());
 
+        defaultFragment();
+        replaceFragment();
 
 
+  }
+
+    public void defaultFragment() {
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentArrayList);
+        mViewPager.setAdapter(viewPagerAdapter);
+    }
+
+    private void replaceFragment() {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentArrayList);
         mViewPager.setAdapter(viewPagerAdapter);
         mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -92,57 +104,17 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.user_menu) {
                     mViewPager.setCurrentItem(4);
                 }
-
-//                switch (item.getItemId())
-//                {
-//                    case R.id.home_menu:
-//                        mViewPager.setCurrentItem(0);
-//                        break;
-//                    case R.id.search_menu:
-//                        mViewPager.setCurrentItem(1);
-//                        break;
-//                    case R.id.plan_menu:
-//                        mViewPager.setCurrentItem(2);
-//                        break;
-//                    case R.id.mall_menu:
-//                        mViewPager.setCurrentItem(3);
-//                        break;
-//                    case R.id.user_menu:
-//                        mViewPager.setCurrentItem(4);
-//                        break;
-//                    default:
-//                        break;
-//                }
                 return true;
             }
         });
+    }
 
+    public void gotoFoodDetail(Recipes recipes)
+    {
+        Intent intent = new Intent(BottomNavigationCustomActivity.this, FoodDetailActivity.class);
+        intent.putExtra("id", recipes.getId());
+        startActivity(intent);
 
-//        replaceFragment(new HomeFragment());
-//        binding.bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//              if(item.getItemId() == R.id.home_menu){
-//                replaceFragment(new HomeFragment());
-//              } else if (item.getItemId() == R.id.search_menu) {
-//                  replaceFragment(new ExploreFragment());
-//              } else if (item.getItemId() == R.id.plan_menu) {
-//                  replaceFragment(new PlanFragment());
-//              } else if (item.getItemId() == R.id.mall_menu) {
-//                  replaceFragment(new GroceriesFragment());
-//              } else if (item.getItemId() == R.id.user_menu) {
-//                  replaceFragment(new UserFragment());
-//              }
-//                return true;
-//            }
-//        });
-//    }
-//
-//    private void replaceFragment(Fragment fragment){
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.view_pager,fragment);
-//        fragmentTransaction.commit();
-  }
+    }
 
 }
