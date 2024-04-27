@@ -85,7 +85,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         });
 
         showInfo();
-        init_setListener();
+//        init_setListener();
     }
     public void showInfo(){
         if (currentUser != null) {
