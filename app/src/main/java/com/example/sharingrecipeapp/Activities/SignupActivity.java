@@ -127,6 +127,8 @@ public class SignupActivity extends AppCompatActivity  {
                             new_user.put("email",Signup_getemail);
                             new_user.put("username",Signup_getusername);
                             new_user.put("password",Signup_getpassword);
+                            new_user.put("id",userID);
+                            new_user.put("avatar","");
                             Signup_document.set(new_user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
@@ -148,7 +150,7 @@ public class SignupActivity extends AppCompatActivity  {
                         }
                         else
                         {
-                            StyleableToast.makeText(SignupActivity.this,"Đăng kí thất bại",Toast.LENGTH_LONG,R.style.errortoast).show();
+                            StyleableToast.makeText(SignupActivity.this,"Tài khoản đã tồn tại",Toast.LENGTH_LONG,R.style.errortoast).show();
                             Signup_progressbar.setVisibility(View.GONE);
                         }
                     }
