@@ -33,7 +33,7 @@
             android:name=".Activities.FoodDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.BottomNavigationCustomActivity"
+            android:name=".Activities.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +42,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.WelcomeActivity" />
+        <activity android:name=".Activities.BottomNavigationCustomActivity"
+            />
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.SignupActivity" />
 

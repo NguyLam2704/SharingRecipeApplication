@@ -5,7 +5,10 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,9 +32,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.muddz.styleabletoast.StyleableToast;
+
 public class SignupActivity extends AppCompatActivity  {
 
     EditText email, username, password;
+    boolean passwordVisible;
 
     private FirebaseAuth Signup_auth;
 
@@ -105,6 +111,7 @@ public class SignupActivity extends AppCompatActivity  {
                 if(password.length() < 6)
                 {
                     password.setError("Mật khẩu tối thiểu gồm 6 kí tự");
+                    return;
                 }
 
                 Signup_progressbar.setVisibility(View.VISIBLE);
@@ -126,6 +133,7 @@ public class SignupActivity extends AppCompatActivity  {
                                     Signup_progressbar.setVisibility(View.GONE);
                                     setContentView(R.layout.activity_successsignup);
                                     Button Login_btn = findViewById(R.id.Login_btn);
+
                                     Login_btn.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -140,7 +148,7 @@ public class SignupActivity extends AppCompatActivity  {
                         }
                         else
                         {
-                            Toast.makeText(SignupActivity.this, "Đăng kí thất bại", Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(SignupActivity.this,"Đăng kí thất bại",Toast.LENGTH_LONG,R.style.errortoast).show();
                             Signup_progressbar.setVisibility(View.GONE);
                         }
                     }
@@ -149,7 +157,33 @@ public class SignupActivity extends AppCompatActivity  {
             }
         });
 
-
+        password.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int Right = 2;
+                if(event.getAction() == MotionEvent.ACTION_UP)
+                {
+                    if(event.getRawX() >= password.getRight()-password.getCompoundDrawables()[Right].getBounds().width()){
+                        int selection = password.getSelectionEnd();
+                        if(passwordVisible)
+                        {
+                            password.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.baseline_visibility_off_24,0);
+                            password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            passwordVisible = false;
+                        }
+                        else
+                        {
+                            password.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.baseline_visibility_24,0);
+                            password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            passwordVisible = true;
+                        }
+                        password.setSelection(selection);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
     }
 }
