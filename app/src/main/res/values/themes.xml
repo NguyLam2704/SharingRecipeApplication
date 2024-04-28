@@ -6,10 +6,13 @@
         <item name="colorPrimaryVariant">@color/color_primary</item>
         <item name="android:textColorHint">@color/grey_background</item>
     </style>
+
     <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/color_cursor</item>
     </style>
+
     <style name="Theme.SharingRecipeApp" parent="Base.Theme.SharingRecipeApp" />
+
     <style name="roundedImageView">
         <item name="cornerFamily">
             rounded
@@ -17,5 +20,25 @@
         <item name="cornerSize">
             50%
         </item>
+    </style>
+
+    <style name="mytoast">
+        <item name="stTextColor">@color/color_primary</item>
+        <item name="stTextBold">true</item>
+        <item name="stColorBackground">#fff</item>
+        <item name="stSolidBackground">true</item>
+        <item name="stRadius">30dp</item>
+        <item name="stStrokeWidth">3dp</item>
+        <item name="stStrokeColor">@color/grey_background</item>
+    </style>
+
+    <style name="errortoast">
+        <item name="stTextColor">#F61515</item>
+        <item name="stTextBold">true</item>
+        <item name="stColorBackground">#fff</item>
+        <item name="stSolidBackground">true</item>
+        <item name="stRadius">30dp</item>
+        <item name="stStrokeWidth">3dp</item>
+        <item name="stStrokeColor">@color/grey_background</item>
     </style>
 </resources>

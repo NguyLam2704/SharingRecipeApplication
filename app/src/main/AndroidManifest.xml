@@ -18,10 +18,13 @@
             android:name=".Activities.PlantoSavedActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.TestActivity"
+            android:name=".Activities.Forgotpass"
             android:exported="false" />
         <activity
-            android:name=".Activities.test"
+            android:name=".Activities.SettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SaveListActivity"
             android:exported="false" />
         <activity
             android:name=".LanguageActivity"
@@ -30,13 +33,7 @@
             android:name=".UpdateProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ToolbarActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activities.UserActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activities.FoodDetailActivity"
+            android:name=".Activities.BottomNavigationCustomActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.WelcomeActivity"
@@ -47,9 +44,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activities.BottomNavigationCustomActivity"
-            android:exported="false" />
+
+
+        <activity android:name=".Activities.FoodDetailActivity" />
+
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.SignupActivity" />
     </application>

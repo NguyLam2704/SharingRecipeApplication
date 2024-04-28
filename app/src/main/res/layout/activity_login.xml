@@ -99,6 +99,7 @@
         android:inputType="textPassword"
         android:padding="12dp"
         android:textCursorDrawable="@drawable/color_cursor"
+        android:drawableRight="@drawable/baseline_visibility_off_24"
         app:layout_constraintStart_toStartOf="@+id/tittle_password"
         app:layout_constraintTop_toBottomOf="@+id/tittle_password" />
 
@@ -106,7 +107,7 @@
         android:id="@+id/login_btn"
         android:layout_width="324dp"
         android:layout_height="60dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="56dp"
         android:backgroundTint="@color/color_primary"
         android:gravity="center_vertical|center_horizontal"
         android:text="Đăng nhập"
@@ -114,6 +115,7 @@
         android:textSize="18sp"
         app:circularflow_radiusInDP="30dp"
         app:layout_constraintEnd_toEndOf="@+id/login_edt_password"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="@+id/login_edt_password"
         app:layout_constraintTop_toBottomOf="@+id/login_edt_password" />
 
@@ -125,7 +127,23 @@
         app:layout_constraintEnd_toEndOf="@+id/login_btn"
         app:layout_constraintStart_toStartOf="@+id/login_btn"
         app:layout_constraintTop_toBottomOf="@+id/login_btn"
+        android:indeterminateTint="@color/color_primary"
         android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/login_txt_forgotpass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:lineSpacingExtra="7sp"
+        android:text="Quên mật khẩu?"
+        android:textColor="@color/color_primary"
+
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/login_edt_password"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/login_edt_password"
+        app:layout_constraintTop_toBottomOf="@+id/login_edt_password" />
 
     <include layout="@layout/privacy"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

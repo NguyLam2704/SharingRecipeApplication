@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <EditText
+        android:id="@+id/edtQuanSua"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="84dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/thongbaosua" />
+
+    <EditText
+        android:id="@+id/edtdvSua"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="84dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtQuanSua" />
+
+    <Button
+        android:id="@+id/update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="80dp"
+        android:width="120dp"
+        android:height="50dp"
+        android:text="Cập nhật"
+        android:backgroundTint="@color/color_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.636"
+        app:layout_constraintStart_toEndOf="@+id/delete"
+        app:layout_constraintTop_toBottomOf="@+id/edtdvSua" />
+
+    <TextView
+        android:id="@+id/txtdvSua"
+        android:layout_width="88dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="15dp"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="Đơn vị:"
+        android:textSize="15sp"
+        android:textColor="#9C9A9A"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/edtdvSua"
+        app:layout_constraintHorizontal_bias="0.646"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtQuanSua" />
+
+    <TextView
+        android:id="@+id/txtQuanSua"
+        android:layout_width="94dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="32dp"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="Số lượng:"
+        android:textSize="15sp"
+        android:textColor="#9C9A9A"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/edtQuanSua"
+        app:layout_constraintHorizontal_bias="0.61"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/thongbaosua" />
+
+    <TextView
+        android:id="@+id/thongbaosua"
+        android:layout_width="288dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="16dp"
+        android:padding="10dp"
+        android:text="Cập nhật, xóa nguyên liệu!"
+        android:textAlignment="center"
+        android:textColor="#6E6E6E"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.317"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="20dp"
+        android:width="120dp"
+        android:height="50dp"
+        android:text="Hủy"
+        android:backgroundTint="#FFE2B8"
+        android:textColor="#FFA115"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtdvSua" />
+
+    <View
+        android:id="@+id/cancelview"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/baseline_cancel_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.957"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

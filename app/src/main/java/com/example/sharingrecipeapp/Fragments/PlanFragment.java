@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,6 +67,7 @@ public class PlanFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         View CN, t2, t3, t4, t5, t6, t7;
         t2 = view.findViewById(R.id.add2);
         t3 = view.findViewById(R.id.add3);
@@ -96,6 +96,7 @@ public class PlanFragment extends Fragment {
             }
         });
     }
+
 
 
     @Override

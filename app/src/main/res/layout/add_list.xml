@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <EditText
+        android:id="@+id/edtName"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="80dp"
+        android:ems="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/thongbao"
+        app:layout_constraintVertical_bias="0.001" />
+
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="80dp"
+        android:width="120dp"
+        android:backgroundTint="@color/color_primary"
+        android:height="50dp"
+        android:text="Thêm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/cancel"
+        app:layout_constraintTop_toBottomOf="@+id/edtdv" />
+
+    <EditText
+        android:id="@+id/edtdv"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="80dp"
+        android:ems="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtQuan"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/txtaddName"
+        android:layout_width="137dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="24dp"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="Tên nguyên liệu:"
+        android:textSize="15sp"
+        android:textColor="#9C9A9A"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/edtName"
+        app:layout_constraintHorizontal_bias="0.887"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/thongbao" />
+
+    <TextView
+        android:id="@+id/txtQuan"
+        android:layout_width="88dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="28dp"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="Đơn vị:"
+        android:textSize="15sp"
+        android:textColor="#9C9A9A"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/edtdv"
+        app:layout_constraintHorizontal_bias="0.89"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtDv" />
+
+    <TextView
+        android:id="@+id/txtDv"
+        android:layout_width="88dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="20dp"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="Số lượng:"
+        android:textSize="15sp"
+        android:textColor="#9C9A9A"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/edtQuan"
+        app:layout_constraintHorizontal_bias="0.89"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtaddName" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="20dp"
+        android:width="120dp"
+        android:height="50dp"
+        android:backgroundTint="#FFE2B8"
+        android:text="Hủy"
+        android:textColor="#FFA115"
+        app:layout_constraintEnd_toStartOf="@+id/edtdv"
+        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtQuan" />
+
+    <EditText
+        android:id="@+id/edtQuan"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="80dp"
+        android:ems="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/thongbao"
+        android:layout_width="387dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="60dp"
+        android:padding="10dp"
+        android:text="Thêm nguyên liệu mới!"
+        android:textAlignment="center"
+        android:textColor="#6E6E6E"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
