@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
@@ -91,8 +92,15 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
                         {
-                            Login_progressbar.setVisibility(View.GONE);
-                            startActivity(new Intent(LoginActivity.this, BottomNavigationCustomActivity.class));
+                            FirebaseUser verify_user = Login_auth.getCurrentUser();
+                            if(!verify_user.isEmailVerified())
+                            {
+                                StyleableToast.makeText(LoginActivity.this,"Vui lòng xác thực email trước khi đăng nhập",R.style.errortoast).show();
+                            }
+                            else {
+                                Login_progressbar.setVisibility(View.GONE);
+                                startActivity(new Intent(LoginActivity.this, BottomNavigationCustomActivity.class));
+                            }
                         }
                         else {
                             Login_progressbar.setVisibility(View.GONE);
