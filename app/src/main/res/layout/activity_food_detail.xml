@@ -110,7 +110,6 @@
                         android:layout_marginEnd="8dp"
                         android:background="@color/white"
                         android:paddingStart="5dp"
-                        android:text="Bún đậu mắm tôm Phúc kỳ chổ Kiệt làm"
                         android:textColor="@color/color_primary"
                         android:textSize="30dp"
                         android:textStyle="bold"
@@ -270,9 +269,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="15 mins"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                         />
                 </LinearLayout>
 
                 <LinearLayout
@@ -306,7 +304,6 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
-                        android:text="Đây là một món ăn đặc sản ở Hà Nội. Đi kèm với mắm tôm thần thành. Ai không ăn được xin đừng ăn !!"
                         android:textSize="16sp" />
 
                 </LinearLayout>
