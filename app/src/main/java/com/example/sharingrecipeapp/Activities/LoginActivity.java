@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
@@ -33,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     Button Login_btn;
 
     ProgressBar Login_progressbar;
-
+    TextView Login_txt_forgotpass;
     private FirebaseAuth Login_auth;
 
     @Override
@@ -53,6 +55,13 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.login_edt_email);
         password = findViewById(R.id.login_edt_password);
         Login_progressbar = findViewById(R.id.login_progressbar);
+        Login_txt_forgotpass = findViewById(R.id.login_txt_forgotpass);
+        Login_txt_forgotpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, Forgotpass.class));
+            }
+        });
         Login_auth = FirebaseAuth.getInstance();
         Login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,8 +92,15 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
                         {
-                            Login_progressbar.setVisibility(View.GONE);
-                            startActivity(new Intent(LoginActivity.this, BottomNavigationCustomActivity.class));
+                            FirebaseUser verify_user = Login_auth.getCurrentUser();
+                            if(!verify_user.isEmailVerified())
+                            {
+                                StyleableToast.makeText(LoginActivity.this,"Vui lòng xác thực email trước khi đăng nhập",R.style.errortoast).show();
+                            }
+                            else {
+                                Login_progressbar.setVisibility(View.GONE);
+                                startActivity(new Intent(LoginActivity.this, BottomNavigationCustomActivity.class));
+                            }
                         }
                         else {
                             Login_progressbar.setVisibility(View.GONE);

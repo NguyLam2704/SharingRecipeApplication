@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -22,10 +23,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sharingrecipeapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -121,31 +124,46 @@ public class SignupActivity extends AppCompatActivity  {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
                         {
-                            userID = Signup_auth.getCurrentUser().getUid();
-                            DocumentReference Signup_document = Signup_db.collection("Users").document(userID);
-                            Map<String,Object> new_user = new HashMap<>();
-                            new_user.put("email",Signup_getemail);
-                            new_user.put("username",Signup_getusername);
-                            new_user.put("password",Signup_getpassword);
-                            new_user.put("id",userID);
-                            new_user.put("avatar","");
-                            Signup_document.set(new_user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            FirebaseUser verify_user = Signup_auth.getCurrentUser();
+                            verify_user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
+                                    StyleableToast.makeText(SignupActivity.this,"Email xác thực đã được gửi ",R.style.mytoast).show();
                                     Signup_progressbar.setVisibility(View.GONE);
-                                    setContentView(R.layout.activity_successsignup);
-                                    Button Login_btn = findViewById(R.id.Login_btn);
-
-                                    Login_btn.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                    Intent login_view = new Intent(SignupActivity.this, BottomNavigationCustomActivity.class);
-                                    startActivity(login_view);
-                                         }
-                                    });
-                                    Log.d(TAG, "DocumentSnapshot added with ID: " + Signup_document.getId());
                                 }
-                            });
+                            })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            StyleableToast.makeText(SignupActivity.this,"Gửi email xác thực thất bại",R.style.errortoast).show();
+                                        }
+                                    });
+//                                StyleableToast.makeText(SignupActivity.this,"Xác thực thành công",R.style.mytoast).show();
+                                userID = Signup_auth.getCurrentUser().getUid();
+                                DocumentReference Signup_document = Signup_db.collection("Users").document(userID);
+                                Map<String,Object> new_user = new HashMap<>();
+                                new_user.put("email",Signup_getemail);
+                                new_user.put("username",Signup_getusername);
+                                new_user.put("password",Signup_getpassword);
+                                new_user.put("id",userID);
+                                new_user.put("avatar","");
+                                Signup_document.set(new_user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Signup_progressbar.setVisibility(View.GONE);
+                                        Button Login_btn = findViewById(R.id.Login_btn);
+                                        Intent login_view = new Intent(SignupActivity.this, LoginActivity.class);
+                                        startActivity(login_view);
+//                                        Login_btn.setOnClickListener(new View.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(View v) {
+//                                                Intent login_view = new Intent(SignupActivity.this, BottomNavigationCustomActivity.class);
+//                                                startActivity(login_view);
+//                                            }
+//                                        });
+                                        Log.d(TAG, "DocumentSnapshot added with ID: " + Signup_document.getId());
+                                    }
+                                });
 
                         }
                         else

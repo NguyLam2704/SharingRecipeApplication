@@ -110,10 +110,13 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
     public void gotoSaved() {
         Intent intent = new Intent(this, SaveListActivity.class);
         startActivity(intent);
     }
+
+
 
     public void gotoChangeProfile() {
         Intent intent = new Intent(this, UpdateProfileActivity.class);
