@@ -101,31 +101,34 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
                 return true;
             }
         });
-  }
+    }
 
 
-    public void gotoFoodDetail(Recipes recipes)
-    {
+    public void gotoFoodDetail(Recipes recipes) {
         Intent intent = new Intent(BottomNavigationCustomActivity.this, FoodDetailActivity.class);
         intent.putExtra("id", recipes.getId());
         startActivity(intent);
+    }
 
-
-  public void gotoSaved(){
-      Intent intent=new Intent(this, SaveListActivity.class);
-      startActivity(intent);
-  }
-    public void gotoChangeProfile(){
-        Intent intent=new Intent(this, UpdateProfileActivity.class);
+    public void gotoSaved() {
+        Intent intent = new Intent(this, SaveListActivity.class);
         startActivity(intent);
     }
-    public void gotoSetting(){
-        Intent intent=new Intent(this, SettingActivity.class);
+
+    public void gotoChangeProfile() {
+        Intent intent = new Intent(this, UpdateProfileActivity.class);
         startActivity(intent);
     }
-    public void gotoLogout(){
-       logoutAccount();
+
+    public void gotoSetting() {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
     }
+
+    public void gotoLogout() {
+        logoutAccount();
+    }
+
     private void logoutAccount() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Đăng xuất");
@@ -146,7 +149,7 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         });
         builder.create().show();
     }
-
-
-
 }
+
+
+
