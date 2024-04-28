@@ -3,8 +3,11 @@ package com.example.sharingrecipeapp.Fragments;
 import static android.widget.Toast.makeText;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -40,28 +43,18 @@ import java.util.concurrent.Executor;
 
 public class UserFragment extends Fragment {
 
+    public static final int MY_REQUEST_CODE = 10;
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
-
-    protected LinearLayout Saved;
-    protected TextView btn_Saved;
-    protected LinearLayout Changeprofile;
-    protected TextView btn_Change;
-    protected LinearLayout Setting;
-    protected TextView btn_setting;
-    protected LinearLayout Logout;
-    protected TextView btn_logout;
+    protected LinearLayout Saved,Change_profile, Setting, Logout;
+    protected TextView btn_Saved, btn_Change, btn_setting, btn_logout, text_name;
     protected ImageView image_account;
-    protected TextView text_name;
-
-    protected FirebaseAuth firebaseAuth;
+    public static FirebaseAuth firebaseAuth;
     protected FirebaseFirestore firestore;
-    protected FirebaseUser currentUser;
-    protected String user_name;
+    protected static FirebaseUser currentUser;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,7 +62,7 @@ public class UserFragment extends Fragment {
         View view= inflater.inflate(R.layout.fragment_user, container, false);
         Saved = view.findViewById(R.id.layout1);
         btn_Saved = view.findViewById(R.id.btn_saved);
-        Changeprofile = view.findViewById(R.id.layout2);
+        Change_profile = view.findViewById(R.id.layout2);
         btn_Change = view.findViewById(R.id.btn_change_profile);
         Setting = view.findViewById(R.id.layout3);
         btn_setting = view.findViewById(R.id.btn_setting);
@@ -82,32 +75,7 @@ public class UserFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
 
-        if(currentUser!=null){
-            String userID = currentUser.getUid();
-
-            firestore = FirebaseFirestore.getInstance();
-            DocumentReference userRef = firestore.collection("Users").document(userID);
-
-            userRef.addSnapshotListener((value, error) -> {
-                if(error!=null){
-                    Toast.makeText(getContext(), "Không thể lấy dữ liệu từ Firestore. Vui lòng thử lại sau!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if(value!=null && value.exists()){
-                    String name = value.getString("username");
-                    String avatar = value.getString("avatar");
-                    text_name.setText(name);
-                    if(avatar != null && !avatar.isEmpty()){
-                        Glide.with(this).load(avatar).error(R.drawable.round_account_circle).into(image_account);
-                    }
-                    else{
-
-                    }
-                }
-            });
-        }
-
+        setProfileUser();
 
         setOnClickSaved();
         setOnClickBtnSaved();
@@ -119,10 +87,25 @@ public class UserFragment extends Fragment {
         setOnClickBtnLogout();
         setOnClickImageAccount();
         setOnClickTextName();
+
         return view;
     }
-    private void setOnClickImageAccount()
-    {
+    public void setProfileUser(){
+        if (currentUser != null) {
+            String userID = currentUser.getUid();
+            firestore = FirebaseFirestore.getInstance();
+            DocumentReference userRef = firestore.collection("Users").document(userID);
+            userRef.addSnapshotListener((value, error) -> {
+                if(value!=null && value.exists()){
+                    String name = value.getString("username");
+                    String avatarURL = value.getString("avatar");
+                    text_name.setText(name);
+                    Glide.with(this).load(avatarURL).error(R.drawable.round_account_circle).into(image_account);
+                }
+            });
+        }
+    }
+    private void setOnClickImageAccount(){
         image_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,8 +113,7 @@ public class UserFragment extends Fragment {
             }
         });
     }
-    private void setOnClickTextName()
-    {
+    private void setOnClickTextName(){
         text_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,8 +121,7 @@ public class UserFragment extends Fragment {
             }
         });
     }
-    private void setOnClickSaved()
-    {
+    private void setOnClickSaved(){
         Saved.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,8 +129,7 @@ public class UserFragment extends Fragment {
             }
         });
     }
-    private void setOnClickBtnSaved()
-    {
+    private void setOnClickBtnSaved(){
         btn_Saved.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,17 +137,15 @@ public class UserFragment extends Fragment {
             }
         });
     }
-    private void setOnClickChangeProfile()
-    {
-        Changeprofile.setOnClickListener(new View.OnClickListener() {
+    private void setOnClickChangeProfile(){
+        Change_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bottomNavigationCustomActivity.gotoChangeProfile();
             }
         });
     }
-    private void setOnClickBtnChange()
-    {
+    private void setOnClickBtnChange(){
         btn_Change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,8 +153,7 @@ public class UserFragment extends Fragment {
             }
         });
     }
-    private void setOnClickSetting()
-    {
+    private void setOnClickSetting(){
         Setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,8 +161,7 @@ public class UserFragment extends Fragment {
             }
         });
     }
-    private void setOnClickBtnSetting()
-    {
+    private void setOnClickBtnSetting(){
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,17 +169,7 @@ public class UserFragment extends Fragment {
             }
         });
     }
-    private void setOnClickBtnLogout()
-    {
-        Logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomNavigationCustomActivity.gotoLogout();
-            }
-        });
-    }
-    private void setOnClickLogout()
-    {
+    private void setOnClickBtnLogout(){
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,5 +177,12 @@ public class UserFragment extends Fragment {
             }
         });
     }
-
+    private void setOnClickLogout() {
+        Logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomNavigationCustomActivity.gotoLogout();
+            }
+        });
+    }
 }
