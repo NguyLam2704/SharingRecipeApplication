@@ -1,9 +1,11 @@
 package com.example.sharingrecipeapp.Fragments;
 
+
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 import com.example.sharingrecipeapp.Adapters.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.ThemeAdapter;
@@ -23,6 +26,7 @@ import com.example.sharingrecipeapp.Adapters.RecipesAdapter;
 import com.example.sharingrecipeapp.Adapters.RecipesRandomAdapter;
 import com.example.sharingrecipeapp.Classes.Theme;
 import com.example.sharingrecipeapp.R;
+
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -46,6 +50,7 @@ public class HomeFragment extends Fragment {
 
     ThemeAdapter themeAdapter;
 
+
     private RecyclerView recyclerViewRate, recyclerViewRandom, recyclerViewTheme;
 
     private List<Recipes> listRecipes;
@@ -56,6 +61,7 @@ public class HomeFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore;
 
     ProgressDialog progressDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +71,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view =inflater.inflate(R.layout.fragment_home,container,false);
         bottomNavigationCustomActivity = (BottomNavigationCustomActivity) getActivity();
 
@@ -81,6 +88,7 @@ public class HomeFragment extends Fragment {
         setdataRecycRate();
         setdataRecycRandom();
         setdataRecycTheme();
+
 
 
         return view;
