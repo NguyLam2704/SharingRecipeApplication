@@ -27,6 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,8 +38,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UpdateProfileActivity extends AppCompatActivity {
     ImageButton return1;
@@ -48,6 +53,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
     FirebaseUser currentUser;
     Uri uri;
+    String name;
     ActivityResultLauncher<Intent> activityResultLauncher =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult o) {
@@ -69,7 +75,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_profile);
-
+        update = findViewById(R.id.update_btn);
         return1=findViewById(R.id.returns1);
         image_user_update = findViewById(R.id.image_user_upd);
         edit_name = findViewById(R.id.edit_name);
@@ -85,7 +91,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         });
 
         showInfo();
-//        init_setListener();
+        init_setListener();
     }
     public void showInfo(){
         if (currentUser != null) {
@@ -94,7 +100,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             DocumentReference userRef = firestore.collection("Users").document(userID);
             userRef.addSnapshotListener((value, error) -> {
                 if(value!=null && value.exists()){
-                    String name = value.getString("username");
+                    name = value.getString("username");
                     String avatarURL = value.getString("avatar");
                     String email = value.getString("email");
                     String pass = value.getString("password");
@@ -117,6 +123,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onClickUpdateProfile();
+
             }
 
         });
@@ -135,7 +142,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private void onClickUpdateProfile() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        String full_name = edit_name.getText().toString().trim();
+        String full_name = edit_name.getText().toString();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(full_name)
                 .setPhotoUri(uri)
@@ -146,8 +153,42 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            showInfo();
-                            Toast.makeText(UpdateProfileActivity.this,"thanh cong",Toast.LENGTH_SHORT).show();
+                            Map<String,Object> update_user = new HashMap<>();
+                            update_user.put("username",full_name);
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("Users")
+                                            .whereEqualTo("username",name)
+                                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if(task.isSuccessful() && !task.getResult().isEmpty())
+                                            {
+                                                DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                                                String documentID = documentSnapshot.getId();
+                                                db.collection("Users")
+                                                        .document(documentID)
+                                                        .update(update_user)
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void unused) {
+                                                                Toast.makeText(UpdateProfileActivity.this,"thanh cong",Toast.LENGTH_SHORT).show();
+                                                                showInfo();
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Toast.makeText(UpdateProfileActivity.this,"that bai",Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                            }
+                                            else {
+                                                Toast.makeText(UpdateProfileActivity.this,"sai me r",Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+
+//                            Toast.makeText(UpdateProfileActivity.this,"thanh cong",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
