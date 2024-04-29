@@ -1,7 +1,9 @@
 package com.example.sharingrecipeapp.Activities;
 
+import static android.app.PendingIntent.getActivity;
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,26 +17,44 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.sharingrecipeapp.Adapters.ViewPagerImageAdapter;
+import com.example.sharingrecipeapp.Adapters.DetailRecipe.ListIngreInDetailAdapter;
+import com.example.sharingrecipeapp.Adapters.DetailRecipe.ListMethodInDetailAdapter;
+import com.example.sharingrecipeapp.Adapters.DetailRecipe.ViewPagerImageFoodAdapter;
+import com.example.sharingrecipeapp.Adapters.DetailRecipe.ViewPagerImagerAvtAdapter;
 import com.example.sharingrecipeapp.Classes.AutoScrollTask;
+import com.example.sharingrecipeapp.Classes.Ingredient;
+import com.example.sharingrecipeapp.Classes.Method;
+import com.example.sharingrecipeapp.Classes.SoLuongIngre;
 import com.example.sharingrecipeapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class FoodDetailActivity extends AppCompatActivity {
 
+    private int i = 0;
+
+    ListIngreInDetailAdapter ingreAdapter;
+
     FirebaseFirestore firebaseFirestore;
+
+    List<Ingredient> ingredientList;
+
 
     String idRecipe;
 
-    ViewPager2 viewPager2;
-    ImageView back, avt;
+    ViewPager2 viewPager2, viewPager2Avt;
+    ImageView back;
 
     TextView username, titlefood, heart, save, add, cook, note;
 
@@ -45,8 +65,8 @@ public class FoodDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_food_detail);
 
         back = findViewById(R.id.backImg);
-        avt = findViewById(R.id.avt);
         viewPager2 = findViewById(R.id.viewpagerImage);
+        viewPager2Avt = findViewById(R.id.viewPagerAvt);
         username = findViewById(R.id.nameUser);
         titlefood = findViewById(R.id.TitleFood_Detail);
         heart = findViewById(R.id.text_heart);
@@ -69,7 +89,12 @@ public class FoodDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         idRecipe = intent.getStringExtra("id");
 
+
+        getUsers(idRecipe);
         getRecipes(idRecipe);
+        getListIngre(idRecipe);
+        getListMethod(idRecipe);
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +105,90 @@ public class FoodDetailActivity extends AppCompatActivity {
         });
     }
 
+
+
+    private void getListMethod(String idRecipe) {
+
+        firebaseFirestore.collection("Recipes").document(idRecipe).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            ArrayList<String> doc = (ArrayList<String>) task.getResult().get("method");
+                            if(!doc.isEmpty()){
+                                List<Method> methodList = new ArrayList<Method>();
+                                for (int i = 0;i<doc.size();i++){
+                                  String step = ("Bước ")+ (i+1)+ ": " +doc.get(i);
+                                  methodList.add(new Method(step));
+                                }
+                                recycMethod.setAdapter(new ListMethodInDetailAdapter(getApplicationContext(),methodList));
+                            }
+                        }
+                    }
+                });
+    }
+
+
+
+    private void getUsers(String idRecipe) {
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection("Recipes").document(idRecipe).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            DocumentReference doc = (DocumentReference) task.getResult().get("Users");
+                            doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot snapshot) {
+                                    username.setText(snapshot.getString("username"));
+                                    String avt = snapshot.getString("avatar");
+                                    ViewPagerImagerAvtAdapter avtAdapter = new ViewPagerImagerAvtAdapter(getApplicationContext(), avt);
+                                    viewPager2Avt.setAdapter(avtAdapter);
+                                }
+                            });
+                        }
+                    }
+                });
+    }
+
+    private void getListIngre(String idRecipe) {
+
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
+        firebaseFirestore.collection("Recipes").document(idRecipe).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            ArrayList<DocumentReference> doc = (ArrayList<DocumentReference>) task.getResult().get("NguyenLieu");
+                            ArrayList<Integer> SL = (ArrayList<Integer>) task.getResult().get("SL");
+                            if(!doc.isEmpty()){
+                                List<Ingredient> IngreList = new ArrayList<Ingredient>();
+                                List<SoLuongIngre> slList = new ArrayList<>();
+                                 for (DocumentReference x : doc){
+                                    x.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot snapshot) {
+
+                                            String sl = String.valueOf(SL.get(i));
+                                            String id = snapshot.getString("id");
+                                            String name = snapshot.getString("name");
+                                            String image = snapshot.getString("img");
+//                                            String donvi = snapshot.getString("donvi");
+                                            IngreList.add(new Ingredient(id, name, image, " ", sl));
+                                            recycIngre.setAdapter(new ListIngreInDetailAdapter(getApplicationContext(), IngreList));
+                                            i++;
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+                    }
+                });
+    }
 
 
     private void getRecipes(String idRecipe) {
@@ -101,7 +210,7 @@ public class FoodDetailActivity extends AppCompatActivity {
 
                     String picRecipe = snapshot.getString("image");
 
-                    ViewPagerImageAdapter imageAdapter = new ViewPagerImageAdapter(getApplicationContext(), picRecipe);
+                    ViewPagerImageFoodAdapter imageAdapter = new ViewPagerImageFoodAdapter(getApplicationContext(), picRecipe);
                     viewPager2.setAdapter(imageAdapter);
 
                     TimerTask autoScrollTask = new AutoScrollTask(viewPager2);
@@ -120,6 +229,5 @@ public class FoodDetailActivity extends AppCompatActivity {
         });
 
     }
-
 
 }

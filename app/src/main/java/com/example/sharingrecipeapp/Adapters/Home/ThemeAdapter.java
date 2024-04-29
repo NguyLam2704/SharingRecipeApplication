@@ -1,4 +1,4 @@
-package com.example.sharingrecipeapp.Adapters;
+package com.example.sharingrecipeapp.Adapters.Home;
 
 import android.view.LayoutInflater;
 import android.view.View;

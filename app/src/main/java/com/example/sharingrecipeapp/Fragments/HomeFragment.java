@@ -19,11 +19,11 @@ import android.widget.ImageView;
 
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
-import com.example.sharingrecipeapp.Adapters.IClickOnItemRecipe;
-import com.example.sharingrecipeapp.Adapters.ThemeAdapter;
+import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
+import com.example.sharingrecipeapp.Adapters.Home.ThemeAdapter;
 import com.example.sharingrecipeapp.Classes.Recipes;
-import com.example.sharingrecipeapp.Adapters.RecipesAdapter;
-import com.example.sharingrecipeapp.Adapters.RecipesRandomAdapter;
+import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
+import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
 import com.example.sharingrecipeapp.Classes.Theme;
 import com.example.sharingrecipeapp.R;
 

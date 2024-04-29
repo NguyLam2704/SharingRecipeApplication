@@ -15,6 +15,9 @@
         android:theme="@style/Theme.SharingRecipeApp"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.ThemeActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.PlantoSavedActivity"
             android:exported="false" />
         <activity
@@ -44,10 +47,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity android:name=".Activities.FoodDetailActivity" />
-
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.SignupActivity" />
     </application>

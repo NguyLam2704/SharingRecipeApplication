@@ -1,4 +1,4 @@
-package com.example.sharingrecipeapp.Adapters;
+package com.example.sharingrecipeapp.Adapters.Home;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.R;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.card.MaterialCardView;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class RecipesRandomAdapter extends  RecyclerView.Adapter<RecipesRandomAdapter.RecipesViewHolder> implements Filterable {
+public class RecipesAdapter extends  RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder> implements Filterable {
 
     private List<Recipes> mRecipes;
 
@@ -29,7 +26,7 @@ public class RecipesRandomAdapter extends  RecyclerView.Adapter<RecipesRandomAda
 
     private IClickOnItemRecipe iClickOnItemRecipe;
 
-    public RecipesRandomAdapter() {
+    public RecipesAdapter() {
 
     }
 
