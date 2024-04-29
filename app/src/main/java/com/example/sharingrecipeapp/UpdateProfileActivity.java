@@ -3,6 +3,7 @@ package com.example.sharingrecipeapp;
 import static com.example.sharingrecipeapp.Fragments.UserFragment.MY_REQUEST_CODE;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.sharingrecipeapp.Fragments.UserFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,6 +45,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class UpdateProfileActivity extends AppCompatActivity {
     ImageButton return1;
@@ -54,23 +57,28 @@ public class UpdateProfileActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     Uri uri;
     String name;
-    ActivityResultLauncher<Intent> activityResultLauncher =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult o) {
             if(o.getResultCode() == RESULT_OK){
                 Intent intent = o.getData();
-                if(intent == null)
-                    return;
-                uri = intent.getData();
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
-                    setBitmap(bitmap);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if(intent != null){
+                    uri = intent.getData();
+                    try {
+                        Bitmap bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                        image_user_update.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else {
+                    Toast.makeText(UpdateProfileActivity.this, "ngu r", Toast.LENGTH_SHORT).show();
                 }
             }
         }
     });
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +100,10 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         showInfo();
         init_setListener();
+
     }
+
+
     public void showInfo(){
         if (currentUser != null) {
             String userID = currentUser.getUid();
@@ -116,7 +127,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         image_user_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickRequestPermission();
+                openGallery();
             }
         });
         update.setOnClickListener(new View.OnClickListener() {
@@ -128,89 +139,74 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         });
     }
-    private void onClickRequestPermission(){
-        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED){
-            openGallery();
-        }else{
-            String [] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
-            requestPermissions(permission,MY_REQUEST_CODE);
-        }
-    }
-
-
-
-    private void onClickUpdateProfile() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        String full_name = edit_name.getText().toString();
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(full_name)
-                .setPhotoUri(uri)
-                .build();
-
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Map<String,Object> update_user = new HashMap<>();
-                            update_user.put("username",full_name);
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            db.collection("Users")
-                                            .whereEqualTo("username",name)
-                                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if(task.isSuccessful() && !task.getResult().isEmpty())
-                                            {
-                                                DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-                                                String documentID = documentSnapshot.getId();
-                                                db.collection("Users")
-                                                        .document(documentID)
-                                                        .update(update_user)
-                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void unused) {
-                                                                Toast.makeText(UpdateProfileActivity.this,"thanh cong",Toast.LENGTH_SHORT).show();
-                                                                showInfo();
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(UpdateProfileActivity.this,"that bai",Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-                                            }
-                                            else {
-                                                Toast.makeText(UpdateProfileActivity.this,"sai me r",Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-
-//                            Toast.makeText(UpdateProfileActivity.this,"thanh cong",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode==MY_REQUEST_CODE){
-            if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            if(grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED)
+            {
                 openGallery();
             }
         }
+
     }
     public void openGallery(){
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        activityResultLauncher.launch(Intent.createChooser(intent,"Chọn ảnh"));
-
+        activityResultLauncher.launch(Intent.createChooser(intent,"Select picture"));
     }
-    private  void setBitmap(Bitmap bitmap){
-        image_user_update.setImageBitmap(bitmap);
+
+    private void onClickUpdateProfile() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String full_name = edit_name.getText().toString().trim();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(full_name)
+                .setPhotoUri(uri)
+                .build();
+        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Map<String,Object> update_user = new HashMap<>();
+                    update_user.put("username",full_name);
+                    update_user.put("avatar", uri);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("Users")
+                            .whereEqualTo("username",name)
+                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful() && !task.getResult().isEmpty())
+                                    {
+                                        DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                                        String documentID = documentSnapshot.getId();
+                                        db.collection("Users")
+                                                .document(documentID)
+                                                .update(update_user)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Toast.makeText(UpdateProfileActivity.this,"Cập nhật thành công",Toast.LENGTH_SHORT).show();
+                                                        showInfo();
+                                                        finish();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(UpdateProfileActivity.this,"Thất bại, vui lòng tử lại sau!",Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+                                    else {
+                                        Toast.makeText(UpdateProfileActivity.this,"sai me r",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+            }
+        });
     }
 
 }
