@@ -142,6 +142,7 @@ public class SignupActivity extends AppCompatActivity  {
                                 userID = Signup_auth.getCurrentUser().getUid();
                                 DocumentReference Signup_document = Signup_db.collection("Users").document(userID);
                                 Map<String,Object> new_user = new HashMap<>();
+
                                 new_user.put("email",Signup_getemail);
                                 new_user.put("username",Signup_getusername);
                                 new_user.put("password",Signup_getpassword);
