@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,8 +103,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         init_setListener();
 
     }
-
-
     public void showInfo(){
         if (currentUser != null) {
             String userID = currentUser.getUid();
@@ -160,10 +159,28 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private void onClickUpdateProfile() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String full_name = edit_name.getText().toString().trim();
+        String email = edit_email.getText().toString().trim();
+        String pass = edit_pass.getText().toString().trim();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(full_name)
                 .setPhotoUri(uri)
                 .build();
+        if(full_name.isEmpty() ){
+            Toast.makeText(UpdateProfileActivity.this,"Vui lòng nhập tên người dùng!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(email.isEmpty() ){
+            Toast.makeText(UpdateProfileActivity.this,"Vui lòng nhập email dùng!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(pass.isEmpty() | pass.length() < 6 ){
+            Toast.makeText(UpdateProfileActivity.this,"Mật khẩu tối thiểu 6 kí tự!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            Toast.makeText(UpdateProfileActivity.this,"Email không tồn tại!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -171,6 +188,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     Map<String,Object> update_user = new HashMap<>();
                     update_user.put("username",full_name);
                     update_user.put("avatar", uri);
+                    update_user.put("email", email);
+                    update_user.put("password", pass);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     db.collection("Users")
                             .whereEqualTo("username",name)
@@ -198,9 +217,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                                         Toast.makeText(UpdateProfileActivity.this,"Thất bại, vui lòng tử lại sau!",Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
-                                    }
-                                    else {
-                                        Toast.makeText(UpdateProfileActivity.this,"sai me r",Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
