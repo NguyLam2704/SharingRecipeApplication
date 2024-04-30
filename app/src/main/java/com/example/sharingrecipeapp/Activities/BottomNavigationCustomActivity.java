@@ -32,12 +32,14 @@ import com.example.sharingrecipeapp.SaveListActivity;
 import com.example.sharingrecipeapp.UpdateProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 public class BottomNavigationCustomActivity extends AppCompatActivity {
     ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
     ViewPager2 mViewPager;
+    UserFragment userFragment;
     private BottomNavigationView mBottomNavigationView;
 
     @Override
@@ -111,11 +113,10 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
     }
 
 
-    public void gotoSaved() {
-        Intent intent = new Intent(this, SaveListActivity.class);
-        startActivity(intent);
-    }
-
+  public void gotoSaved(){
+      Intent intent=new Intent(this, SaveListActivity.class);
+      startActivity(intent);
+  }
 
 
     public void gotoChangeProfile() {
@@ -127,6 +128,7 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
+
 
     public void gotoLogout() {
         logoutAccount();
@@ -153,6 +155,7 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         builder.create().show();
     }
 }
+
 
 
 

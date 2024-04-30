@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar3"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="#E8E9EF"
@@ -21,9 +22,9 @@
             android:id="@+id/returns1"
             android:layout_width="48dp"
             android:layout_height="26dp"
-            android:src="@drawable/arrow_back"
+            android:layout_gravity="left"
             android:background="@drawable/oval_btn_background"
-            android:layout_gravity="left"/>
+            android:src="@drawable/arrow_back" />
 
         <TextView
             android:id="@+id/textView"
@@ -50,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.033"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_name" />
 
     <TextView
         android:id="@+id/text_password"
@@ -74,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:lineHeight="26sp"
         android:lineSpacingExtra="7sp"
@@ -84,10 +85,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView2" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/edit_pass"
         android:layout_width="370dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
@@ -102,21 +103,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_password" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="166dp"
-        android:layout_height="142dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="72dp"
-        android:src="@drawable/round_account_circle"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        app:cardCornerRadius="150dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </ImageView>
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/grey_background">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_user_upd"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:src="@drawable/round_account_circle" />
+    </com.google.android.material.card.MaterialCardView>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/edit_name"
         android:layout_width="370dp"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
@@ -147,33 +154,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_email" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
+
+    <Button
+        android:id="@+id/update_btn"
+        android:layout_width="208dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="#FB8019"
+        android:text="Cập nhật"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2">
-
-        <Button
-            android:id="@+id/update_btn"
-            android:layout_width="208dp"
-            android:layout_height="58dp"
-            android:backgroundTint="#FB8019"
-            android:text="Cập nhật"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-
-        <ProgressBar
-            android:id="@+id/profile_progressBar"
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminateTint="#FB8019" />
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/edit_pass" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
