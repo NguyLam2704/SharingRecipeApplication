@@ -10,7 +10,7 @@
         android:id="@+id/toolbar3"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="#E8E9EF"
+        android:background="@color/grey_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -23,7 +23,9 @@
             android:layout_width="48dp"
             android:layout_height="26dp"
             android:layout_gravity="left"
+            app:tint="@color/black"
             android:background="@drawable/oval_btn_background"
+            android:backgroundTint="@color/grey_background"
             android:src="@drawable/arrow_back" />
 
         <TextView
@@ -33,7 +35,8 @@
             android:layout_gravity="center"
             android:text="Chỉnh sửa hồ sơ"
             android:textSize="25sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
     </androidx.appcompat.widget.Toolbar>
 
     <TextView
@@ -41,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
         android:lineHeight="26sp"
         android:lineSpacingExtra="7sp"
@@ -51,14 +54,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.033"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_name" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView2" />
 
     <TextView
         android:id="@+id/text_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
         android:lineHeight="26sp"
         android:lineSpacingExtra="7sp"
@@ -68,14 +71,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.024"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_email" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_name" />
 
     <TextView
         android:id="@+id/text_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
         android:lineHeight="26sp"
         android:lineSpacingExtra="7sp"
@@ -83,9 +86,9 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintHorizontal_bias="0.02"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView2" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_email" />
 
     <EditText
         android:id="@+id/edit_pass"
@@ -105,8 +108,8 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:layout_marginTop="80dp"
         app:cardCornerRadius="150dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -122,6 +125,7 @@
             android:src="@drawable/round_account_circle" />
     </com.google.android.material.card.MaterialCardView>
 
+
     <EditText
         android:id="@+id/edit_name"
         android:layout_width="370dp"
@@ -134,15 +138,17 @@
         android:hint="Tên người dùng"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.39"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_name" />
 
-    <EditText
+    <TextView
         android:id="@+id/edt_email"
         android:layout_width="370dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
         android:background="@drawable/edittext_background"
         android:backgroundTint="@color/white"
         android:drawablePadding="8dp"
@@ -150,10 +156,9 @@
         android:hint="Email"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.439"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_email" />
-
 
     <Button
         android:id="@+id/update_btn"
