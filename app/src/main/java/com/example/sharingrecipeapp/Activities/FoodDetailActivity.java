@@ -80,7 +80,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         titlefood = findViewById(R.id.TitleFood_Detail);
         heart = findViewById(R.id.like_text);
         save = findViewById(R.id.text_save);
-        add = findViewById(R.id.text_add);
+        add = findViewById(R.id.text_cook);
         cook = findViewById(R.id.text_time_detail);
         note = findViewById(R.id.text_Note);
         recycIngre = findViewById(R.id.recyNguyenLieu);
