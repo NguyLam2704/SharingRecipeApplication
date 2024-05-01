@@ -112,21 +112,50 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
   public void gotoSaved(){
       Intent intent=new Intent(this, SaveListActivity.class);
       startActivity(intent);
   }
 
+
     public void gotoChangeProfile() {
         Intent intent = new Intent(this, UpdateProfileActivity.class);
         startActivity(intent);
     }
+
     public void gotoSetting() {
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
+
+
     public void gotoLogout() {
-        Intent intent = new Intent(BottomNavigationCustomActivity.this, BottomNavigationCustomActivity.class);
-        startActivity(intent);
+        logoutAccount();
+    }
+
+    private void logoutAccount() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Đăng xuất");
+        builder.setMessage("Bạn có chắc chắn muốn đăng xuất không?");
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(BottomNavigationCustomActivity.this, BottomNavigationCustomActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 }
+
+
+
+
