@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/edittext_bound"
         android:iconifiedByDefault="false"
         android:queryBackground="@android:color/transparent"
@@ -24,12 +24,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView8"
         android:layout_width="298dp"
         android:layout_height="28dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/line_save_background"
-        android:text="Danh sách đã lưu được .... món ăn"
         android:padding="3dp"
+        android:text="Danh sách đã lưu được .... món ăn"
         android:textAlignment="center"
         android:textColor="#9F9F9F"
         android:textSize="15sp"
@@ -39,18 +40,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Searchbar" />
 
-    <GridView
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="10dp"
-        android:id="@+id/GridView"
-        android:layout_width="409dp"
-        android:layout_height="487dp"
-        android:numColumns="2"
-        android:gravity="center"
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="407dp"
+        android:layout_height="528dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/recy_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
