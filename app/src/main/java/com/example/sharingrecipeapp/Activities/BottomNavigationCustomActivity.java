@@ -20,6 +20,7 @@ import android.view.MenuItem;
 
 import com.example.sharingrecipeapp.Adapters.ViewPagerAdapter;
 import com.example.sharingrecipeapp.Classes.Recipes;
+import com.example.sharingrecipeapp.Classes.Theme;
 import com.example.sharingrecipeapp.Fragments.ExploreFragment;
 import com.example.sharingrecipeapp.Fragments.GroceriesFragment;
 import com.example.sharingrecipeapp.Fragments.HomeFragment;
@@ -153,6 +154,13 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+
+    public void gotoThemeDetail(Theme theme) {
+        Intent intent = new Intent(BottomNavigationCustomActivity.this, ThemeActivity.class);
+        intent.putExtra("id", theme.getId());
+        startActivity(intent);
     }
 }
 

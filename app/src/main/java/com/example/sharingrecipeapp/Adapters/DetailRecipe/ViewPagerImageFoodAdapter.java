@@ -1,4 +1,4 @@
-package com.example.sharingrecipeapp.Adapters;
+package com.example.sharingrecipeapp.Adapters.DetailRecipe;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,13 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sharingrecipeapp.R;
 import com.squareup.picasso.Picasso;
 
-public class ViewPagerImageAdapter extends RecyclerView.Adapter<ViewPagerImageAdapter.ImageViewHolder> implements Filterable {
+public class ViewPagerImageFoodAdapter extends RecyclerView.Adapter<ViewPagerImageFoodAdapter.ImageViewHolder> implements Filterable {
 
     private String imgUrl;
     private Context context;
 
 
-    public ViewPagerImageAdapter(Context c, String s){
+    public ViewPagerImageFoodAdapter(Context c, String s){
         this.imgUrl = s;
         this.context = c;
     }
@@ -33,14 +33,14 @@ public class ViewPagerImageAdapter extends RecyclerView.Adapter<ViewPagerImageAd
 
     @NonNull
     @Override
-    public ViewPagerImageAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewPagerImageFoodAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image_recipes,parent,false);
-        return new ViewPagerImageAdapter.ImageViewHolder(view);
+        return new ViewPagerImageFoodAdapter.ImageViewHolder(view);
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewPagerImageAdapter.ImageViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewPagerImageFoodAdapter.ImageViewHolder holder, int position) {
         Picasso.get().load(imgUrl).into(holder.img);
     }
 
