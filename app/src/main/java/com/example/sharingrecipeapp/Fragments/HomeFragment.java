@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.ThemeAdapter;
+import com.example.sharingrecipeapp.Adapters.Home.iClickOnItemTheme;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
@@ -55,7 +56,7 @@ public class HomeFragment extends Fragment {
 
     private List<Recipes> listRecipes;
 
-    private List<Theme> lisTheme;
+    private List<Theme> listTheme;
     ImageView img_food;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
@@ -172,23 +173,36 @@ public class HomeFragment extends Fragment {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
             recyclerViewTheme.setLayoutManager(linearLayoutManager);
 
-           FirestoreRecyclerOptions<Theme> options = new FirestoreRecyclerOptions.Builder<Theme>()
-                   .setQuery(firebaseFirestore.collection("Theme"),Theme.class)
-                   .build();
-           themeAdapter = new ThemeAdapter(options);
-           recyclerViewTheme.setAdapter(themeAdapter);
+            themeAdapter = new ThemeAdapter();
+            firebaseFirestore.collection("Theme")
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            if (error != null) {
+                                Log.w("Error", "listen:error", error);
+                                return;
+                            }
+                            listTheme = new ArrayList<>();
+                            for (DocumentSnapshot snapshot : value.getDocuments()){
+                                String id = snapshot.getString("id");
+                                String name = snapshot.getString("name");
+                                String image = snapshot.getString("image");
+                                listTheme.add(new Theme(id, name, image));
+                            }
+                            themeAdapter.setData(listTheme, new iClickOnItemTheme() {
+                                @Override
+                                public void onClickItemTheme(Theme theme) {
+                                    onClickGoToDetailTheme(theme);
+                                }
+                            });
+                            recyclerViewTheme.setAdapter(themeAdapter);
+                        }
+                    });
+
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        themeAdapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        themeAdapter.stopListening();
+    private void onClickGoToDetailTheme(Theme theme) {
+        bottomNavigationCustomActivity.gotoThemeDetail(theme);
     }
 
 }

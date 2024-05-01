@@ -17,7 +17,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.sharingrecipeapp.Adapters.DetailRecipe.ListIngreInDetailAdapter;
+import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetailAdapterDonVi;
+import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetailAdapterName;
+import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetailAdapterSoLuong;
 import com.example.sharingrecipeapp.Adapters.DetailRecipe.ListMethodInDetailAdapter;
 import com.example.sharingrecipeapp.Adapters.DetailRecipe.ViewPagerImageFoodAdapter;
 import com.example.sharingrecipeapp.Adapters.DetailRecipe.ViewPagerImagerAvtAdapter;
@@ -42,13 +44,20 @@ import java.util.TimerTask;
 
 public class FoodDetailActivity extends AppCompatActivity {
 
-    private int i = 0;
+    private int countSL = 0;
+    private int countIngre = -1;
 
-    ListIngreInDetailAdapter ingreAdapter;
+    ListIngreInDetailAdapterName ingreAdapter;
+    ListIngreInDetailAdapterSoLuong soluongAdapter;
+
+    ListIngreInDetailAdapterDonVi donviAdapter;
 
     FirebaseFirestore firebaseFirestore;
 
-    List<Ingredient> ingredientList;
+    List<Ingredient> IngreList;
+    List<Ingredient> IngreDVList;
+    List<String> ingres;
+    List<String> sl;
 
 
     String idRecipe;
@@ -58,7 +67,7 @@ public class FoodDetailActivity extends AppCompatActivity {
 
     TextView username, titlefood, heart, save, add, cook, note;
 
-    RecyclerView recycIngre, recycMethod;
+    RecyclerView recycIngre, recycSoLuong, recycDonVi, recycMethod;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,20 +78,23 @@ public class FoodDetailActivity extends AppCompatActivity {
         viewPager2Avt = findViewById(R.id.viewPagerAvt);
         username = findViewById(R.id.nameUser);
         titlefood = findViewById(R.id.TitleFood_Detail);
-        heart = findViewById(R.id.text_heart);
+        heart = findViewById(R.id.like_text);
         save = findViewById(R.id.text_save);
         add = findViewById(R.id.text_add);
         cook = findViewById(R.id.text_time_detail);
         note = findViewById(R.id.text_Note);
         recycIngre = findViewById(R.id.recyNguyenLieu);
         recycMethod = findViewById(R.id.recyMethod);
+        recycSoLuong = findViewById(R.id.recySoLuong);
+        recycDonVi = findViewById(R.id.recyDonVi);
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getApplicationContext(), RecyclerView.VERTICAL, false);
         recycIngre.setLayoutManager(linearLayoutManager);
         LinearLayoutManager linearLayoutManagerMethod = new LinearLayoutManager(this.getApplicationContext(), RecyclerView.VERTICAL, false);
         recycMethod.setLayoutManager(linearLayoutManagerMethod);
-
+        recycSoLuong.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(),RecyclerView.VERTICAL,false));
+        recycDonVi.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(),RecyclerView.VERTICAL,false));
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -92,7 +104,7 @@ public class FoodDetailActivity extends AppCompatActivity {
 
         getUsers(idRecipe);
         getRecipes(idRecipe);
-        getListIngre(idRecipe);
+        getSoLuongIngre(idRecipe);
         getListMethod(idRecipe);
 
 
@@ -105,6 +117,25 @@ public class FoodDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void getSoLuongIngre(String idRecipe) {
+        firebaseFirestore.collection("Recipes").document(idRecipe).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            ArrayList<String> doc = (ArrayList<String>) task.getResult().get("SoLuong");
+                            if(!doc.isEmpty()){
+                                List<SoLuongIngre> soLuongIngreList = new ArrayList<SoLuongIngre>();
+                                for (int i = 0;i<doc.size();i++){
+                                    String sl = String.valueOf(doc.get(i));
+                                    soLuongIngreList.add(new SoLuongIngre(sl));
+                                }
+                                recycSoLuong.setAdapter(new ListIngreInDetailAdapterSoLuong(getApplicationContext(),soLuongIngreList));
+                            }
+                        }
+                    }
+                });
+    }
 
 
     private void getListMethod(String idRecipe) {
@@ -118,16 +149,15 @@ public class FoodDetailActivity extends AppCompatActivity {
                             if(!doc.isEmpty()){
                                 List<Method> methodList = new ArrayList<Method>();
                                 for (int i = 0;i<doc.size();i++){
-                                  String step = ("Bước ")+ (i+1)+ ": " +doc.get(i);
+                                  String step = ("• Bước ")+ (i+1)+ ": " +doc.get(i);
                                   methodList.add(new Method(step));
                                 }
-                                recycMethod.setAdapter(new ListMethodInDetailAdapter(getApplicationContext(),methodList));
+                               recycMethod.setAdapter(new ListMethodInDetailAdapter(getApplicationContext(),methodList));
                             }
                         }
                     }
                 });
     }
-
 
 
     private void getUsers(String idRecipe) {
@@ -152,43 +182,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                 });
     }
 
-    private void getListIngre(String idRecipe) {
 
-
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-        firebaseFirestore.collection("Recipes").document(idRecipe).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
-                            ArrayList<DocumentReference> doc = (ArrayList<DocumentReference>) task.getResult().get("NguyenLieu");
-                            ArrayList<Integer> SL = (ArrayList<Integer>) task.getResult().get("SL");
-                            if(!doc.isEmpty()){
-                                List<Ingredient> IngreList = new ArrayList<Ingredient>();
-                                List<SoLuongIngre> slList = new ArrayList<>();
-                                 for (DocumentReference x : doc){
-                                    x.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot snapshot) {
-
-                                            String sl = String.valueOf(SL.get(i));
-                                            String id = snapshot.getString("id");
-                                            String name = snapshot.getString("name");
-                                            String image = snapshot.getString("img");
-//                                            String donvi = snapshot.getString("donvi");
-                                            IngreList.add(new Ingredient(id, name, image, " ", sl));
-                                            recycIngre.setAdapter(new ListIngreInDetailAdapter(getApplicationContext(), IngreList));
-                                            i++;
-                                        }
-                                    });
-
-                                }
-                            }
-                        }
-                    }
-                });
-    }
 
 
     private void getRecipes(String idRecipe) {
@@ -222,12 +216,63 @@ public class FoodDetailActivity extends AppCompatActivity {
                     cook.setText(snapshot.getString("timecook")+" phút");
                     note.setText(snapshot.getString("note"));
 
+                    ingres = (List<String>) snapshot.get("NguyenLieu");
+
+
+
+                    getIngre(ingres);
+
+
+
                 } else {
                     Log.d(TAG, "Current data: null");
                 }
             }
-        });
 
+
+
+        });
+    }
+
+
+
+
+    private void getIngre(List<String> ingres) {
+        IngreList = new ArrayList<>();
+
+        ingreAdapter = new ListIngreInDetailAdapterName();
+        donviAdapter = new ListIngreInDetailAdapterDonVi();
+
+        for (String ingre : ingres){
+            final DocumentReference docRef = firebaseFirestore.collection("NguyenLieu").document(ingre);
+            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    if (snapshot != null && snapshot.exists()) {
+                        Log.d(TAG, "Current data: " + snapshot.getData());
+                        String id = (String) snapshot.get("id");
+                        String name = (String) snapshot.get("name");
+                        String image = (String) snapshot.get("img");
+                        String dv = (String) snapshot.get("donvi");
+                        Ingredient ingreList = new Ingredient(id, name, image, dv);
+                        IngreList.add(ingreList);
+                        ingreAdapter.setData(IngreList, FoodDetailActivity.this);
+                        recycIngre.setAdapter(ingreAdapter);
+
+                        donviAdapter.setData(IngreList, FoodDetailActivity.this);
+                        recycDonVi.setAdapter(donviAdapter);
+
+                    } else {
+                        Log.d(TAG, "Current data: null");
+                    }
+                }
+            });
+        }
     }
 
 }

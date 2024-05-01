@@ -1,17 +1,17 @@
 package com.example.sharingrecipeapp.Classes;
 
 public class SoLuongIngre {
-    Long soluong;
+    String soluong;
 
-    public SoLuongIngre(Long soluong) {
+    public SoLuongIngre(String soluong) {
         this.soluong = soluong;
     }
 
-    public Long getSoluong() {
+    public String getSoluong() {
         return soluong;
     }
 
-    public void setSoluong(Long soluong) {
+    public void setSoluong(String soluong) {
         this.soluong = soluong;
     }
 }

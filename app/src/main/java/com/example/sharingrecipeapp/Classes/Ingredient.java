@@ -1,14 +1,14 @@
 package com.example.sharingrecipeapp.Classes;
 
 public class Ingredient {
-    String id, name, img, donvi, SL;
+    String id, name, img, donvi;
 
-    public Ingredient(String id, String name, String img, String donvi, String soluong) {
+    public Ingredient(String id, String name, String img, String donvi) {
         this.id = id;
         this.name = name;
         this.img = img;
         this.donvi = donvi;
-        this.SL = soluong;
+
     }
 
     public String getId() {
@@ -43,12 +43,6 @@ public class Ingredient {
         this.donvi = donvi;
     }
 
-    public String getSL() {
-        return SL;
-    }
 
-    public void setSL(String SL) {
-        this.SL = SL;
-    }
 }
 
