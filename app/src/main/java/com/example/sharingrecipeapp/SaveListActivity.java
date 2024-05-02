@@ -27,6 +27,9 @@ import com.example.sharingrecipeapp.Adapters.RecipesAdapter;
 import com.example.sharingrecipeapp.Classes.ABrief;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,9 +43,12 @@ public class SaveListActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecipesAdapter recipesAdapter;
-    private List<Recipes> listRecipes;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firebaseFirestore;
+    List<String> listSaveRe;
+     List<Recipes> listRecipes;
+     FirebaseAuth firebaseAuth;
+    FirebaseUser currentUser;
+     FirebaseFirestore firebaseFirestore;
+    String userID;
     TextView txt;
     int Number;
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
@@ -53,11 +59,15 @@ public class SaveListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_list);
         recyclerView= findViewById(R.id.recy_save);
-
         firebaseAuth = FirebaseAuth.getInstance();
+        currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            userID = currentUser.getUid();
+        }
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         setdataGrid();
+
 
     }
 
@@ -67,7 +77,9 @@ public class SaveListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
         recipesAdapter = new RecipesAdapter();
         txt= (TextView) findViewById(R.id.text_save);
-        firebaseFirestore.collection("SaveRecipes")
+        CollectionReference collectionReferenceuser= firebaseFirestore.collection("SaveRecipes");
+        collectionReferenceuser
+                .whereEqualTo("idUser",userID )
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -75,7 +87,22 @@ public class SaveListActivity extends AppCompatActivity {
                             Log.w("Error", "listen:error", error);
                             return;
                         }
-                        Number=value.size();
+                        listSaveRe = new ArrayList<>();
+                        for (DocumentSnapshot documentSnapshot: value.getDocuments()){
+                            listSaveRe.add(documentSnapshot.getString("idRecipes"));
+                        }
+                        Number=listSaveRe.size();
+
+                    }
+                });
+
+        txt.setText("Bạn đã lưu được "+Number+"món ăn");
+
+        firebaseFirestore.collection("Recipes")
+                .whereIn("idRecipes", listSaveRe)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         listRecipes = new ArrayList<>();
                         for (DocumentSnapshot documentSnapshot : value.getDocuments()){
                             String id = documentSnapshot.getString("id");
@@ -85,17 +112,19 @@ public class SaveListActivity extends AppCompatActivity {
                             String time = documentSnapshot.getString("timecook");
                             listRecipes.add(new Recipes(id, image, name, save, time));
                         }
+                        Number=listRecipes.size();
                         recipesAdapter.setData(listRecipes, new IClickOnItemRecipe() {
                             @Override
                             public void onClickItemRecipe(Recipes recipes) {
                                 onClickGoToDetailFood(recipes);
                             }
+                            //public void onLongClickItemR
                         });
                         recyclerView.setAdapter(recipesAdapter);
                     }
                 });
 
-        txt.setText("Bạn đã lưu được "+Number+"món ăn");
+
     }
 
     private void onClickGoToDetailFood(Recipes recipes) {
