@@ -36,7 +36,8 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
-            android:src="@drawable/save" />
+            android:src="@drawable/save"
+            app:tint="@color/black" />
 
         <TextView
             android:id="@+id/btn_saved"
@@ -46,8 +47,8 @@
             android:layout_marginStart="10dp"
             android:gravity="center|start"
             android:text="Công thức đã lưu"
-            android:textColor="#000000"
-            android:textSize="18dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -68,7 +69,8 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
-            android:src="@drawable/outline_edit" />
+            android:src="@drawable/baseline_user"
+            app:tint="@color/black"/>
 
         <TextView
             android:id="@+id/btn_change_profile"
@@ -77,9 +79,9 @@
             android:layout_marginVertical="15dp"
             android:layout_marginStart="10dp"
             android:gravity="center|start"
-            android:text="Chỉnh sửa hồ sơ"
-            android:textColor="#000000"
-            android:textSize="18dp"
+            android:text="Hồ sơ cá nhân"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -100,7 +102,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
-            android:src="@drawable/baseline_settings"
+            android:src="@drawable/outline_settings"
             app:tint="@color/black" />
 
         <TextView
@@ -111,8 +113,8 @@
             android:layout_marginStart="10dp"
             android:gravity="center|start"
             android:text="Cài đặt"
-            android:textColor="#000000"
-            android:textSize="18dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -144,8 +146,8 @@
             android:layout_marginStart="10dp"
             android:gravity="center|start"
             android:text="Đăng xuất"
-            android:textColor="#000000"
-            android:textSize="18dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -157,10 +159,11 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="165dp"
+            android:layout_height="165dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:strokeColor="@color/grey_background"
+            app:strokeWidth="0.5dp"
             app:cardCornerRadius="200dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -169,9 +172,10 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_user"
                 android:layout_width="185dp"
-                android:layout_height="183dp"
+                android:layout_height="185dp"
                 android:layout_gravity="center"
                 android:src="@drawable/round_account_circle"
+                android:tint="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
