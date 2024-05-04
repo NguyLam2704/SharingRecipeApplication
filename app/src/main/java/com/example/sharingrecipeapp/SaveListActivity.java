@@ -39,6 +39,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SaveListActivity extends AppCompatActivity {
@@ -93,7 +94,7 @@ public class SaveListActivity extends AppCompatActivity {
         txt= (TextView) findViewById(R.id.text_save);
         CollectionReference collectionReferenceuser= firebaseFirestore.collection("SaveRecipes");
         collectionReferenceuser
-                .whereEqualTo("idUser",userID )
+                .whereArrayContainsAny("idUser", Arrays.asList(userID) )
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
