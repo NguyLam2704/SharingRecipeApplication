@@ -302,7 +302,6 @@ public class PlanFragment extends Fragment {
                 });
 
 
-
     }
 
     private ConstraintLayout selectBtnSetting(String dateOfWeek) {

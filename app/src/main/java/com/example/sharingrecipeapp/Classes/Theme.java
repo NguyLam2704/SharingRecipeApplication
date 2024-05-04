@@ -1,10 +1,11 @@
 package com.example.sharingrecipeapp.Classes;
 
 public class Theme {
-    String name, image;
+    String id, name, image;
 
     public Theme(){ }
-    public Theme(String name, String image) {
+    public Theme(String id, String name, String image) {
+        this.id = id;
         this.name = name;
         this.image = image;
     }
@@ -23,5 +24,13 @@ public class Theme {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

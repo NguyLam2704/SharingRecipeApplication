@@ -1,4 +1,4 @@
-package com.example.sharingrecipeapp.Adapters;
+package com.example.sharingrecipeapp.Adapters.Home;
 
 import com.example.sharingrecipeapp.Classes.Recipes;
 
