@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 
-import com.example.sharingrecipeapp.Adapters.IClickOnItemRecipe;
-import com.example.sharingrecipeapp.Adapters.RecipesAdapter;
+
+import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
+import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 import com.example.sharingrecipeapp.Classes.ABrief;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,6 +52,7 @@ public class SaveListActivity extends AppCompatActivity {
      FirebaseFirestore firebaseFirestore;
     String userID;
     TextView txt;
+    ImageButton btn_back;
     int Number;
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
 
@@ -68,12 +71,23 @@ public class SaveListActivity extends AppCompatActivity {
 
         setdataGrid();
 
+        btn_back = (ImageButton) findViewById(R.id.btn_back_profile);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
+
+
 
     }
 
     private void setdataGrid(){
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, RecyclerView.VERTICAL);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
         recipesAdapter = new RecipesAdapter();
         txt= (TextView) findViewById(R.id.text_save);
@@ -120,7 +134,9 @@ public class SaveListActivity extends AppCompatActivity {
                             }
                             //public void onLongClickItemR
                         });
+
                         recyclerView.setAdapter(recipesAdapter);
+
                     }
                 });
 
