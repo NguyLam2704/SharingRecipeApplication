@@ -4,42 +4,50 @@ package com.example.sharingrecipeapp.Fragments;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
-import com.example.sharingrecipeapp.Activities.LoginActivity;
+import com.example.sharingrecipeapp.Activities.FoodDetailActivity;
 import com.example.sharingrecipeapp.Activities.PlantoSavedActivity;
-import com.example.sharingrecipeapp.Adapters.AdapterPlanListRecipes;
-import com.example.sharingrecipeapp.Models.Recipes;
+import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetailAdapterSoLuong;
+import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
+import com.example.sharingrecipeapp.Adapters.PlanList.AdapterPlanListRecipes;
+import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
+import com.example.sharingrecipeapp.Classes.Recipes;
+import com.example.sharingrecipeapp.Classes.SoLuongIngre;
 import com.example.sharingrecipeapp.R;
 import com.example.sharingrecipeapp.databinding.FragmentPlanBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -48,8 +56,15 @@ public class PlanFragment extends Fragment {
     private FragmentPlanBinding binding;
     private Calendar calendar;
     FirebaseFirestore db;
+    FirebaseAuth auth;
+
+    private BottomNavigationCustomActivity bottomNavigationCustomActivity;
 
     RecyclerView recyclerView;
+    private  List<String> plan_list;
+    private  List<Recipes> recipesList;
+
+    int curWeekOfYear;
 
     public PlanFragment() {
         // Required empty public constructor
@@ -67,7 +82,6 @@ public class PlanFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         View CN, t2, t3, t4, t5, t6, t7;
         t2 = view.findViewById(R.id.add2);
         t3 = view.findViewById(R.id.add3);
@@ -84,6 +98,34 @@ public class PlanFragment extends Fragment {
         doAddBtn(t6);
         doAddBtn(t7);
         doAddBtn(CN);
+
+        PlanOfDay();
+
+        prev = binding.prevWeek;
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendar.add(Calendar.DATE, -7);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setDateTime();
+                }
+                LightOffCurDate(binding.getRoot());
+                PlanOfDay();
+            }
+        });
+
+        next = binding.nextWeek;
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendar.add(Calendar.DATE, 7);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setDateTime();
+                }
+                LightOffCurDate(binding.getRoot());
+                PlanOfDay();
+            }
+        });
 
     }
 
@@ -108,60 +150,34 @@ public class PlanFragment extends Fragment {
     private ImageView prev;
     private ImageView next;
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentPlanBinding.inflate(inflater, container, false);
         calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        curWeekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
+        bottomNavigationCustomActivity = (BottomNavigationCustomActivity) getActivity();
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         InitUI();
 
-        PlanOfDay();
-
-        prev = binding.prevWeek;
-        prev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calendar.add(Calendar.DATE, -7);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    setDateTime(binding.DateTime);
-                }
-
-                LightOffCurDate(binding.getRoot());
-                PlanOfDay();
-            }
-        });
-
-        next = binding.nextWeek;
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calendar.add(Calendar.DATE, 7);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    setDateTime(binding.DateTime);
-                }
-                resetRecyclerView();
-                LightOffCurDate(binding.getRoot());
-                PlanOfDay();
-            }
-        });
 
         return binding.getRoot();
     }
 
-    private void resetRecyclerView() {
 
-    }
 
     private void LightOffCurDate(View view) {
-        Calendar cur = Calendar.getInstance();
-        cur.setTimeInMillis(System.currentTimeMillis());
 
-        if (cur.get(Calendar.WEEK_OF_YEAR) != calendar.get(Calendar.WEEK_OF_YEAR)) {
+        if (curWeekOfYear != calendar.get(Calendar.WEEK_OF_YEAR)) {
             TextView date;
             int color = requireContext().getColor(R.color.black);
-            switch (cur.get(Calendar.DAY_OF_WEEK)) {
+            switch (calendar.get(Calendar.DAY_OF_WEEK)) {
                 case Calendar.MONDAY:
                     date = view.findViewById(R.id.Thu2);
                     date.setTextColor(color);
@@ -197,7 +213,7 @@ public class PlanFragment extends Fragment {
         } else {
             int color = requireContext().getColor(R.color.color_primary);
             TextView date;
-            switch (cur.get(Calendar.DAY_OF_WEEK)) {
+            switch (calendar.get(Calendar.DAY_OF_WEEK)) {
                 case Calendar.MONDAY:
                     date = view.findViewById(R.id.Thu2);
                     date.setTextColor(color);
@@ -232,11 +248,80 @@ public class PlanFragment extends Fragment {
         }
     }
 
-    private void PlanOfDay() {
-        Calendar cur = calendar;
-        db = FirebaseFirestore.getInstance();
-        String weekID = String.valueOf(cur.get(Calendar.WEEK_OF_YEAR));
+    private void PlanOfDay(){
 
+        turnOffRecyclerView();
+        String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
+        db.collection("PlanList").document(auth.getUid()).collection(weekID).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        for (DocumentSnapshot doc : task.getResult()){
+
+
+                            List<String> tenRecipe = (List<String>) doc.get("recipes");
+                            ArrayList<Recipes> recipesList = new ArrayList<>();
+                            for (String i : tenRecipe){
+                                db.collection("Recipes").document(i).get()
+                                        .addOnSuccessListener(documentSnapshot -> {
+                                            String image = documentSnapshot.getString("image");
+                                            String name = documentSnapshot.getString("name");
+                                            String save = documentSnapshot.get("save").toString();
+                                            String time = documentSnapshot.get("timecook").toString();
+
+                                            Recipes recipes = new Recipes(i,image,name,save,time);
+                                            recipesList.add(recipes);
+
+                                            if (i == tenRecipe.get(tenRecipe.size()-1)){
+                                                recyclerView = selectRecycleView(doc.getId());
+                                                recyclerView.setVisibility(View.VISIBLE);
+
+                                                ConstraintLayout setting = selectBtnSetting(doc.getId());
+                                                setting.setVisibility(View.VISIBLE);
+
+                                                AdapterPlanListRecipes myAdapter = new AdapterPlanListRecipes();
+
+                                                myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+                                                    @Override
+                                                    public void onClickItemRecipe(Recipes recipes) {
+                                                        onClickGoToDetailFood(recipes);
+                                                    }
+                                                });
+                                                recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false));
+
+
+                                                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
+                                                    @Override
+                                                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                                                        return false;
+                                                    }
+
+                                                    @Override
+                                                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                                                        int position = viewHolder.getAbsoluteAdapterPosition();
+                                                        db.collection("PlanList").document(auth.getUid()).collection(weekID).document(doc.getId()).update("recipes", FieldValue.arrayRemove(recipesList.get(position).getId()));
+                                                        recipesList.remove(position);
+                                                        if (recipesList.isEmpty()){
+                                                            ConstraintLayout setting = selectBtnSetting(doc.getId());
+                                                            setting.setVisibility(View.GONE);
+                                                        }
+                                                        //deleteRecipe(weekID,doc.getId(),position);
+                                                        myAdapter.notifyDataSetChanged();
+                                                    }
+                                                });
+                                                itemTouchHelper.attachToRecyclerView(recyclerView);
+                                                recyclerView.setAdapter(myAdapter);
+                                            }
+
+
+                                        });
+                            }
+                        }
+                    }
+                });
+    }
+
+
+    private void turnOffRecyclerView() {
         List<String> date = new ArrayList<>();
         date.add("Thu2");
         date.add("Thu3");
@@ -246,62 +331,18 @@ public class PlanFragment extends Fragment {
         date.add("Thu7");
         date.add("ChuNhat");
 
+        for (String dateOfWeek : date){
+            ConstraintLayout setting = selectBtnSetting(dateOfWeek);
+            setting.setVisibility(View.GONE);
 
-        db.collection("PlanList").document(weekID).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        for (String dateOfWeek : date){
-                            if ( task.getResult().get(dateOfWeek) == null) {
-
-                                CardView empty = selectEmptyRecycler(dateOfWeek);
-                                empty.setVisibility(View.VISIBLE);
-
-                                ConstraintLayout setting = selectBtnSetting(dateOfWeek);
-                                setting.setVisibility(View.GONE);
-
-                                recyclerView = SelectRecycleView(dateOfWeek);
-                                recyclerView.setVisibility(View.GONE);
-//                                ArrayList<Recipes> recipes = new ArrayList<>();
-//                                AdapterPlanListRecipes adapter = new AdapterPlanListRecipes(binding.getRoot().getContext(),recipes);
-//                                recyclerView.setAdapter(adapter);
-//                                recyclerView.
-//                                recipes.clear();
-//                                adapter.notifyDataSetChanged();
-                                continue;
-                            }
-                            ArrayList<DocumentReference> doc = (ArrayList<DocumentReference>) task.getResult().get(dateOfWeek);
-                            if (!doc.isEmpty()){
-                                List<Recipes> recipesList = new ArrayList<Recipes>();
-                                for (DocumentReference x : doc) {
-
-                                    x.get().addOnSuccessListener(documentSnapshot -> {
-
-                                        String a, b;
-                                        a = documentSnapshot.get("name").toString();
-                                        b = documentSnapshot.get("image").toString();
-                                        recipesList.add(new Recipes(a, b));
-                                        recyclerView = SelectRecycleView(dateOfWeek);
-                                        recyclerView.setVisibility(View.VISIBLE);
-
-                                        CardView empty = selectEmptyRecycler(dateOfWeek);
-                                        empty.setVisibility(View.GONE);
-
-                                        ConstraintLayout setting = selectBtnSetting(dateOfWeek);
-                                        setting.setVisibility(View.VISIBLE);
-
-                                        recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false));
-                                        recyclerView.setAdapter(new AdapterPlanListRecipes(getActivity().getApplicationContext(), recipesList));
-
-                                    });
-                                }
-                            }
-
-                        }
-
-                    }
-                });
+            recyclerView = selectRecycleView(dateOfWeek);
+            recyclerView.setVisibility(View.GONE);
+        }
+    }
 
 
+    private void onClickGoToDetailFood(Recipes recipes){
+        bottomNavigationCustomActivity.gotoFoodDetail(recipes);
     }
 
     private ConstraintLayout selectBtnSetting(String dateOfWeek) {
@@ -323,34 +364,22 @@ public class PlanFragment extends Fragment {
         }
     }
 
-    private CardView selectEmptyRecycler(String a) {
-        switch (a){
-            case "Thu2":
-                return binding.emptyRecyclerView2;
-            case "Thu3":
-                return binding.emptyRecyclerView3;
-            case "Thu4":
-                return binding.emptyRecyclerView4;
-            case "Thu5":
-                return binding.emptyRecyclerView5;
-            case "Thu6":
-                return binding.emptyRecyclerView6;
-            case "Thu7":
-                return binding.emptyRecyclerView7;
-            default:
-                return binding.emptyRecyclerView1;
-        }
-    }
+
 
     private void InitUI() {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            setDateTime(binding.getRoot());
+            setDateTime();
         }
         lightCurrentDate(binding.getRoot());
     }
 
     private void lightCurrentDate(View view) {
-        Calendar cur = calendar;
+
+
+        Calendar cur = Calendar.getInstance();
+
+        cur.setTime(calendar.getTime());
         cur.setTimeInMillis(System.currentTimeMillis());
         int color = requireContext().getColor(R.color.color_primary);
         TextView date;
@@ -389,26 +418,29 @@ public class PlanFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setDateTime(View view) {
+    private void setDateTime() {
 
-        TextView datetime = view.findViewById(R.id.DateTime);
+        TextView datetime = binding.DateTime;
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
 
-        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            calendar.add(Calendar.DATE, -1);
+        Calendar cur = Calendar.getInstance();
+        cur.setTimeInMillis(calendar.getTimeInMillis());
+
+        while (cur.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            cur.add(Calendar.DATE, -1);
         }
 
-        String date = dateFormat.format(calendar.getTime());
+        String date = dateFormat.format(cur.getTime());
 
-        calendar.add(Calendar.DATE, 6);
-        String nextWeek = dateFormat.format(calendar.getTime());
+        cur.add(Calendar.DATE, 6);
+        String nextWeek = dateFormat.format(cur.getTime());
 
         datetime.setText(date + " - " + nextWeek);
     }
 
 
-    private RecyclerView SelectRecycleView(String a) {
+    private RecyclerView selectRecycleView(String a) {
         switch (a) {
             case "Thu2":
                 return binding.recyclerViewThu2;

@@ -32,7 +32,7 @@
                 android:textColor="@color/text_color"
                 android:textStyle="bold"
                 android:layout_weight="3"
-                android:text="Meal Plan" />
+                android:text="Kế hoạch nấu ăn" />
         </LinearLayout>
 
         <LinearLayout
@@ -147,7 +147,7 @@
                         android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Thu 2"
+                        android:text="Thứ 2"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -220,27 +220,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/plan_recipe_border"
-                        android:visibility="gone"/>
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/empty_recyclerView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu2"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:background="@color/white"
-                        app:cardCornerRadius="8dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginBottom="12dp">
-                        <TextView
+                        />
 
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Chưa có món ăn được chọn"
-                            />
-                    </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -254,7 +235,7 @@
                         android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Thu 3"
+                        android:text="Thứ 3"
                         android:textColor="@color/black"
 
                         android:textSize="16sp"
@@ -328,56 +309,35 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/plan_recipe_border"
-                        android:visibility="gone"/>
+                        />
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/empty_recyclerView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu3"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:background="@color/white"
-                        app:cardCornerRadius="8dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginBottom="12dp">
-                        <TextView
 
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Chưa có món ăn được chọn"
-                            />
-                    </androidx.cardview.widget.CardView>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    >
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/Thu4"
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:text="Thu 4"
+                        android:gravity="center"
+                        android:text="Thứ 4"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        android:gravity="center"
-                        />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_marginEnd="8dp"
-                        app:layout_constraintEnd_toStartOf="@+id/btn_setting4"
-                        app:layout_constraintBottom_toBottomOf="@+id/Thu4"
-                        app:layout_constraintTop_toTopOf="@+id/Thu4"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/Thu4"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_setting4"
+                        app:layout_constraintTop_toTopOf="@+id/Thu4">
 
                         <View
                             android:id="@+id/add4"
@@ -400,16 +360,15 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/btn_setting4"
-                        android:visibility="gone"
-                        android:layout_marginEnd="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="@+id/Thu4"
-                        app:layout_constraintTop_toTopOf="@+id/Thu4"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/Thu4"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/Thu4">
 
                         <View
                             android:id="@+id/setting4"
@@ -436,31 +395,11 @@
                         android:id="@+id/recyclerView_Thu4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/plan_recipe_border"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu4"
-                        android:visibility="gone"/>
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/empty_recyclerView4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:background="@color/white"
-                        app:cardCornerRadius="8dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginBottom="12dp">
-                        <TextView
+                        app:layout_constraintTop_toBottomOf="@+id/Thu4" />
 
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Chưa có món ăn được chọn"
-                            />
-                    </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -474,7 +413,7 @@
                         android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Thu 5"
+                        android:text="Thứ 5"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -549,27 +488,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/plan_recipe_border"
-                        android:visibility="gone"/>
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/empty_recyclerView5"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:background="@color/white"
-                        app:cardCornerRadius="8dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginBottom="12dp">
-                        <TextView
+                        />
 
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Chưa có món ăn được chọn"
-                            />
-                    </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -583,7 +503,7 @@
                         android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Thu 6"
+                        android:text="Thứ 6"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -658,27 +578,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/plan_recipe_border"
-                        android:visibility="gone"/>
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/empty_recyclerView6"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu6"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:background="@color/white"
-                        app:cardCornerRadius="8dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginBottom="12dp">
-                        <TextView
+                        />
 
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Chưa có món ăn được chọn"
-                            />
-                    </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -692,7 +593,7 @@
                         android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Thu 7"
+                        android:text="Thứ 7"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -764,31 +665,11 @@
                         android:id="@+id/recyclerView_Thu7"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/plan_recipe_border"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu7"
-                        android:visibility="gone"/>
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/empty_recyclerView7"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu7"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:background="@color/white"
-                        app:cardCornerRadius="8dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginBottom="12dp">
-                        <TextView
+                        app:layout_constraintTop_toBottomOf="@+id/Thu7"/>
 
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Chưa có món ăn được chọn"
-                            />
-                    </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -802,7 +683,7 @@
                         android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Chu Nhat"
+                        android:text="Chủ Nhật"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -877,27 +758,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/plan_recipe_border"
-                        android:visibility="gone"/>
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/empty_recyclerView1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ChuNhat"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:background="@color/white"
-                        app:cardCornerRadius="8dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginBottom="12dp">
-                        <TextView
+                        />
 
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Chưa có món ăn được chọn"
-                            />
-                    </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -918,4 +780,3 @@
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
