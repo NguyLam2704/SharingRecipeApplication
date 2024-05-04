@@ -52,10 +52,6 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class FoodDetailActivity extends AppCompatActivity {
 
-    private int countSL = 0;
-    private int countIngre = -1;
-    private int count_like = -1;
-    private int count_save = 0;
     ListIngreInDetailAdapterName ingreAdapter;
     ListIngreInDetailAdapterSoLuong soluongAdapter;
 
@@ -146,12 +142,13 @@ public class FoodDetailActivity extends AppCompatActivity {
 
 
         btncook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FoodDetailActivity.this, Method_Silder_Activity.class);
-                intent.putExtra("id", idRecipe);
-                startActivity(intent);
-
+                                       @Override
+                                       public void onClick(View v) {
+                                           Intent intent = new Intent(FoodDetailActivity.this, Method_Silder_Activity.class);
+                                           intent.putExtra("id", idRecipe);
+                                           startActivity(intent);
+                                       }
+                                   });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,27 +210,23 @@ public class FoodDetailActivity extends AppCompatActivity {
                 ArrayList<String> idUsers = new ArrayList<>();
                 for (QueryDocumentSnapshot doc :value)
                 {
-                    if(doc.get("idUsers") != null)
+
+                    if(doc.get("idUsers") != null && doc != null)
                     {
                         idUsers = (ArrayList<String>) doc.get("idUsers");
+                        heart.setText((String.valueOf(idUsers.size())));
                     }
-                    heart.setText((String.valueOf(idUsers.size())));
                 }
 
+
             }
         });
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     private void getSoluongSave(String idRecipe)
     {
-        firebaseFirestore.collection("SaveRecipes").whereEqualTo("idRecipes",idRecipe).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",idRecipe).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error !=  null)
@@ -244,9 +237,9 @@ public class FoodDetailActivity extends AppCompatActivity {
                 ArrayList<String> idUser = new ArrayList<>();
                 for (QueryDocumentSnapshot doc :value)
                 {
-                    if(doc.get("idUser") != null)
+                    if(doc.get("idUsers") != null)
                     {
-                        idUser = (ArrayList<String>) doc.get("idUser");
+                        idUser = (ArrayList<String>) doc.get("idUsers");
                     }
                     save.setText((String.valueOf(idUser.size())));
                 }
