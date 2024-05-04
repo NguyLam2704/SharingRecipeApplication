@@ -44,6 +44,8 @@ public class ListMethodInDetailAdapter extends RecyclerView.Adapter<ListMethodIn
     public void onBindViewHolder(@NonNull ListMethodInDetailAdapter.MethodViewHolder holder, int position) {
         if(getItemCount() != 0){
             holder.method.setText(methodList.get(position).getStep());
+            holder.buoc.setText("Bước "+ (position+1) +":");
+
         }
 
     }
@@ -54,10 +56,11 @@ public class ListMethodInDetailAdapter extends RecyclerView.Adapter<ListMethodIn
     }
 
     public class MethodViewHolder extends RecyclerView.ViewHolder {
-        TextView method;
+        TextView method, buoc;
         public MethodViewHolder(@NonNull View itemView) {
             super(itemView);
             method = itemView.findViewById(R.id.method_text);
+            buoc = itemView.findViewById(R.id.Text_buoc);
         }
     }
 }

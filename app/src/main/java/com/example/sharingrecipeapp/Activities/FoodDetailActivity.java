@@ -26,6 +26,7 @@ import com.example.sharingrecipeapp.Adapters.DetailRecipe.ViewPagerImagerAvtAdap
 import com.example.sharingrecipeapp.Classes.AutoScrollTask;
 import com.example.sharingrecipeapp.Classes.Ingredient;
 import com.example.sharingrecipeapp.Classes.Method;
+import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Classes.SoLuongIngre;
 import com.example.sharingrecipeapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -65,7 +66,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     ViewPager2 viewPager2, viewPager2Avt;
     ImageView back;
 
-    TextView username, titlefood, heart, save, add, cook, note;
+    TextView username, titlefood, heart, save, btncook, timecook, note;
 
     RecyclerView recycIngre, recycSoLuong, recycDonVi, recycMethod;
     @Override
@@ -80,14 +81,19 @@ public class FoodDetailActivity extends AppCompatActivity {
         titlefood = findViewById(R.id.TitleFood_Detail);
         heart = findViewById(R.id.like_text);
         save = findViewById(R.id.text_save);
-        add = findViewById(R.id.text_cook);
-        cook = findViewById(R.id.text_time_detail);
+        btncook = findViewById(R.id.text_cook);
+        timecook = findViewById(R.id.text_time_detail);
         note = findViewById(R.id.text_Note);
         recycIngre = findViewById(R.id.recyNguyenLieu);
         recycMethod = findViewById(R.id.recyMethod);
         recycSoLuong = findViewById(R.id.recySoLuong);
         recycDonVi = findViewById(R.id.recyDonVi);
 
+        //Recycler không scroll
+        recycIngre.setNestedScrollingEnabled(false);
+        recycMethod.setNestedScrollingEnabled(false);
+        recycSoLuong.setNestedScrollingEnabled(false);
+        recycDonVi.setNestedScrollingEnabled(false);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getApplicationContext(), RecyclerView.VERTICAL, false);
         recycIngre.setLayoutManager(linearLayoutManager);
@@ -108,11 +114,19 @@ public class FoodDetailActivity extends AppCompatActivity {
         getListMethod(idRecipe);
 
 
+        btncook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FoodDetailActivity.this, Method_Silder_Activity.class);
+                intent.putExtra("id", idRecipe);
+                startActivity(intent);
+            }
+        });
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FoodDetailActivity.this, BottomNavigationCustomActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
@@ -149,7 +163,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                             if(!doc.isEmpty()){
                                 List<Method> methodList = new ArrayList<Method>();
                                 for (int i = 0;i<doc.size();i++){
-                                  String step = ("• Bước ")+ (i+1)+ ": " +doc.get(i);
+                                  String step = doc.get(i);
                                   methodList.add(new Method(step));
                                 }
                                recycMethod.setAdapter(new ListMethodInDetailAdapter(getApplicationContext(),methodList));
@@ -184,7 +198,6 @@ public class FoodDetailActivity extends AppCompatActivity {
 
 
 
-
     private void getRecipes(String idRecipe) {
 
         final DocumentReference docRef = firebaseFirestore.collection("Recipes").document(idRecipe);
@@ -213,16 +226,12 @@ public class FoodDetailActivity extends AppCompatActivity {
 
                     heart.setText(String.valueOf(snapshot.get("like")));
                     save.setText(String.valueOf(snapshot.get("save")));
-                    cook.setText(snapshot.getString("timecook")+" phút");
+                    timecook.setText(snapshot.getString("timecook")+" phút");
                     note.setText(snapshot.getString("note"));
 
                     ingres = (List<String>) snapshot.get("NguyenLieu");
 
-
-
                     getIngre(ingres);
-
-
 
                 } else {
                     Log.d(TAG, "Current data: null");
@@ -233,8 +242,6 @@ public class FoodDetailActivity extends AppCompatActivity {
 
         });
     }
-
-
 
 
     private void getIngre(List<String> ingres) {
@@ -252,7 +259,6 @@ public class FoodDetailActivity extends AppCompatActivity {
                         Log.w(TAG, "Listen failed.", e);
                         return;
                     }
-
                     if (snapshot != null && snapshot.exists()) {
                         Log.d(TAG, "Current data: " + snapshot.getData());
                         String id = (String) snapshot.get("id");
@@ -275,4 +281,9 @@ public class FoodDetailActivity extends AppCompatActivity {
         }
     }
 
+    public void gotoStepSlider(String idRecipe) {
+        Intent intent = new Intent(FoodDetailActivity.this, Method_Silder_Activity.class);
+        intent.putExtra("id", idRecipe);
+        startActivity(intent);
+    }
 }
