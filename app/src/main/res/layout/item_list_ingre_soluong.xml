@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_list_ingre_soluong"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="5dp">
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
@@ -18,13 +18,13 @@
             android:layout_height="24dp" />
 
         <TextView
-            android:layout_gravity="center"
+            android:textAlignment="viewEnd"
             android:id="@+id/soluong_Ingre"
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginEnd="3dp"
-            android:text="so luong"
+            android:text="10"
             android:textStyle="bold"
             android:textSize="15sp" />
 

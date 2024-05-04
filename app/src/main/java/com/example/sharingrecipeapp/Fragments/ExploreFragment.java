@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 
+
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
