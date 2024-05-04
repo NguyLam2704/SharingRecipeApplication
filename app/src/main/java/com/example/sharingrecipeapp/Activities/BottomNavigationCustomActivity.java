@@ -140,7 +140,7 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
     }
 
     public void gotoFoodDetail(Recipes recipes) {
-        Intent intent = new Intent(BottomNavigationCustomActivity.this, FoodDetailActivity.class);
+        Intent intent = new Intent(this, FoodDetailActivity.class);
         intent.putExtra("id", recipes.getId());
         startActivity(intent);
     }

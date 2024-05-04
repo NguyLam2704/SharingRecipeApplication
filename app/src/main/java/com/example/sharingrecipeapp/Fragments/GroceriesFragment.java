@@ -18,7 +18,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Adapters.ListInAdapter;
+import com.example.sharingrecipeapp.Adapters.ReGroAdapter;
 import com.example.sharingrecipeapp.Classes.ListIngredient;
+import com.example.sharingrecipeapp.Classes.ReGro;
 import com.example.sharingrecipeapp.databinding.FragmentGroceriesBinding;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sharingrecipeapp.R;
 
 import java.util.ArrayList;
@@ -63,6 +68,9 @@ public class GroceriesFragment extends Fragment {
     ArrayList<ListIngredient> arrayListIng;
     ListInAdapter adapter;
     ImageView dot, plus;
+    RecyclerView recyclerView_re ;
+    ArrayList<ReGro> arrayRecipe;
+    ReGroAdapter regroadapter;
     private FragmentGroceriesBinding binding;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -81,9 +89,18 @@ public class GroceriesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+
+
+
+
+
+
+
         // Inflate the layout for this fragment
 
-
+        AnhXa();
         binding = FragmentGroceriesBinding.inflate(inflater,container,false);
         AnhXa();
         adapter = new ListInAdapter(binding.getRoot().getContext(), R.layout.list_ingredients, arrayListIng);
@@ -119,11 +136,23 @@ public class GroceriesFragment extends Fragment {
         });
 
 
+
+
         return binding.getRoot();
     }
 
     private void AnhXa(){
         ingListView = binding.getRoot().findViewById(R.id.list_groceries);
+
+        arrayRecipe =new ArrayList<>();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
+        recyclerView_re.setLayoutManager(linearLayoutManager);
+        recyclerView_re = binding.getRoot().findViewById(R.id.recy_recipe_groceries);
+
+
+        arrayRecipe.add(new ReGro("banh xeo",R.drawable.bdmt));
+        recyclerView_re.setAdapter(regroadapter);
 
         arrayListIng =new ArrayList<>();
         arrayListIng.add(new ListIngredient("avocado","4", R.drawable.avocado, false));
@@ -241,5 +270,10 @@ public class GroceriesFragment extends Fragment {
         dialog.show();
 
     }
+
+
+
+
+
 
 }

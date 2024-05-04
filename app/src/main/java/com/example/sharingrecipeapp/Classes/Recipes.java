@@ -6,6 +6,12 @@ public class Recipes {
     public Recipes() {
     }
 
+    public Recipes(String id, String name, String image) {
+        this.id = id;
+        this.image = image;
+        this.name = name;
+    }
+
     public Recipes(String id, String image, String name, String save, String timecook) {
         this.id = id;
         this.image = image;
