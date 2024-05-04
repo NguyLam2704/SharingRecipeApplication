@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,22 +32,29 @@ import com.example.sharingrecipeapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.github.muddz.styleabletoast.StyleableToast;
+
 public class FoodDetailActivity extends AppCompatActivity {
 
     private int countSL = 0;
     private int countIngre = -1;
-
+    private int count_like = -1;
+    private int count_save = 0;
     ListIngreInDetailAdapterName ingreAdapter;
     ListIngreInDetailAdapterSoLuong soluongAdapter;
 
@@ -59,7 +67,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     List<String> ingres;
     List<String> sl;
 
-
+    ImageView FdDetail_like_btn, FdSDetail_save_btn;
     String idRecipe;
 
     ViewPager2 viewPager2, viewPager2Avt;
@@ -68,10 +76,34 @@ public class FoodDetailActivity extends AppCompatActivity {
     TextView username, titlefood, heart, save, add, cook, note;
 
     RecyclerView recycIngre, recycSoLuong, recycDonVi, recycMethod;
+    FirebaseUser current_user;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor_like, editor_save;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_detail);
+        Intent intent = getIntent();
+        idRecipe = intent.getStringExtra("id");
+        sharedPreferences = getSharedPreferences("pref",0);
+        boolean check_like = sharedPreferences.getBoolean("like"+idRecipe,false);
+        editor_like = sharedPreferences.edit();
+        FdDetail_like_btn = findViewById(R.id.like_btn);
+        if (check_like)
+        {
+            FdDetail_like_btn.setSelected(true);
+        }
+        else
+        {
+            FdDetail_like_btn.setSelected(false);
+        }
+        boolean check_save = sharedPreferences.getBoolean("save"+idRecipe,false);
+        editor_save = sharedPreferences.edit();
+        FdSDetail_save_btn = findViewById(R.id.detail_save_btn);
+        FdSDetail_save_btn.setSelected(check_save);
+
+
+
 
         back = findViewById(R.id.backImg);
         viewPager2 = findViewById(R.id.viewpagerImage);
@@ -88,6 +120,10 @@ public class FoodDetailActivity extends AppCompatActivity {
         recycSoLuong = findViewById(R.id.recySoLuong);
         recycDonVi = findViewById(R.id.recyDonVi);
 
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        current_user = FirebaseAuth.getInstance().getCurrentUser();
+
+
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getApplicationContext(), RecyclerView.VERTICAL, false);
         recycIngre.setLayoutManager(linearLayoutManager);
@@ -96,26 +132,112 @@ public class FoodDetailActivity extends AppCompatActivity {
         recycSoLuong.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(),RecyclerView.VERTICAL,false));
         recycDonVi.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(),RecyclerView.VERTICAL,false));
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-        Intent intent = getIntent();
-        idRecipe = intent.getStringExtra("id");
 
 
+
+
+        getSoluongLike(idRecipe);
+        getSoluongSave(idRecipe);
         getUsers(idRecipe);
         getRecipes(idRecipe);
         getSoLuongIngre(idRecipe);
         getListMethod(idRecipe);
 
 
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FoodDetailActivity.this, BottomNavigationCustomActivity.class);
-                startActivity(intent);
+               finish();
+            }
+        });
+
+        FdSDetail_save_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(FdSDetail_save_btn.isSelected())
+                {
+                    int update_text_save = Integer.parseInt(save.getText().toString()) - 1;
+                    save.setText(String.valueOf(update_text_save));
+                    FdSDetail_save_btn.setSelected(false);
+                    editor_save.putBoolean("save"+idRecipe,false);
+                }
+                else {
+                    int update_text_save = Integer.parseInt(save.getText().toString()) + 1 ;
+                    save.setText(String.valueOf(update_text_save));
+                    FdSDetail_save_btn.setSelected(true);
+                    editor_save.putBoolean("save"+idRecipe,true);
+                }
+                editor_save.commit();
+            }
+        });
+        FdDetail_like_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(FdDetail_like_btn.isSelected())
+                {
+                    int update_text_like = Integer.parseInt(heart.getText().toString()) - 1;
+                    heart.setText(String.valueOf(update_text_like));
+                    FdDetail_like_btn.setSelected(false);
+                    editor_like.putBoolean("like"+idRecipe,false);
+                }
+                else {
+                    int update_text_like = Integer.parseInt(heart.getText().toString()) + 1;
+                    heart.setText(String.valueOf(update_text_like));
+                    FdDetail_like_btn.setSelected(true);
+                    editor_like.putBoolean("like"+idRecipe,true);
+                }
+                editor_like.commit();
+            }
+        });
+
+    }
+    private void getSoluongLike(String idRecipe)
+    {
+        firebaseFirestore.collection("Likes").whereEqualTo("Recipes",idRecipe).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error !=  null)
+                {
+                    StyleableToast.makeText(FoodDetailActivity.this,"like error",R.style.errortoast).show();
+                    return;
+                }
+                ArrayList<String> idUsers = new ArrayList<>();
+                for (QueryDocumentSnapshot doc :value)
+                {
+                    if(doc.get("idUsers") != null)
+                    {
+                        idUsers = (ArrayList<String>) doc.get("idUsers");
+                    }
+                    heart.setText((String.valueOf(idUsers.size())));
+                }
             }
         });
     }
+
+    private void getSoluongSave(String idRecipe)
+    {
+        firebaseFirestore.collection("SaveRecipes").whereEqualTo("idRecipes",idRecipe).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error !=  null)
+                {
+                    StyleableToast.makeText(FoodDetailActivity.this,"save error",R.style.errortoast).show();
+                    return;
+                }
+                ArrayList<String> idUser = new ArrayList<>();
+                for (QueryDocumentSnapshot doc :value)
+                {
+                    if(doc.get("idUser") != null)
+                    {
+                        idUser = (ArrayList<String>) doc.get("idUser");
+                    }
+                    save.setText((String.valueOf(idUser.size())));
+                }
+            }
+        });
+    }
+
 
     private void getSoLuongIngre(String idRecipe) {
         firebaseFirestore.collection("Recipes").document(idRecipe).get()
@@ -186,7 +308,6 @@ public class FoodDetailActivity extends AppCompatActivity {
 
 
     private void getRecipes(String idRecipe) {
-
         final DocumentReference docRef = firebaseFirestore.collection("Recipes").document(idRecipe);
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -195,42 +316,26 @@ public class FoodDetailActivity extends AppCompatActivity {
                     Log.w(TAG,"Listen failed",e );
                     return;
                 }
-
                 if (snapshot != null && snapshot.exists()){
                     Log.d(TAG,"Current data: " + snapshot.getData());
                     String tenRecipe = snapshot.getString("name");
                     titlefood.setText(tenRecipe);
-
-
                     String picRecipe = snapshot.getString("image");
-
                     ViewPagerImageFoodAdapter imageAdapter = new ViewPagerImageFoodAdapter(getApplicationContext(), picRecipe);
                     viewPager2.setAdapter(imageAdapter);
-
                     TimerTask autoScrollTask = new AutoScrollTask(viewPager2);
                     Timer timer = new Timer();
                     timer.schedule(autoScrollTask, 2000, 2000);
-
-                    heart.setText(String.valueOf(snapshot.get("like")));
-                    save.setText(String.valueOf(snapshot.get("save")));
+//                    heart.setText(String.valueOf(count_like));
+//                    save.setText(String.valueOf(snapshot.get("save")));
                     cook.setText(snapshot.getString("timecook")+" phút");
                     note.setText(snapshot.getString("note"));
-
                     ingres = (List<String>) snapshot.get("NguyenLieu");
-
-
-
                     getIngre(ingres);
-
-
-
                 } else {
                     Log.d(TAG, "Current data: null");
                 }
             }
-
-
-
         });
     }
 
@@ -263,10 +368,8 @@ public class FoodDetailActivity extends AppCompatActivity {
                         IngreList.add(ingreList);
                         ingreAdapter.setData(IngreList, FoodDetailActivity.this);
                         recycIngre.setAdapter(ingreAdapter);
-
                         donviAdapter.setData(IngreList, FoodDetailActivity.this);
                         recycDonVi.setAdapter(donviAdapter);
-
                     } else {
                         Log.d(TAG, "Current data: null");
                     }

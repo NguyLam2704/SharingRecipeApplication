@@ -10,7 +10,7 @@
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/explore_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -43,7 +43,7 @@
         <!--        </androidx.cardview.widget.CardView>-->
 
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/Searchbar"
+            android:id="@+id/explore_searchbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
@@ -71,6 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/explore_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="20dp" />
@@ -80,6 +81,7 @@
     </LinearLayout>
 
     <ProgressBar
+        android:id="@+id/explore_progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/color_primary"
