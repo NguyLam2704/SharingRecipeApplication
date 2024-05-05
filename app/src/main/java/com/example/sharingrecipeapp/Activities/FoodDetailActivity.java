@@ -38,13 +38,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -164,18 +167,36 @@ public class FoodDetailActivity extends AppCompatActivity {
                 {
                     int update_text_save = Integer.parseInt(save.getText().toString()) - 1;
                     save.setText(String.valueOf(update_text_save));
+                    //save state
                     FdSDetail_save_btn.setSelected(false);
                     editor_save.putBoolean("save"+idRecipe,false);
+                    //update firestore
+
+                    DocumentReference minus_save = firebaseFirestore.collection("SaveRecipes").document(idRecipe);
+                    minus_save.update("idUsers", FieldValue.arrayRemove(String.valueOf(current_user.getUid())));
                 }
                 else {
                     int update_text_save = Integer.parseInt(save.getText().toString()) + 1 ;
                     save.setText(String.valueOf(update_text_save));
+                    //save state
                     FdSDetail_save_btn.setSelected(true);
                     editor_save.putBoolean("save"+idRecipe,true);
+                    //update firestore
+                    Map<String,Object> saverecipe = new HashMap<>();
+                    saverecipe.put("Recipes",idRecipe);
+                    firebaseFirestore.collection("SaveRecipes").document(idRecipe).set(saverecipe).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d(TAG, "update saverecipes successfully");
+                        }
+                    });
+                    DocumentReference plus_save = firebaseFirestore.collection("SaveRecipes").document(idRecipe);
+                    plus_save.update("idUsers", FieldValue.arrayUnion(String.valueOf(current_user.getUid())));
                 }
                 editor_save.commit();
             }
         });
+
         FdDetail_like_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,14 +204,30 @@ public class FoodDetailActivity extends AppCompatActivity {
                 {
                     int update_text_like = Integer.parseInt(heart.getText().toString()) - 1;
                     heart.setText(String.valueOf(update_text_like));
+                    //save state
                     FdDetail_like_btn.setSelected(false);
                     editor_like.putBoolean("like"+idRecipe,false);
+                    //update Likes firestore
+                    DocumentReference minus_like = firebaseFirestore.collection("Likes").document(idRecipe);
+                    minus_like.update("idUsers", FieldValue.arrayRemove(String.valueOf(current_user.getUid())));
                 }
                 else {
                     int update_text_like = Integer.parseInt(heart.getText().toString()) + 1;
                     heart.setText(String.valueOf(update_text_like));
+                    //save state
                     FdDetail_like_btn.setSelected(true);
                     editor_like.putBoolean("like"+idRecipe,true);
+                    //update Likes firestore
+                    Map<String,Object> Likes = new HashMap<>();
+                    Likes.put("Recipes",idRecipe);
+                    firebaseFirestore.collection("Likes").document(idRecipe).set(Likes).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d(TAG, "update like successfully");
+                        }
+                    });
+                    DocumentReference plus_like = firebaseFirestore.collection("Likes").document(idRecipe);
+                    plus_like.update("idUsers", FieldValue.arrayUnion(String.valueOf(current_user.getUid())));
                 }
                 editor_like.commit();
             }
