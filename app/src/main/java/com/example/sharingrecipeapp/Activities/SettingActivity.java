@@ -2,6 +2,7 @@ package com.example.sharingrecipeapp.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -38,6 +39,24 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
         aSwitch = findViewById(R.id.dark_switch);
+        SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
+        aSwitch.setChecked(sharedPreferences.getBoolean("value", true));;
+        aSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(aSwitch.isChecked()){
+                    SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
+                    editor.putBoolean("value", true);
+                    editor.apply();
+                    aSwitch.setChecked(true);
+                }else{
+                    SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
+                    editor.putBoolean("value", false);
+                    editor.apply();
+                    aSwitch.setChecked(false);
+                }
+            }
+        });
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
