@@ -39,10 +39,11 @@ public class ListIngreInDetailAdapterDonVi extends RecyclerView.Adapter<ListIngr
 
     }
 
+
+
     public ListIngreInDetailAdapterDonVi(Context context, List<Ingredient> list){
         this.context = context;
         this.ingredientList = list;
-
     }
 
     @Override
@@ -62,6 +63,12 @@ public class ListIngreInDetailAdapterDonVi extends RecyclerView.Adapter<ListIngr
         if (getItemCount() != 0) {
             holder.donvi.setText(ingredientList.get(position).getDonvi());
         }
+
+    }
+
+    public void setIngredientList(List<Ingredient> ingredientList) {
+        this.ingredientList = ingredientList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -74,6 +81,11 @@ public class ListIngreInDetailAdapterDonVi extends RecyclerView.Adapter<ListIngr
         public DonViViewHolder(@NonNull View itemView) {
             super(itemView);
             donvi = itemView.findViewById(R.id.donvi_Ingre);
+        }
+
+        public void setDonvi(TextView donvi) {
+            this.donvi = donvi;
+
         }
     }
 }

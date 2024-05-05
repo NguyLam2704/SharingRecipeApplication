@@ -83,4 +83,6 @@ dependencies {
     implementation ("com.firebaseui:firebase-ui-auth:8.0.2")
     // FirebaseUI for Cloud Storage
     implementation ("com.firebaseui:firebase-ui-storage:8.0.2")
+
+    implementation ("me.relex:circleindicator:2.1.6")
 }

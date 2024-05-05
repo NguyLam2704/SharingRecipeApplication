@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 
@@ -31,6 +33,7 @@ import com.example.sharingrecipeapp.R;
 //import com.example.sharingrecipeapp.databinding.ActivityHomeBinding;
 import com.example.sharingrecipeapp.SaveListActivity;
 import com.example.sharingrecipeapp.UpdateProfileActivity;
+import com.example.sharingrecipeapp.databinding.ActivityBottomNavigationCustomBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,72 +46,101 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
     UserFragment userFragment;
     private BottomNavigationView mBottomNavigationView;
 
+    ActivityBottomNavigationCustomBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bottom_navigation_custom);
+//        setContentView(R.layout.activity_bottom_navigation_custom);
+//        **
+        binding = ActivityBottomNavigationCustomBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        replaceFragment(new HomeFragment());
 
-        mViewPager = findViewById(R.id.view_pager);
-        mBottomNavigationView = findViewById(R.id.bottomNavigationView);
-
-
-        fragmentArrayList.add(new HomeFragment());
-        fragmentArrayList.add(new ExploreFragment());
-        fragmentArrayList.add(new PlanFragment());
-        fragmentArrayList.add(new GroceriesFragment());
-        fragmentArrayList.add(new UserFragment());
-
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentArrayList);
-        mViewPager.setAdapter(viewPagerAdapter);
-        mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                switch (position) {
-                    case 0:
-                        mBottomNavigationView.setSelectedItemId(R.id.home_menu);
-                        break;
-                    case 1:
-                        mBottomNavigationView.setSelectedItemId(R.id.search_menu);
-                        break;
-                    case 2:
-                        mBottomNavigationView.setSelectedItemId(R.id.plan_menu);
-                        break;
-                    case 3:
-                        mBottomNavigationView.setSelectedItemId(R.id.mall_menu);
-                        break;
-                    case 4:
-                        mBottomNavigationView.setSelectedItemId(R.id.user_menu);
-                        break;
-                    default:
-                        mBottomNavigationView.setSelectedItemId(R.id.home_menu);
-                        break;
-                }
-                super.onPageSelected(position);
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.home_menu:
+                    replaceFragment(new HomeFragment());
+                    break;
+                case R.id.search_menu:
+                    replaceFragment(new ExploreFragment());
+                    break;
+                case R.id.plan_menu:
+                    replaceFragment(new PlanFragment());
+                    break;
+                case R.id.mall_menu:
+                    replaceFragment(new GroceriesFragment());
+                    break;
+                case R.id.user_menu:
+                    replaceFragment(new UserFragment());
+                    break;
             }
+            return true;
         });
 
-        mBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.home_menu) {
-                    mViewPager.setCurrentItem(0);
-                } else if (item.getItemId() == R.id.search_menu) {
-                    mViewPager.setCurrentItem(1);
-                } else if (item.getItemId() == R.id.plan_menu) {
-                    mViewPager.setCurrentItem(2);
-                } else if (item.getItemId() == R.id.mall_menu) {
-                    mViewPager.setCurrentItem(3);
-                } else if (item.getItemId() == R.id.user_menu) {
-                    mViewPager.setCurrentItem(4);
-                }
-                return true;
-            }
-        });
+
+        // **
+
+//        mViewPager = findViewById(R.id.view_pager);
+//        mBottomNavigationView = findViewById(R.id.bottomNavigationView);
+//
+//
+//        fragmentArrayList.add(new HomeFragment());
+//        fragmentArrayList.add(new ExploreFragment());
+//        fragmentArrayList.add(new PlanFragment());
+//        fragmentArrayList.add(new GroceriesFragment());
+//        fragmentArrayList.add(new UserFragment());
+
+//        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentArrayList);
+//        mViewPager.setAdapter(viewPagerAdapter);
+//        mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+//            @Override
+//            public void onPageSelected(int position) {
+//                switch (position) {
+//                    case 0:
+//                        mBottomNavigationView.setSelectedItemId(R.id.home_menu);
+//                        break;
+//                    case 1:
+//                        mBottomNavigationView.setSelectedItemId(R.id.search_menu);
+//                        break;
+//                    case 2:
+//                        mBottomNavigationView.setSelectedItemId(R.id.plan_menu);
+//                        break;
+//                    case 3:
+//                        mBottomNavigationView.setSelectedItemId(R.id.mall_menu);
+//                        break;
+//                    case 4:
+//                        mBottomNavigationView.setSelectedItemId(R.id.user_menu);
+//                        break;
+//                    default:
+//                        mBottomNavigationView.setSelectedItemId(R.id.home_menu);
+//                        break;
+//                }
+//                super.onPageSelected(position);
+//            }
+//        });
+
+//        mBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                if (item.getItemId() == R.id.home_menu) {
+//                    mViewPager.setCurrentItem(0);
+//                } else if (item.getItemId() == R.id.search_menu) {
+//                    mViewPager.setCurrentItem(1);
+//                } else if (item.getItemId() == R.id.plan_menu) {
+//                    mViewPager.setCurrentItem(2);
+//                } else if (item.getItemId() == R.id.mall_menu) {
+//                    mViewPager.setCurrentItem(3);
+//                } else if (item.getItemId() == R.id.user_menu) {
+//                    mViewPager.setCurrentItem(4);
+//                }
+//                return true;
+//            }
+//        });
     }
 
-
     public void gotoFoodDetail(Recipes recipes) {
-        Intent intent = new Intent(BottomNavigationCustomActivity.this, FoodDetailActivity.class);
+        Intent intent = new Intent(this, FoodDetailActivity.class);
         intent.putExtra("id", recipes.getId());
         startActivity(intent);
     }
@@ -162,6 +194,14 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         intent.putExtra("id", theme.getId());
         startActivity(intent);
     }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.view_pager,fragment);
+        fragmentTransaction.commit();
+    }
+
 }
 
 
