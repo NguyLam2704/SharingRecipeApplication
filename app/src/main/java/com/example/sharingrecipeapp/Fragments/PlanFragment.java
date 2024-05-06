@@ -4,6 +4,7 @@ package com.example.sharingrecipeapp.Fragments;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,42 +13,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
-import com.example.sharingrecipeapp.Activities.FoodDetailActivity;
 import com.example.sharingrecipeapp.Activities.PlantoSavedActivity;
-import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetailAdapterSoLuong;
-import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
 import com.example.sharingrecipeapp.Adapters.PlanList.AdapterPlanListRecipes;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Classes.Recipes;
-import com.example.sharingrecipeapp.Classes.SoLuongIngre;
 import com.example.sharingrecipeapp.R;
 import com.example.sharingrecipeapp.databinding.FragmentPlanBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -61,10 +52,10 @@ public class PlanFragment extends Fragment {
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
 
     RecyclerView recyclerView;
-    private  List<String> plan_list;
-    private  List<Recipes> recipesList;
 
     int curWeekOfYear;
+
+
 
     public PlanFragment() {
         // Required empty public constructor
@@ -91,26 +82,34 @@ public class PlanFragment extends Fragment {
         t7 = view.findViewById(R.id.add7);
         CN = view.findViewById(R.id.add1);
 
-        doAddBtn(t2);
-        doAddBtn(t3);
-        doAddBtn(t4);
-        doAddBtn(t5);
-        doAddBtn(t6);
-        doAddBtn(t7);
-        doAddBtn(CN);
+        doAddBtn(t2,"Thu2");
+        doAddBtn(t3,"Thu3");
+        doAddBtn(t4,"Thu4");
+        doAddBtn(t5,"Thu5");
+        doAddBtn(t6,"Thu6");
+        doAddBtn(t7,"Thu7");
+        doAddBtn(CN,"ChuNhat");
 
-        PlanOfDay();
+        String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
+        PlanOfDay(weekID);
 
         prev = binding.prevWeek;
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar.add(Calendar.DATE, -7);
+                calendar.add(Calendar.WEEK_OF_YEAR, -1);
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     setDateTime();
                 }
                 LightOffCurDate(binding.getRoot());
-                PlanOfDay();
+
+                String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
+
+                resetList();
+                //Toast.makeText(binding.getRoot().getContext(),weekID,Toast.LENGTH_SHORT).show();
+
+                PlanOfDay(weekID);
             }
         });
 
@@ -118,37 +117,69 @@ public class PlanFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar.add(Calendar.DATE, 7);
+                calendar.add(Calendar.WEEK_OF_YEAR, 1);
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     setDateTime();
                 }
                 LightOffCurDate(binding.getRoot());
-                PlanOfDay();
+                String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
+
+                resetList();
+                //Toast.makeText(binding.getRoot().getContext(),weekID,Toast.LENGTH_SHORT).show();
+
+                PlanOfDay(weekID);
             }
         });
 
     }
 
-    public void doAddBtn(View view) {
+    public void doAddBtn(View view, String date) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR)) ;
                 Intent intent = new Intent(binding.getRoot().getContext(), PlantoSavedActivity.class);
-                startActivity(intent);
+                intent.putExtra("date",date);
+                intent.putExtra("weekID",weekID);
+                intent.putExtra("weekOfYear",calendar.get(Calendar.WEEK_OF_YEAR)    );
+
+                activityResultLauncher.launch(intent);
+
             }
         });
     }
+
+    ActivityResultLauncher<Intent> activityResultLauncher =  registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result ->{
+        if (result.getResultCode() == 123){
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+
+                    calendar.set(Calendar.WEEK_OF_YEAR,result.getData().getExtras().getInt("weekOfYear"));
+
+                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                    ft.detach(PlanFragment.newInstance()).attach(PlanFragment.newInstance() ).commit();
+
+                    resetList();
+                    PlanOfDay(String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR)));
+                }
+            }, 1234); // 5 seconds
+
+        }
+    });
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
 
     private ImageView prev;
     private ImageView next;
+
 
 
 
@@ -165,7 +196,6 @@ public class PlanFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
 
         InitUI();
-
 
         return binding.getRoot();
     }
@@ -248,19 +278,32 @@ public class PlanFragment extends Fragment {
         }
     }
 
-    private void PlanOfDay(){
+
+
+    private void PlanOfDay(String weekID){
 
         turnOffRecyclerView();
-        String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
+
+        List<String> date = new ArrayList<>();
+        date.add("Thu2");
+        date.add("Thu3");
+        date.add("Thu4");
+        date.add("Thu5");
+        date.add("Thu6");
+        date.add("Thu7");
+        date.add("ChuNhat");
+
+
+
         db.collection("PlanList").document(auth.getUid()).collection(weekID).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
-                        for (DocumentSnapshot doc : task.getResult()){
-
+                        for (DocumentSnapshot doc : task.getResult().getDocuments()){
 
                             List<String> tenRecipe = (List<String>) doc.get("recipes");
-                            ArrayList<Recipes> recipesList = new ArrayList<>();
-                            for (String i : tenRecipe){
+
+                            List<Recipes> recipesList = selectListRecipes(doc.getId());
+                            for (String i : tenRecipe) {
                                 db.collection("Recipes").document(i).get()
                                         .addOnSuccessListener(documentSnapshot -> {
                                             String image = documentSnapshot.getString("image");
@@ -268,12 +311,19 @@ public class PlanFragment extends Fragment {
                                             String save = documentSnapshot.get("save").toString();
                                             String time = documentSnapshot.get("timecook").toString();
 
-                                            Recipes recipes = new Recipes(i,image,name,save,time);
-                                            recipesList.add(recipes);
+                                            Recipes recipes = new Recipes(i, image, name, save, time);
 
-                                            if (i == tenRecipe.get(tenRecipe.size()-1)){
+                                            if (!recipesList.contains(recipes)) {
+                                                recipesList.add(recipes);
+                                            }
+
+
+                                            if (i.equals(tenRecipe.get(tenRecipe.size() - 1))) {
+
                                                 recyclerView = selectRecycleView(doc.getId());
                                                 recyclerView.setVisibility(View.VISIBLE);
+
+                                                recyclerView.setHasFixedSize(true);
 
                                                 ConstraintLayout setting = selectBtnSetting(doc.getId());
                                                 setting.setVisibility(View.VISIBLE);
@@ -286,10 +336,7 @@ public class PlanFragment extends Fragment {
                                                         onClickGoToDetailFood(recipes);
                                                     }
                                                 });
-                                                recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false));
-
-
-                                                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
+                                                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                                                     @Override
                                                     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                                                         return false;
@@ -297,17 +344,27 @@ public class PlanFragment extends Fragment {
 
                                                     @Override
                                                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                                                        int position = viewHolder.getAbsoluteAdapterPosition();
-                                                        db.collection("PlanList").document(auth.getUid()).collection(weekID).document(doc.getId()).update("recipes", FieldValue.arrayRemove(recipesList.get(position).getId()));
-                                                        recipesList.remove(position);
-                                                        if (recipesList.isEmpty()){
-                                                            ConstraintLayout setting = selectBtnSetting(doc.getId());
-                                                            setting.setVisibility(View.GONE);
-                                                        }
-                                                        //deleteRecipe(weekID,doc.getId(),position);
-                                                        myAdapter.notifyDataSetChanged();
+                                                        int position = viewHolder.getLayoutPosition();
+
+
+                                                        String ID = recipesList.get(position).getId();
+
+                                                        String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
+                                                        Toast.makeText(binding.getRoot().getContext(), "Xoa " + ID, Toast.LENGTH_SHORT).show();
+                                                        db.collection("PlanList").document(auth.getUid()).collection(week).document(doc.getId()).update("recipes", FieldValue.arrayRemove(ID));
+
+                                                        resetList();
+                                                        //myAdapter.notifyDataSetChanged();
+//                                    if (recipesList.isEmpty()){
+//                                        ConstraintLayout setting = selectBtnSetting(doc.getId());
+//                                        setting.setVisibility(View.GONE);
+//                                    }
+                                                        PlanOfDay(week);
+                                                        Toast.makeText(binding.getRoot().getContext(), "Đã xoá món ăn", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
+                                                recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false));
+
                                                 itemTouchHelper.attachToRecyclerView(recyclerView);
                                                 recyclerView.setAdapter(myAdapter);
                                             }
@@ -315,9 +372,60 @@ public class PlanFragment extends Fragment {
 
                                         });
                             }
+
                         }
                     }
                 });
+    }
+
+    List<Recipes> monAnThu2 = new ArrayList<>();
+    List<Recipes> monAnThu3 = new ArrayList<>();
+    List<Recipes> monAnThu4 = new ArrayList<>();
+    List<Recipes> monAnThu5 = new ArrayList<>();
+    List<Recipes> monAnThu6 = new ArrayList<>();
+    List<Recipes> monAnThu7 = new ArrayList<>();
+    List<Recipes> monAnChuNhat = new ArrayList<>();
+
+    private void resetList(){
+        monAnThu2.clear();
+        monAnThu3.clear();
+        monAnThu4.clear();
+        monAnThu5.clear();
+        monAnThu6.clear();
+        monAnThu7.clear();
+        monAnChuNhat.clear();
+    }
+
+
+    private void setDataList(List<Recipes > a, List <Recipes> b){
+        a.clear();
+        a.addAll(b);
+    }
+
+    private List<Recipes> selectListRecipes(String date){
+        switch (date){
+            case "Thu2":
+                return monAnThu2;
+            case "Thu3":
+                return monAnThu3;
+            case "Thu4":
+                return monAnThu4;
+            case "Thu5":
+                return monAnThu5;
+            case "Thu6":
+                return monAnThu6;
+            case "Thu7":
+                return monAnThu7;
+            default:
+                return monAnChuNhat;
+
+        }
+    }
+
+
+    private void displayDay(List<String> tenRecipe, String docId) {
+
+
     }
 
 
@@ -375,7 +483,6 @@ public class PlanFragment extends Fragment {
     }
 
     private void lightCurrentDate(View view) {
-
 
         Calendar cur = Calendar.getInstance();
 
