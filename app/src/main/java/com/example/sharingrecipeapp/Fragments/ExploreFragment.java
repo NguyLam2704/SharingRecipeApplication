@@ -49,7 +49,7 @@ public class ExploreFragment extends Fragment {
     private List<Recipes> Explore_listRecipes;
     private FirebaseAuth Explore_firebaseAuth;
     private FirebaseFirestore Explore_db;
-    List<String> ingres;
+    List<String> List_ingre_db;
 
 
 //    public ExploreFragment() {
@@ -70,16 +70,18 @@ public class ExploreFragment extends Fragment {
         Explore_progressbar = (ProgressBar) view.findViewById(R.id.explore_progressbar);
         Explore_searchview = (SearchView) view.findViewById(R.id.explore_searchbar);
         Explore_searchview.clearFocus();
+        //chuc nang search
         Explore_searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                filterList(query);
-                return true;
+//                Explore_searchName(query);
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                filterList(newText);
+//                Explore_searchName(newText);
+                Explore_searchIngre(newText);
                 return true;
             }
         });
@@ -90,37 +92,10 @@ public class ExploreFragment extends Fragment {
         return view;
 
     }
-
-
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-//
-//        MenuItem item = menu.findItem(R.id.explore_searchbar);
-//        SearchView searchView = (SearchView)MenuItemCompat.getActionView(item);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                searchData(s);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        if(item.getItemId() == R.id.act)
-//        return super.onOptionsItemSelected(item);
-//    }
-
-    private void filterList(String newtext)
+//tim kiem cong thuc
+    private void Explore_searchName(String newtext)
     {
-        List<Recipes> filteredList = new ArrayList<>();
+        List<Recipes> ResultSearchList = new ArrayList<>();
         Explore_db.collection("Recipes").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -141,14 +116,15 @@ public class ExploreFragment extends Fragment {
                 }
                 for (Recipes recipes : Explore_listRecipes)
                 {
-                    if(unAccent(recipes.getName()).toLowerCase().contains(unAccent(newtext.toLowerCase())))
+                    if(unAccent(recipes.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
                     {
-                        filteredList.add(recipes);
+                        ResultSearchList.add(recipes);
                     }
                 }
-                if(filteredList.isEmpty())
+                //search ko co ket qua
+                if(ResultSearchList.isEmpty())
                 {
-                    Explore_adapter.setData(filteredList,new IClickOnItemRecipe() {
+                    Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
                         @Override
                         public void onClickItemRecipe(Recipes recipes) {
                             onClickGoToDetailFood(recipes);
@@ -159,7 +135,7 @@ public class ExploreFragment extends Fragment {
                 else{
                     //tạm
 
-                    Explore_adapter.setData(filteredList,new IClickOnItemRecipe() {
+                    Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
                     @Override
                     public void onClickItemRecipe(Recipes recipes) {
                         onClickGoToDetailFood(recipes);
@@ -170,11 +146,62 @@ public class ExploreFragment extends Fragment {
 
             }
         });
+    }
+//tim kiem nguyen lieu
+    private void Explore_searchIngre(String newtext)
+    {
+        List<Recipes> ResultSearchList = new ArrayList<>();
 
+        Explore_db.collection("Recipes").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w("Error", "listen:error", error);
+                }
+                List <String> nguyenlieu = new ArrayList<>();
+                for (DocumentSnapshot documentSnapshot : value.getDocuments()){
+                    String id = documentSnapshot.getString("id");
+                    String image = documentSnapshot.getString("image");
+                    String name = documentSnapshot.getString("name");
+                    String save = String.valueOf(documentSnapshot.get("save"));
+                    String time = documentSnapshot.getString("timecook");
+                    nguyenlieu = (List<String>)documentSnapshot.get("NguyenLieu");
+                    for (String ingres_item : nguyenlieu)
+                    {
+                        if(unAccent(ingres_item.replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                        {
+                            if(ResultSearchList.contains(new Recipes(id,image,name, save,time)))
+                            {
 
-
-
-
+                            }
+                            else {
+                                ResultSearchList.add(new Recipes(id, image, name, save, time));
+                            }
+                        }
+                    }
+                    //search ko co ket qua
+                    if(ResultSearchList.isEmpty())
+                    {
+                        Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                            @Override
+                            public void onClickItemRecipe(Recipes recipes) {
+                                onClickGoToDetailFood(recipes);
+                            }
+                        });
+                        Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+                    }
+                    else {
+                        Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                            @Override
+                            public void onClickItemRecipe(Recipes recipes) {
+                                onClickGoToDetailFood(recipes);
+                            }
+                        });
+                        Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+                    }
+                }
+            }
+        });
     }
 
     //chuyển có dấu thành không dấu
@@ -183,9 +210,9 @@ public class ExploreFragment extends Fragment {
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         if (s.equals("Đ") || s.equals("đ"))
         {
-            return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replace("đ", "");
+            return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replace("đ", "d");
         }
-        return pattern.matcher(temp).replaceAll("");
+        return pattern.matcher(temp).replaceAll("").replace('đ','d').replace('Đ','D');
 
     }
 
