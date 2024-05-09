@@ -163,7 +163,7 @@ public class PlanFragment extends Fragment {
                     resetList();
                     PlanOfDay(String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR)));
                 }
-            }, 1234); // 5 seconds
+            }, 500); // 5 seconds
 
         }
     });
