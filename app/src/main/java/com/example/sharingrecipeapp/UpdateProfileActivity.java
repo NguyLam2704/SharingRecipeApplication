@@ -192,32 +192,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             Toast.makeText(UpdateProfileActivity.this, "Email không tồn tại!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!pass.equals(old_pass) || !full_name.equals(old_name) || uri != null){
-            user.updatePassword(pass).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    Map<String, Object> update_user = new HashMap<>();
-                    update_user.put("password", pass);
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("Users").whereEqualTo("password", old_pass).get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if(task.isSuccessful() && !task.getResult().isEmpty()){
-                                        DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-                                        String documentID = documentSnapshot.getId();
-                                        db.collection("Users").document(documentID)
-                                                .update(update_user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void unused) {
-                                                        finish();
-                                                    }
-                                                });
-                                    }
-                                }
-                            });
-                }
-            });
+        if(!full_name.equals(old_name) || uri != null){
             user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -244,7 +219,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                                         @Override
                                                         public void onSuccess(Void unused) {
                                                             Toast.makeText(UpdateProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                                                            finish();
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -257,6 +231,33 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                     }
                                 });
                     }
+                }
+            });
+        }
+        if(!pass.equals(old_pass)) {
+            user.updatePassword(pass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Map<String, Object> update_pass = new HashMap<>();
+                    update_pass.put("password", pass);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("Users").whereEqualTo("password", old_pass).get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                                        DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                                        String documentID = documentSnapshot.getId();
+                                        db.collection("Users").document(documentID)
+                                                .update(update_pass).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        finish();
+                                                    }
+                                                });
+                                    }
+                                }
+                            });
                 }
             });
         }

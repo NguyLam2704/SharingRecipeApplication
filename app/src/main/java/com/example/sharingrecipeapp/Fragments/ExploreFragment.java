@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
+import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 
 
 import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
@@ -35,7 +36,6 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
 
 public class ExploreFragment extends Fragment {
     private FragmentExploreBinding binding;
