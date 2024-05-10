@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +34,9 @@ import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.R;
 import com.example.sharingrecipeapp.databinding.FragmentPlanBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -134,13 +139,13 @@ public class PlanFragment extends Fragment {
 
     }
 
-    public void doAddBtn(View view, String date) {
+    public void doAddBtn(View view, String dateAdd) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR)) ;
                 Intent intent = new Intent(binding.getRoot().getContext(), PlantoSavedActivity.class);
-                intent.putExtra("date",date);
+                intent.putExtra("date",dateAdd);
                 intent.putExtra("weekID",weekID);
                 intent.putExtra("weekOfYear",calendar.get(Calendar.WEEK_OF_YEAR)    );
 
@@ -152,21 +157,90 @@ public class PlanFragment extends Fragment {
 
     ActivityResultLauncher<Intent> activityResultLauncher =  registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result ->{
         if (result.getResultCode() == 123){
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
+//            new Handler().postDelayed(new Runnable() {
+//                public void run() {
 
-                    calendar.set(Calendar.WEEK_OF_YEAR,result.getData().getExtras().getInt("weekOfYear"));
+                calendar.set(Calendar.WEEK_OF_YEAR,result.getData().getExtras().getInt("weekOfYear"));
+                String id = result.getData().getStringExtra("id");
+                String date = result.getData().getStringExtra("date");
+                String name = result.getData().getStringExtra("name");
+                String img = result.getData().getStringExtra("img");
+                Recipes recipes = new Recipes(id,name,img);
+                recyclerView = selectRecycleView(date);
+                List<Recipes> recipesList = selectListRecipes(date);
+                AdapterPlanListRecipes myAdapter = new AdapterPlanListRecipes();
 
-                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-                    ft.detach(PlanFragment.newInstance()).attach(PlanFragment.newInstance() ).commit();
-
-                    resetList();
-                    PlanOfDay(String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR)));
+                boolean biTrung = false;
+                if (!recipesList.isEmpty()){
+                    for (Recipes x : recipesList){
+                        if (x.getId().equals(recipes.getId())){
+                            Toast.makeText(binding.getRoot().getContext(),"Món ăn bị trùng",Toast.LENGTH_SHORT).show();
+                            biTrung = true;
+                            break;
+                        }
+                    }
                 }
-            }, 500); // 5 seconds
+                else {
+
+                    myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+                    @Override
+                    public void onClickItemRecipe(Recipes recipes) {
+                        onClickGoToDetailFood(recipes);
+                    }
+                    });
+                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                    @Override
+                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                        int position = viewHolder.getLayoutPosition();
+                        String ID = recipesList.get(position).getId();
+                        String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
+
+                        Toast.makeText(binding.getRoot().getContext(), "Xoa " + ID, Toast.LENGTH_SHORT).show();
+                        db.collection("PlanList").document(auth.getUid()).collection(week).document(date).update("recipes", FieldValue.arrayRemove(ID));
+
+                        new Handler().postDelayed(new Runnable() {
+                            public void run() {
+                                recipesList.remove(position);
+                                viewHolder.getBindingAdapter().notifyDataSetChanged();
+                                if (recipesList.isEmpty()){
+                                    ConstraintLayout setting = selectBtnSetting(date);
+                                    setting.setVisibility(View.GONE);
+                                }
+                            }
+                        }, 200); // 5 seconds
+
+                        //Toast.makeText(binding.getRoot().getContext(), "Đã xoá món ăn", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false));
+
+                itemTouchHelper.attachToRecyclerView(recyclerView);
+                recyclerView.setAdapter(myAdapter);
+                recyclerView.setVisibility(View.VISIBLE);
+                selectBtnSetting(date).setVisibility(View.VISIBLE);
+            }
+
+                if (!biTrung){
+                    recipesList.add(recipes);
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                }
+
+
+//                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+//                    ft.detach(PlanFragment.newInstance()).attach(PlanFragment.newInstance() ).commit();
+
 
         }
     });
+
+
+
 
 
 
@@ -279,9 +353,7 @@ public class PlanFragment extends Fragment {
     }
 
 
-
     private void PlanOfDay(String weekID){
-
         turnOffRecyclerView();
 
         List<String> date = new ArrayList<>();
@@ -293,90 +365,129 @@ public class PlanFragment extends Fragment {
         date.add("Thu7");
         date.add("ChuNhat");
 
+        for (String i : date){
+            db.collection("PlanList").document(auth.getUid()).collection(weekID).document(i).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.get("recipes") != null){
+                                List<String> listFromDB = (List<String>) documentSnapshot.get("recipes");
 
 
-        db.collection("PlanList").document(auth.getUid()).collection(weekID).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        for (DocumentSnapshot doc : task.getResult().getDocuments()){
-
-                            List<String> tenRecipe = (List<String>) doc.get("recipes");
-
-                            List<Recipes> recipesList = selectListRecipes(doc.getId());
-                            for (String i : tenRecipe) {
-                                db.collection("Recipes").document(i).get()
-                                        .addOnSuccessListener(documentSnapshot -> {
-                                            String image = documentSnapshot.getString("image");
-                                            String name = documentSnapshot.getString("name");
-                                            String save = documentSnapshot.get("save").toString();
-                                            String time = documentSnapshot.get("timecook").toString();
-
-                                            Recipes recipes = new Recipes(i, image, name, save, time);
-
-                                            if (!recipesList.contains(recipes)) {
-                                                recipesList.add(recipes);
-                                            }
-
-
-                                            if (i.equals(tenRecipe.get(tenRecipe.size() - 1))) {
-
-                                                recyclerView = selectRecycleView(doc.getId());
-                                                recyclerView.setVisibility(View.VISIBLE);
-
-                                                recyclerView.setHasFixedSize(true);
-
-                                                ConstraintLayout setting = selectBtnSetting(doc.getId());
-                                                setting.setVisibility(View.VISIBLE);
-
-                                                AdapterPlanListRecipes myAdapter = new AdapterPlanListRecipes();
-
-                                                myAdapter.setData(recipesList, new IClickOnItemRecipe() {
-                                                    @Override
-                                                    public void onClickItemRecipe(Recipes recipes) {
-                                                        onClickGoToDetailFood(recipes);
-                                                    }
-                                                });
-                                                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-                                                    @Override
-                                                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                                                        return false;
-                                                    }
-
-                                                    @Override
-                                                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                                                        int position = viewHolder.getLayoutPosition();
-
-
-                                                        String ID = recipesList.get(position).getId();
-
-                                                        String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
-                                                        Toast.makeText(binding.getRoot().getContext(), "Xoa " + ID, Toast.LENGTH_SHORT).show();
-                                                        db.collection("PlanList").document(auth.getUid()).collection(week).document(doc.getId()).update("recipes", FieldValue.arrayRemove(ID));
-
-                                                        resetList();
-                                                        //myAdapter.notifyDataSetChanged();
-//                                    if (recipesList.isEmpty()){
-//                                        ConstraintLayout setting = selectBtnSetting(doc.getId());
-//                                        setting.setVisibility(View.GONE);
-//                                    }
-                                                        PlanOfDay(week);
-                                                        Toast.makeText(binding.getRoot().getContext(), "Đã xoá món ăn", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                                recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false));
-
-                                                itemTouchHelper.attachToRecyclerView(recyclerView);
-                                                recyclerView.setAdapter(myAdapter);
-                                            }
-
-
-                                        });
+                                //
+                                if (!listFromDB.isEmpty()){
+                                    displayDay(listFromDB,i);
+                                }
                             }
 
                         }
-                    }
-                });
+                    });
+        }
     }
+//
+//
+//    private void PlanOfDay(String weekID){
+//
+//        turnOffRecyclerView();
+//
+//        List<String> date = new ArrayList<>();
+//        date.add("Thu2");
+//        date.add("Thu3");
+//        date.add("Thu4");
+//        date.add("Thu5");
+//        date.add("Thu6");
+//        date.add("Thu7");
+//        date.add("ChuNhat");
+//
+//
+//
+//        db.collection("PlanList").document(auth.getUid()).collection(weekID).get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()){
+//                        for (DocumentSnapshot doc : task.getResult().getDocuments()){
+//
+//                            List<String> tenRecipe = (List<String>) doc.get("recipes");
+//
+//                            List<Recipes> recipesList = selectListRecipes(doc.getId());
+//                            for (String i : tenRecipe) {
+//                                db.collection("Recipes").document(i).get()
+//                                        .addOnSuccessListener(documentSnapshot -> {
+//                                            String image = documentSnapshot.getString("image");
+//                                            String name = documentSnapshot.getString("name");
+//                                            String save = documentSnapshot.get("save").toString();
+//                                            String time = documentSnapshot.get("timecook").toString();
+//
+//                                            Recipes recipes = new Recipes(i, image, name, save, time);
+//
+//                                            if (!recipesList.contains(recipes)) {
+//                                                recipesList.add(recipes);
+//                                            }
+//
+//
+//                                            if (i.equals(tenRecipe.get(tenRecipe.size() - 1))) {
+//
+//                                                recyclerView = selectRecycleView(doc.getId());
+//                                                recyclerView.setVisibility(View.VISIBLE);
+//
+//                                                //recyclerView.setHasFixedSize(true);
+//
+//                                                ConstraintLayout setting = selectBtnSetting(doc.getId());
+//                                                setting.setVisibility(View.VISIBLE);
+//
+//                                                AdapterPlanListRecipes myAdapter = new AdapterPlanListRecipes();
+//
+//                                                myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+//                                                    @Override
+//                                                    public void onClickItemRecipe(Recipes recipes) {
+//                                                        onClickGoToDetailFood(recipes);
+//                                                    }
+//                                                });
+//                                                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+//                                                    @Override
+//                                                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//                                                        return false;
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//                                                        int position = viewHolder.getLayoutPosition();
+//
+//                                                        String ID = recipesList.get(position).getId();
+//                                                        String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
+//                                                        Toast.makeText(binding.getRoot().getContext(), "Xoa " + ID, Toast.LENGTH_SHORT).show();
+//                                                        db.collection("PlanList").document(auth.getUid()).collection(week).document(doc.getId()).update("recipes", FieldValue.arrayRemove(ID));
+//
+//                                                        new Handler().postDelayed(new Runnable() {
+//                                                            public void run() {
+//                                                                recipesList.remove(position);
+//                                                                viewHolder.getBindingAdapter().notifyDataSetChanged();
+//                                                                if (recipesList.isEmpty()){
+//                                                                    ConstraintLayout setting = selectBtnSetting(doc.getId());
+//                                                                    setting.setVisibility(View.GONE);
+//                                                                }
+//                                                            }
+//                                                        }, 200); // 5 seconds
+//
+//
+//
+//                                                        //PlanOfDay(week);
+//                                                        //Toast.makeText(binding.getRoot().getContext(), "Đã xoá món ăn", Toast.LENGTH_SHORT).show();
+//                                                    }
+//                                                });
+//                                                recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false));
+//
+//                                                itemTouchHelper.attachToRecyclerView(recyclerView);
+//                                                recyclerView.setAdapter(myAdapter);
+//                                            }
+//
+//
+//                                        });
+//                            }
+//
+//                        }
+//                    }
+//                });
+//    }
 
     List<Recipes> monAnThu2 = new ArrayList<>();
     List<Recipes> monAnThu3 = new ArrayList<>();
@@ -402,7 +513,8 @@ public class PlanFragment extends Fragment {
         a.addAll(b);
     }
 
-    private List<Recipes> selectListRecipes(String date){
+
+    public List<Recipes> selectListRecipes(String date){
         switch (date){
             case "Thu2":
                 return monAnThu2;
@@ -422,10 +534,100 @@ public class PlanFragment extends Fragment {
         }
     }
 
+    private void addRe( List<String> list ,String date){
 
-    private void displayDay(List<String> tenRecipe, String docId) {
+        List<Recipes> recipesList = selectListRecipes(date);
+
+        for (String id : list){
+            db.collection("Recipes").document(id).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        String image = documentSnapshot.getString("image");
+                        String name = documentSnapshot.getString("name");
+                        String save = documentSnapshot.get("save").toString();
+                        String time = documentSnapshot.get("timecook").toString();
+
+                        Recipes recipes = new Recipes(id, image, name, save, time);
+                        recipesList.add(recipes);
+
+                        selectRecycleView(date).getAdapter().notifyDataSetChanged();
+
+                        if (id.equals(list.get(list.size()-1))){
+                            selectRecycleView(date).setMinimumHeight(286 * list.size());
+//                            Toast.makeText(binding.getRoot().getContext(),String.valueOf(selectRecycleView(date).getHeight()),Toast.LENGTH_SHORT).show();
+                            //selectRecycleView(date).getAdapter().notifyDataSetChanged();
+                        }
 
 
+                    });
+        }
+
+
+
+    }
+
+    private void displayDay(List<String> tenRecipe, String date) {
+
+        List<Recipes> recipesList = selectListRecipes(date);
+
+        recyclerView = selectRecycleView(date);
+        recyclerView.setVisibility(View.VISIBLE);
+
+
+        ConstraintLayout setting = selectBtnSetting(date);
+        setting.setVisibility(View.VISIBLE);
+
+        AdapterPlanListRecipes myAdapter = new AdapterPlanListRecipes();
+
+        myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+            @Override
+            public void onClickItemRecipe(Recipes recipes) {
+                onClickGoToDetailFood(recipes);
+            }
+        });
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getLayoutPosition();
+
+                String ID = recipesList.get(position).getId();
+                String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
+                Toast.makeText(binding.getRoot().getContext(), "Xoa " + ID, Toast.LENGTH_SHORT).show();
+                db.collection("PlanList").document(auth.getUid()).collection(week).document(date).update("recipes", FieldValue.arrayRemove(ID));
+
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        recipesList.remove(position);
+                        viewHolder.getBindingAdapter().notifyDataSetChanged();
+                        selectRecycleView(date).setMinimumHeight(selectRecycleView(date).getHeight() - 286);
+                        if (recipesList.isEmpty()){
+                            ConstraintLayout setting = selectBtnSetting(date);
+                            setting.setVisibility(View.GONE);
+                        }
+                    }
+                }, 200); // 5 seconds
+
+            }
+        });
+
+        LinearLayoutManager linearLayout = new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayout);
+
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),0);
+               // linearLayout.getOrientation());
+
+//        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        recyclerView.setAdapter(myAdapter);
+        recyclerView.setNestedScrollingEnabled(true);
+
+        addRe(tenRecipe,date);
     }
 
 
