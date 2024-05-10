@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
-=======
 
 
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
@@ -38,7 +37,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class ExploreFragment extends Fragment {
     private FragmentExploreBinding binding;

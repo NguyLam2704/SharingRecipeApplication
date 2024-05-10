@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.UserManager;
 import android.view.MenuItem;
 
 
@@ -26,6 +27,7 @@ import com.example.sharingrecipeapp.Classes.Theme;
 import com.example.sharingrecipeapp.Fragments.ExploreFragment;
 import com.example.sharingrecipeapp.Fragments.GroceriesFragment;
 import com.example.sharingrecipeapp.Fragments.HomeFragment;
+import com.example.sharingrecipeapp.Fragments.NonUserFragment;
 import com.example.sharingrecipeapp.Fragments.PlanFragment;
 import com.example.sharingrecipeapp.Fragments.UserFragment;
 import com.example.sharingrecipeapp.R;
@@ -37,15 +39,18 @@ import com.example.sharingrecipeapp.databinding.ActivityBottomNavigationCustomBi
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class BottomNavigationCustomActivity extends AppCompatActivity {
     ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
-    ViewPager2 mViewPager;
-    UserFragment userFragment;
     private BottomNavigationView mBottomNavigationView;
 
+    public FirebaseAuth firebaseAuth;
+    protected FirebaseFirestore firestore;
+    protected FirebaseUser currentUser;
     ActivityBottomNavigationCustomBinding binding;
 
     @Override
@@ -56,6 +61,8 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         binding = ActivityBottomNavigationCustomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
+        firebaseAuth = FirebaseAuth.getInstance();
+        currentUser = firebaseAuth.getCurrentUser();
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
@@ -66,13 +73,25 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
                     replaceFragment(new ExploreFragment());
                     break;
                 case R.id.plan_menu:
-                    replaceFragment(new PlanFragment());
+                    if(currentUser != null){
+                        replaceFragment(new PlanFragment());
+                    }else{
+                        replaceFragment(new NonUserFragment());
+                    }
                     break;
                 case R.id.mall_menu:
-                    replaceFragment(new GroceriesFragment());
+                    if(currentUser != null){
+                        replaceFragment(new GroceriesFragment());
+                    }else{
+                        replaceFragment(new NonUserFragment());
+                    }
                     break;
                 case R.id.user_menu:
-                    replaceFragment(new UserFragment());
+                    if(currentUser != null){
+                        replaceFragment(new UserFragment());
+                    }else{
+                        replaceFragment(new NonUserFragment());
+                    }
                     break;
             }
             return true;
@@ -174,6 +193,7 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                firebaseAuth.signOut();
                 Intent intent = new Intent(BottomNavigationCustomActivity.this, BottomNavigationCustomActivity.class);
                 startActivity(intent);
                 finish();
@@ -200,6 +220,10 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.view_pager,fragment);
         fragmentTransaction.commit();
+    }
+    public void gotoLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
 }
