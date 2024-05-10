@@ -69,8 +69,7 @@ public class ThemeActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ThemeActivity.this, BottomNavigationCustomActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 

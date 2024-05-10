@@ -57,9 +57,9 @@ public class UserFragment extends Fragment {
     protected LinearLayout Saved,Change_profile, Setting, Logout;
     protected TextView btn_Saved, btn_Change, btn_setting, btn_logout, text_name;
     protected ImageView image_account;
-    public static FirebaseAuth firebaseAuth;
+    public FirebaseAuth firebaseAuth;
     protected FirebaseFirestore firestore;
-    protected static FirebaseUser currentUser;
+    protected FirebaseUser currentUser;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +113,7 @@ public class UserFragment extends Fragment {
                 }
             });
         }
+
     }
     private void setOnClickImageAccount(){
         image_account.setOnClickListener(new View.OnClickListener() {
@@ -194,6 +195,4 @@ public class UserFragment extends Fragment {
             }
         });
     }
-
-
 }

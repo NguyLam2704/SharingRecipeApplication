@@ -15,6 +15,9 @@
         android:theme="@style/Theme.SharingRecipeApp"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.Method_Silder_Activity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.ThemeActivity"
             android:exported="false" />
         <activity

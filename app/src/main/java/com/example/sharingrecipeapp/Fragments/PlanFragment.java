@@ -235,6 +235,7 @@ public class PlanFragment extends Fragment {
 //                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
 //                    ft.detach(PlanFragment.newInstance()).attach(PlanFragment.newInstance() ).commit();
 
+
         }
     });
 
