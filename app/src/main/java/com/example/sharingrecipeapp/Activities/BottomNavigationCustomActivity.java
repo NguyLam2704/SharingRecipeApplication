@@ -205,9 +205,16 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        builder.create().show();
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface abc) {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.color_primary));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.color_primary));
+            }
+        });
+        dialog.show();
     }
-
 
     public void gotoThemeDetail(Theme theme) {
         Intent intent = new Intent(BottomNavigationCustomActivity.this, ThemeActivity.class);
@@ -221,11 +228,6 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.view_pager,fragment);
         fragmentTransaction.commit();
     }
-    public void gotoLogin(){
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
-
 }
 
 
