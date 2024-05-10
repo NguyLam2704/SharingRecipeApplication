@@ -57,7 +57,6 @@ public class PlantoSavedActivity extends AppCompatActivity {
 
 
 
-
         recyclerView = findViewById(R.id.List_save_recipes);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -137,11 +136,15 @@ public class PlantoSavedActivity extends AppCompatActivity {
         });
 
 
+        Toast.makeText(binding.getRoot().getContext(),"Đang thêm món ăn",Toast.LENGTH_SHORT).show();
 
-        Toast.makeText(binding.getRoot().getContext(),"Dang cap nhat",Toast.LENGTH_SHORT).show();
         Intent turnBack = new Intent();
         int weekOfYear = extras.getInt("weekOfYear");
         turnBack.putExtra("weekOfYear",weekOfYear);
+        turnBack.putExtra("id",recipes.getId());
+        turnBack.putExtra("name",recipes.getName());
+        turnBack.putExtra("img",recipes.getImage());
+        turnBack.putExtra("date",date);
         setResult(123,turnBack);
 //        setResult(123);
         finish();
