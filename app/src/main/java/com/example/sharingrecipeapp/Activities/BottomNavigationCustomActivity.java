@@ -1,6 +1,5 @@
 package com.example.sharingrecipeapp.Activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -8,20 +7,14 @@ import androidx.fragment.app.Fragment;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager2.widget.ViewPager2;
 
 
-
-import android.content.Context;
 import android.content.DialogInterface;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.UserManager;
-import android.view.MenuItem;
 
 
-import com.example.sharingrecipeapp.Adapters.ViewPagerAdapter;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Classes.Theme;
 import com.example.sharingrecipeapp.Fragments.ExploreFragment;
@@ -33,11 +26,9 @@ import com.example.sharingrecipeapp.Fragments.UserFragment;
 import com.example.sharingrecipeapp.R;
 
 //import com.example.sharingrecipeapp.databinding.ActivityHomeBinding;
-import com.example.sharingrecipeapp.SaveListActivity;
 import com.example.sharingrecipeapp.UpdateProfileActivity;
 import com.example.sharingrecipeapp.databinding.ActivityBottomNavigationCustomBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;

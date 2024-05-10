@@ -30,7 +30,7 @@
             android:name=".Activities.SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".SaveListActivity"
+            android:name=".Activities.SaveListActivity"
             android:exported="false" />
         <activity
             android:name=".UpdateProfileActivity"
