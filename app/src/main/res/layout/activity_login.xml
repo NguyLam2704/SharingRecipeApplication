@@ -146,5 +146,37 @@
         app:layout_constraintStart_toStartOf="@+id/login_edt_password"
         app:layout_constraintTop_toBottomOf="@+id/login_edt_password" />
 
+    <TextView
+        android:id="@+id/login_txt_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:lineSpacingExtra="7sp"
+        android:text="Đăng kí"
+
+        android:textColor="@color/color_primary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView12"
+        app:layout_constraintEnd_toEndOf="@+id/login_btn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
+        app:layout_constraintTop_toBottomOf="@+id/login_btn"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:lineSpacingExtra="7sp"
+        android:paddingRight="5dp"
+        android:text="Bạn chưa có tài khoản ?"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/login_btn"
+        app:layout_constraintHorizontal_bias="0.299"
+        app:layout_constraintStart_toStartOf="@+id/login_btn"
+        app:layout_constraintTop_toBottomOf="@+id/login_btn" />
+
     <include layout="@layout/privacy"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

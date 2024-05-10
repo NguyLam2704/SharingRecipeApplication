@@ -5,11 +5,14 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,8 +32,10 @@ import com.example.sharingrecipeapp.Classes.Ingredient;
 import com.example.sharingrecipeapp.Classes.Method;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Classes.SoLuongIngre;
+import com.example.sharingrecipeapp.Fragments.NonUserFragment;
 import com.example.sharingrecipeapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +50,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,27 +60,16 @@ import java.util.TimerTask;
 import io.github.muddz.styleabletoast.StyleableToast;
 
 public class FoodDetailActivity extends AppCompatActivity {
-
     ListIngreInDetailAdapterName ingreAdapter;
-    ListIngreInDetailAdapterSoLuong soluongAdapter;
-
     ListIngreInDetailAdapterDonVi donviAdapter;
-
     FirebaseFirestore firebaseFirestore;
-
     List<Ingredient> IngreList;
-    List<Ingredient> IngreDVList;
     List<String> ingres;
-    List<String> sl;
-
     ImageView FdDetail_like_btn, FdSDetail_save_btn;
     String idRecipe;
-
     ViewPager2 viewPager2, viewPager2Avt;
     ImageView back;
-
     TextView username, titlefood, heart, save, btncook, timecook, note;
-
     RecyclerView recycIngre, recycSoLuong, recycDonVi, recycMethod;
     FirebaseUser current_user;
     SharedPreferences sharedPreferences;
@@ -122,6 +117,11 @@ public class FoodDetailActivity extends AppCompatActivity {
         recycDonVi.setNestedScrollingEnabled(false);
         firebaseFirestore = FirebaseFirestore.getInstance();
         current_user = FirebaseAuth.getInstance().getCurrentUser();
+        if(current_user == null)
+        {
+            FdSDetail_save_btn.setSelected(false);
+            FdDetail_like_btn.setSelected(false);
+        }
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getApplicationContext(), RecyclerView.VERTICAL, false);
@@ -145,13 +145,13 @@ public class FoodDetailActivity extends AppCompatActivity {
 
 
         btncook.setOnClickListener(new View.OnClickListener() {
-                                       @Override
-                                       public void onClick(View v) {
-                                           Intent intent = new Intent(FoodDetailActivity.this, Method_Silder_Activity.class);
-                                           intent.putExtra("id", idRecipe);
-                                           startActivity(intent);
-                                       }
-                                   });
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FoodDetailActivity.this, Method_Silder_Activity.class);
+                intent.putExtra("id", idRecipe);
+                startActivity(intent);
+            }
+        });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,85 +163,152 @@ public class FoodDetailActivity extends AppCompatActivity {
         FdSDetail_save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(FdSDetail_save_btn.isSelected())
-                {
-                    int update_text_save = Integer.parseInt(save.getText().toString()) - 1;
-                    save.setText(String.valueOf(update_text_save));
-                    //save state
-                    FdSDetail_save_btn.setSelected(false);
-                    editor_save.putBoolean("save"+idRecipe,false);
-                    //update firestore
+                if (current_user == null) {
 
-                    DocumentReference minus_save = firebaseFirestore.collection("SaveRecipes").document(idRecipe);
-                    minus_save.update("idUsers", FieldValue.arrayRemove(String.valueOf(current_user.getUid())));
-                }
-                else {
-                    int update_text_save = Integer.parseInt(save.getText().toString()) + 1 ;
-                    save.setText(String.valueOf(update_text_save));
-                    //save state
-                    FdSDetail_save_btn.setSelected(true);
-                    editor_save.putBoolean("save"+idRecipe,true);
-                    //update firestore
-                    Map<String,Object> saverecipe = new HashMap<>();
-                    saverecipe.put("Recipes",idRecipe);
-                    firebaseFirestore.collection("SaveRecipes").document(idRecipe).set(saverecipe).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(FoodDetailActivity.this);
+                    builder.setTitle("Thông báo");
+                    builder.setMessage("Vui lòng đăng nhập để tiếp tục");
+                    builder.setPositiveButton("Đăng nhập", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onSuccess(Void unused) {
-                            Log.d(TAG, "update saverecipes successfully");
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Intent intent = new Intent(FoodDetailActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            finish();
                         }
                     });
-                    DocumentReference plus_save = firebaseFirestore.collection("SaveRecipes").document(idRecipe);
-                    plus_save.update("idUsers", FieldValue.arrayUnion(String.valueOf(current_user.getUid())));
+                    builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();
                 }
-                editor_save.commit();
+                else {
+                    if (FdSDetail_save_btn.isSelected()) {
+//                        int update_text_save = Integer.parseInt(save.getText().toString()) - 1;
+//                        save.setText(String.valueOf(update_text_save));
+                        //save state
+                        FdSDetail_save_btn.setSelected(false);
+                        editor_save.putBoolean("save" + idRecipe, false);
+                        //update firestore
+                        DocumentReference minus_save = firebaseFirestore.collection("SaveRecipes").document(idRecipe);
+                        minus_save.update("idUsers", FieldValue.arrayRemove(String.valueOf(current_user.getUid())));
+                    } else {
+//                        int update_text_save = Integer.parseInt(save.getText().toString()) + 1;
+//                        save.setText(String.valueOf(update_text_save));
+                        //save state
+                        FdSDetail_save_btn.setSelected(true);
+                        editor_save.putBoolean("save" + idRecipe, true);
+                        //update firestore
+                        Map<String, Object> saverecipe = new HashMap<>();
+                        saverecipe.put("Recipes", idRecipe);
+                        firebaseFirestore.collection("SaveRecipes").document(idRecipe).update(saverecipe)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                    Log.d(TAG, "update saverecipes successfully");
+                                    DocumentReference plus_save = firebaseFirestore.collection("SaveRecipes").document(idRecipe);
+                                    plus_save.update("idUsers", FieldValue.arrayUnion(String.valueOf(current_user.getUid())));
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        firebaseFirestore.collection("SaveRecipes").document(idRecipe).set(saverecipe).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                DocumentReference plus_save = firebaseFirestore.collection("SaveRecipes").document(idRecipe);
+                                                plus_save.update("idUsers", FieldValue.arrayUnion(String.valueOf(current_user.getUid())));
+                                            }
+                                        });
+                                    }
+                                });
+                    }
+                    editor_save.commit();
+                }
             }
         });
 
         FdDetail_like_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(FdDetail_like_btn.isSelected())
-                {
-                    int update_text_like = Integer.parseInt(heart.getText().toString()) - 1;
-                    heart.setText(String.valueOf(update_text_like));
-                    //save state
-                    FdDetail_like_btn.setSelected(false);
-                    editor_like.putBoolean("like"+idRecipe,false);
-                    //update Likes firestore
-                    DocumentReference minus_like = firebaseFirestore.collection("Likes").document(idRecipe);
-                    minus_like.update("idUsers", FieldValue.arrayRemove(String.valueOf(current_user.getUid())));
-                }
-                else {
-                    int update_text_like = Integer.parseInt(heart.getText().toString()) + 1;
-                    heart.setText(String.valueOf(update_text_like));
-                    //save state
-                    FdDetail_like_btn.setSelected(true);
-                    editor_like.putBoolean("like"+idRecipe,true);
-                    //update Likes firestore
-                    Map<String,Object> Likes = new HashMap<>();
-                    Likes.put("Recipes",idRecipe);
-                    firebaseFirestore.collection("Likes").document(idRecipe).set(Likes).addOnSuccessListener(new OnSuccessListener<Void>() {
+                if (current_user == null) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(FoodDetailActivity.this);
+                    builder.setTitle("Thông báo");
+                    builder.setMessage("Vui lòng đăng nhập để tiếp tục");
+                    builder.setPositiveButton("Đăng nhập", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onSuccess(Void unused) {
-                            Log.d(TAG, "update like successfully");
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Intent intent = new Intent(FoodDetailActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
                         }
                     });
-                    DocumentReference plus_like = firebaseFirestore.collection("Likes").document(idRecipe);
-                    plus_like.update("idUsers", FieldValue.arrayUnion(String.valueOf(current_user.getUid())));
+                    builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();
+                } else {
+                    if (FdDetail_like_btn.isSelected()) {
+//                    int update_text_like = Integer.parseInt(heart.getText().toString()) - 1;
+//                    heart.setText(String.valueOf(update_text_like));
+                        //save state
+                        FdDetail_like_btn.setSelected(false);
+                        editor_like.putBoolean("like" + idRecipe, false);
+                        //update Likes firestore
+                        DocumentReference minus_like = firebaseFirestore.collection("Likes").document(idRecipe);
+                        minus_like.update("idUsers", FieldValue.arrayRemove(String.valueOf(current_user.getUid())));
+                    } else {
+//                    int update_text_like = Integer.parseInt(heart.getText().toString()) + 1;
+//                    heart.setText(String.valueOf(update_text_like));
+                        //save state
+                        FdDetail_like_btn.setSelected(true);
+                        editor_like.putBoolean("like" + idRecipe, true);
+                        //update Likes firestore
+                        Map<String, Object> Likes = new HashMap<>();
+                        Likes.put("Recipes", idRecipe);
+//
+                        firebaseFirestore.collection("Likes").document(idRecipe).update(Likes).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d(TAG, "update like successfully");
+                                DocumentReference plus_like = firebaseFirestore.collection("Likes").document(idRecipe);
+                                plus_like.update("idUsers", FieldValue.arrayUnion(String.valueOf(current_user.getUid())));
+                            }
+
+                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        firebaseFirestore.collection("Likes").document(idRecipe).set(Likes).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                DocumentReference plus_like = firebaseFirestore.collection("Likes").document(idRecipe);
+                                                plus_like.update("idUsers", FieldValue.arrayUnion(String.valueOf(current_user.getUid())));
+                                            }
+                                        });
+                                    }
+                                });
+                    }
+                    editor_like.commit();
                 }
-                editor_like.commit();
             }
         });
-
     }
     private void getSoluongLike(String idRecipe)
     {
         firebaseFirestore.collection("Likes").whereEqualTo("Recipes",idRecipe).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error !=  null)
+                if (error !=  null )
                 {
-                    StyleableToast.makeText(FoodDetailActivity.this,"like error",R.style.errortoast).show();
                     return;
                 }
                 ArrayList<String> idUsers = new ArrayList<>();
@@ -259,6 +326,7 @@ public class FoodDetailActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
     private void getSoluongSave(String idRecipe)
@@ -266,11 +334,11 @@ public class FoodDetailActivity extends AppCompatActivity {
         firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",idRecipe).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error !=  null)
+                if (error !=  null )
                 {
-                    StyleableToast.makeText(FoodDetailActivity.this,"save error",R.style.errortoast).show();
                     return;
                 }
+
                 ArrayList<String> idUser = new ArrayList<>();
                 for (QueryDocumentSnapshot doc :value)
                 {

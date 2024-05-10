@@ -10,31 +10,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sharingrecipeapp.R;
 
-public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener {
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.CreateUser)
-        {
-            Intent signup = new Intent(WelcomeActivity.this, SignupActivity.class);
-            startActivity(signup);
-        }
-        if(v.getId() == R.id.logintxt)
-        {
-            Intent login = new Intent(WelcomeActivity.this, LoginActivity.class);
-            startActivity(login);
-        }
-    }
+public class WelcomeActivity extends AppCompatActivity {
+
     Button welcome_btn;
-    TextView login_txt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        welcome_btn = findViewById(R.id.CreateUser);
-        welcome_btn.setOnClickListener(this);
+        welcome_btn = findViewById(R.id.WelcometoHome);
+        welcome_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WelcomeActivity.this,BottomNavigationCustomActivity.class));
+            }
+        });
 
-        login_txt = findViewById(R.id.logintxt);
-        login_txt.setOnClickListener(this);
+
     }
 }
