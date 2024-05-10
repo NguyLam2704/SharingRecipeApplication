@@ -11,7 +11,7 @@
         android:layout_width="185dp"
         android:layout_height="185dp"
         android:layout_gravity="center"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="60dp"
         android:src="@drawable/logo_notext"
         android:tint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,6 +61,5 @@
                 android:textColor="@color/white" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
