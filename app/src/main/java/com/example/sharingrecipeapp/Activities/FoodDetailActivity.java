@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -183,7 +184,17 @@ public class FoodDetailActivity extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     });
-                    builder.create().show();
+
+                    AlertDialog dialog = builder.create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface abc) {
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.color_primary));
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.color_primary));
+                        }
+                    });
+                    dialog.show();
+
                 }
                 else {
                     if (FdSDetail_save_btn.isSelected()) {
@@ -254,7 +265,15 @@ public class FoodDetailActivity extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     });
-                    builder.create().show();
+                    AlertDialog dialog = builder.create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface abc) {
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.color_primary));
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.color_primary));
+                        }
+                    });
+                    dialog.show();
                 } else {
                     if (FdDetail_like_btn.isSelected()) {
 //                    int update_text_like = Integer.parseInt(heart.getText().toString()) - 1;
@@ -417,8 +436,6 @@ public class FoodDetailActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 
     private void getRecipes(String idRecipe) {
         final DocumentReference docRef = firebaseFirestore.collection("Recipes").document(idRecipe);
