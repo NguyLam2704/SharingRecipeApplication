@@ -13,6 +13,8 @@ import android.content.DialogInterface;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 
 import com.example.sharingrecipeapp.Classes.Recipes;
@@ -44,6 +46,8 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
     protected FirebaseUser currentUser;
     ActivityBottomNavigationCustomBinding binding;
 
+    ImageView btn_add_recipe;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +58,15 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         replaceFragment(new HomeFragment());
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
+        btn_add_recipe = findViewById(R.id.imageButton);
+
+        btn_add_recipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(BottomNavigationCustomActivity.this, CreateRecipeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
