@@ -3,13 +3,23 @@ package com.example.sharingrecipeapp.Classes;
 import android.widget.BaseAdapter;
 
 public class ReGro {
+    String id;
     private String nameReGr;
-    private int imgReGr;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    private String imgReGr;
 
     public ReGro(){}
 
-
-    public ReGro(String nameReGr, int imgReGr) {
+    public ReGro(String id, String nameReGr, String imgReGr) {
+        this.id = id;
         this.nameReGr = nameReGr;
         this.imgReGr = imgReGr;
     }
@@ -22,11 +32,11 @@ public class ReGro {
         this.nameReGr = nameReGr;
     }
 
-    public int getImgReGr() {
+    public String getImgReGr() {
         return imgReGr;
     }
 
-    public void setImgReGr(int imgReGr) {
+    public void setImgReGr(String imgReGr) {
         this.imgReGr = imgReGr;
     }
 }

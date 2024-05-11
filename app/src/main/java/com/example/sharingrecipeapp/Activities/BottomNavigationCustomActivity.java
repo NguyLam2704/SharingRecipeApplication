@@ -22,6 +22,7 @@ import android.view.MenuItem;
 
 
 import com.example.sharingrecipeapp.Adapters.ViewPagerAdapter;
+import com.example.sharingrecipeapp.Classes.ReGro;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Classes.Theme;
 import com.example.sharingrecipeapp.Fragments.ExploreFragment;
@@ -161,6 +162,12 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
     public void gotoFoodDetail(Recipes recipes) {
         Intent intent = new Intent(this, FoodDetailActivity.class);
         intent.putExtra("id", recipes.getId());
+        startActivity(intent);
+    }
+
+    public void gotoFoodDetail(String id) {
+        Intent intent = new Intent(this, FoodDetailActivity.class);
+        intent.putExtra("id", id);
         startActivity(intent);
     }
 
