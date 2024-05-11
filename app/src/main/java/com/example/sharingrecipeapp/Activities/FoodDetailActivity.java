@@ -69,8 +69,8 @@ public class FoodDetailActivity extends AppCompatActivity {
     ImageView FdDetail_like_btn, FdSDetail_save_btn;
     String idRecipe;
     ViewPager2 viewPager2, viewPager2Avt;
-    ImageView back;
-    TextView username, titlefood, heart, save, btncook, timecook, note;
+    ImageView back, btncook;
+    TextView username, titlefood, heart, save, timecook, note;
     RecyclerView recycIngre, recycSoLuong, recycDonVi, recycMethod;
     FirebaseUser current_user;
     SharedPreferences sharedPreferences;
