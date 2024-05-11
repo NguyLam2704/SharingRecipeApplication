@@ -80,8 +80,8 @@ public class ExploreFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-//                Explore_searchName(newText);
-                Explore_searchIngre(newText);
+                Explore_searchName(newText);
+//                Explore_searchIngre(newText);
                 return true;
             }
         });
@@ -170,13 +170,8 @@ public class ExploreFragment extends Fragment {
                     {
                         if(unAccent(ingres_item.replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
                         {
-                            if(ResultSearchList.contains(new Recipes(id,image,name, save,time)))
-                            {
-
-                            }
-                            else {
                                 ResultSearchList.add(new Recipes(id, image, name, save, time));
-                            }
+                                break;
                         }
                     }
                     //search ko co ket qua
