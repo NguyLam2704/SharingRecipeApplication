@@ -1,60 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".Activities.SaveListActivity">
+
 
     <TextView
+        android:id="@+id/tittle_SaveRecipes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Danh sách đã lưu"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:lineHeight="28sp"
+        android:lineSpacingExtra="1sp"
+        android:text="Saved Recipes"
         android:textColor="@color/black"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.316"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/btn_back_profile"
-        android:layout_width="46dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="48dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="52dp"
         android:background="@drawable/oval_btn_background"
-        android:backgroundTint="@color/white"
         android:src="@drawable/arrow_back"
-        app:layout_constraintEnd_toStartOf="@+id/Searchbar"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="@+id/tittle_SaveRecipes"
+        app:layout_constraintEnd_toStartOf="@+id/tittle_SaveRecipes"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/tittle_SaveRecipes"
+        app:layout_constraintVertical_bias="1.0" />
 
     <SearchView
         android:id="@+id/Searchbar"
         android:layout_width="369dp"
         android:layout_height="48dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="76dp"
         android:background="@drawable/edittext_bound"
+        android:layout_marginTop="16dp"
         android:iconifiedByDefault="false"
         android:queryBackground="@android:color/transparent"
         android:queryHint="Tìm kiếm"
-
         android:searchIcon="@drawable/baseline_search"
         android:textCursorDrawable="@drawable/color_cursor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.055"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tittle_SaveRecipes" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/textTb"
         android:layout_width="298dp"
         android:layout_height="28dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/line_save_background"
         android:padding="3dp"
         android:text="Bạn đã lưu được .... món ăn"
@@ -62,20 +64,31 @@
         android:textColor="#9F9F9F"
         android:textSize="15sp"
         android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/Searchbar"
+        app:layout_constraintStart_toStartOf="@+id/Searchbar"
         app:layout_constraintTop_toBottomOf="@+id/Searchbar" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recy_save"
-        android:layout_width="404dp"
-        android:layout_height="485dp"
-        android:layout_marginTop="20dp"
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="172dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/textTb">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recy_save"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="23dp" />
+
+    </androidx.core.widget.NestedScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

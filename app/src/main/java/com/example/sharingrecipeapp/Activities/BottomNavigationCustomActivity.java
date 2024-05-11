@@ -1,6 +1,5 @@
 package com.example.sharingrecipeapp.Activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -8,20 +7,16 @@ import androidx.fragment.app.Fragment;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager2.widget.ViewPager2;
 
 
-
-import android.content.Context;
 import android.content.DialogInterface;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.UserManager;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 
-import com.example.sharingrecipeapp.Adapters.ViewPagerAdapter;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Classes.Theme;
 import com.example.sharingrecipeapp.Fragments.ExploreFragment;
@@ -33,11 +28,9 @@ import com.example.sharingrecipeapp.Fragments.UserFragment;
 import com.example.sharingrecipeapp.R;
 
 //import com.example.sharingrecipeapp.databinding.ActivityHomeBinding;
-import com.example.sharingrecipeapp.SaveListActivity;
 import com.example.sharingrecipeapp.UpdateProfileActivity;
 import com.example.sharingrecipeapp.databinding.ActivityBottomNavigationCustomBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -53,6 +46,8 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
     protected FirebaseUser currentUser;
     ActivityBottomNavigationCustomBinding binding;
 
+    ImageView btn_add_recipe;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +58,15 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         replaceFragment(new HomeFragment());
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
+        btn_add_recipe = findViewById(R.id.imageButton);
+
+        btn_add_recipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(BottomNavigationCustomActivity.this, CreateRecipeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
