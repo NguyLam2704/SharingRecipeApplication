@@ -1,3 +1,5 @@
+
+
 package com.example.sharingrecipeapp.Fragments;
 
 import static android.widget.Toast.makeText;
@@ -17,10 +19,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
+import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.ListInAdapter;
-import com.example.sharingrecipeapp.Adapters.ReGroAdapter;
+import com.example.sharingrecipeapp.Adapters.NguyenLieu.IClickOnItemSavedRecipe;
+import com.example.sharingrecipeapp.Adapters.NguyenLieu.ReGroAdapter;
 import com.example.sharingrecipeapp.Classes.ListIngredient;
 import com.example.sharingrecipeapp.Classes.ReGro;
+import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.databinding.FragmentGroceriesBinding;
 
 import androidx.annotation.NonNull;
@@ -32,8 +38,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sharingrecipeapp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,14 +52,6 @@ import java.util.ArrayList;
  */
 public class GroceriesFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public GroceriesFragment() {
         // Required empty public constructor
@@ -58,12 +60,16 @@ public class GroceriesFragment extends Fragment {
     public static GroceriesFragment newInstance(String param1, String param2) {
         GroceriesFragment fragment = new GroceriesFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
+
+
+    FirebaseFirestore db;
+    FirebaseAuth auth;
+    BottomNavigationCustomActivity bottomNavigationCustomActivity;
+    String userID;
     ListView ingListView;
     ArrayList<ListIngredient> arrayListIng;
     ListInAdapter adapter;
@@ -89,24 +95,20 @@ public class GroceriesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-
-
-
-
-
-
-
-        // Inflate the layout for this fragment
-
-        AnhXa();
         binding = FragmentGroceriesBinding.inflate(inflater,container,false);
-        AnhXa();
-        adapter = new ListInAdapter(binding.getRoot().getContext(), R.layout.list_ingredients, arrayListIng);
-        ingListView.setAdapter(adapter);
 
-        dot= (ImageView) binding.getRoot().findViewById(R.id.btn);
+        bottomNavigationCustomActivity = (BottomNavigationCustomActivity) getActivity();
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        userID = auth.getUid();
+        ingListView = binding.listGroceries;
+        recyclerView_re = binding.recyRecipeGroceries;
+        dot = binding.btn;
+        plus = binding.plus;
+        AnhXa();
+
+
+
 
         //khi nhan 3 cham se hien ra thong bao de xac dinh xoa het tat ca
         // Xoa khi nhan day 3 cham
@@ -118,14 +120,12 @@ public class GroceriesFragment extends Fragment {
         });
 
         //nhan plus thi add them ngieu lieu
-        plus= (ImageView) binding.getRoot().findViewById(R.id.plus);
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddNew();
             }
         });
-
 
         ingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -142,17 +142,7 @@ public class GroceriesFragment extends Fragment {
     }
 
     private void AnhXa(){
-        ingListView = binding.getRoot().findViewById(R.id.list_groceries);
-
-        arrayRecipe =new ArrayList<>();
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
-        recyclerView_re.setLayoutManager(linearLayoutManager);
-        recyclerView_re = binding.getRoot().findViewById(R.id.recy_recipe_groceries);
-
-
-        arrayRecipe.add(new ReGro("banh xeo",R.drawable.bdmt));
-        recyclerView_re.setAdapter(regroadapter);
+        displaySavedRecipes();
 
         arrayListIng =new ArrayList<>();
         arrayListIng.add(new ListIngredient("avocado","4", R.drawable.avocado, false));
@@ -167,6 +157,51 @@ public class GroceriesFragment extends Fragment {
         arrayListIng.add(new ListIngredient("fish", "2", R.drawable.fish,false));
         arrayListIng.add(new ListIngredient("milk", "3", R.drawable.milk, false));
 
+        adapter = new ListInAdapter(binding.getRoot().getContext(), R.layout.list_ingredients, arrayListIng);
+        ingListView.setAdapter(adapter);
+
+    }
+
+    private void displaySavedRecipes() {
+        arrayRecipe = new ArrayList<>();
+        //arrayRecipe.add(new ReGro("MucNhoiThit","Cut","https://firebasestorage.googleapis.com/v0/b/fantafood-3ea80.appspot.com/o/Recipes%2Fmuc_nhoi_TB.jpg?alt=media&token=f0949f1b-611d-4cd0-918b-907a2bda317b"));
+
+        regroadapter = new ReGroAdapter();
+        regroadapter.setData(arrayRecipe, new IClickOnItemSavedRecipe() {
+            @Override
+            public void onClickItemSavedRecipe(String id) {
+                onClickGoToDetailFood(id);
+            }
+
+        });
+        recyclerView_re.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false));
+        recyclerView_re.setAdapter(regroadapter);
+
+        db.collection("SaveRecipes").whereArrayContains("idUsers",userID).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+
+                        List<String> tenRecipes = new ArrayList<>();
+                        for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
+                            tenRecipes.add(documentSnapshot.get("Recipes").toString());
+                        }
+                        for (String i : tenRecipes){
+                            db.collection("Recipes").document(i).get()
+                                    .addOnSuccessListener(documentSnapshot -> {
+                                        String image = documentSnapshot.getString("image");
+                                        String name = documentSnapshot.getString("name");
+
+                                        ReGro recipes = new ReGro(i,name,image);
+                                        arrayRecipe.add(recipes);
+                                        regroadapter.notifyDataSetChanged();
+                                    });
+                        }
+                    }
+                });
+    }
+
+    private void onClickGoToDetailFood(String id) {
+        bottomNavigationCustomActivity.gotoFoodDetail(id);
     }
 
     private void RemoveAll (){
