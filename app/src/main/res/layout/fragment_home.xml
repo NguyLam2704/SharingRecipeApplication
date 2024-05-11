@@ -33,26 +33,6 @@
                 android:textColor="@color/text_color"
                 android:textSize="35sp"
                 android:textStyle="bold" />
-<com.google.android.material.card.MaterialCardView
-    android:layout_width="wrap_content"
-    android:layout_marginStart="50dp"
-    android:layout_height="35dp"
-    android:layout_marginTop="5dp"
-    app:strokeColor="@color/text_color"
-    android:layout_gravity="center">
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:background="@color/white"
-        android:text="Share"
-        android:drawableStart="@drawable/baseline_share"
-        android:textColor="@color/text_color"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-</com.google.android.material.card.MaterialCardView>
 
 
         </LinearLayout>
@@ -189,9 +169,21 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="30dp"
             android:paddingStart="100dp"
-            android:paddingEnd="100dp"/>
+
+            android:paddingEnd="24dp">
+
+            <ImageView
+                android:id="@+id/imageButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/btn_add_recipes"
+                android:src="@drawable/baseline_add_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

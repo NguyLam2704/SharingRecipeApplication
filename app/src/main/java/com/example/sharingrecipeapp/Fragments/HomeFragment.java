@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
     private List<Recipes> listRecipes;
 
     private List<Theme> listTheme;
-    ImageView img_food;
+    ImageView img_food, btn_create;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment {
         recyclerViewRate = (RecyclerView) view.findViewById(R.id.recyRate);
         recyclerViewRandom = (RecyclerView) view.findViewById(R.id.recyRanDom);
         recyclerViewTheme = (RecyclerView) view.findViewById(R.id.recyTheme);
-
+        btn_create = view.findViewById(R.id.imageButton);
 
 
         setdataRecycRate();
@@ -101,6 +101,12 @@ public class HomeFragment extends Fragment {
         setdataRecycTheme();
 
 
+        btn_create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomNavigationCustomActivity.gotoAddRecipe();
+            }
+        });
 
         return view;
     }
@@ -119,7 +125,7 @@ public class HomeFragment extends Fragment {
                             Log.w("Error", "listen:error", error);
                             return;
                         }
-                        listRecipes = new ArrayList<>();
+                        //listRecipes = new ArrayList<>();
                         for (DocumentSnapshot documentSnapshot : value.getDocuments()){
                             String id = documentSnapshot.getString("id");
                             firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -137,14 +143,14 @@ public class HomeFragment extends Fragment {
                                         String name = documentSnapshot.getString("name");
                                         String save = String.valueOf(idUser.size());
                                         String time = documentSnapshot.getString("timecook");
-                                        listRecipes.add(new Recipes(id, image, name, save, time));
+                                        //listRecipes.add(new Recipes(id, image, name, save, time));
                                         recipesAdapter.setData(listRecipes, new IClickOnItemRecipe() {
                                             @Override
                                             public void onClickItemRecipe(Recipes recipes) {
                                                 onClickGoToDetailFood(recipes);
                                             }
                                         });
-                                        recyclerViewRate.setAdapter(recipesAdapter);
+                                       recyclerViewRate.setAdapter(recipesAdapter);
                                     }
                                 }
                             });
