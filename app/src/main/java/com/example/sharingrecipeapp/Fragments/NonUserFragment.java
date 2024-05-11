@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 import com.example.sharingrecipeapp.Activities.LoginActivity;
+import com.example.sharingrecipeapp.Activities.SignupActivity;
 import com.example.sharingrecipeapp.Activities.WelcomeActivity;
 import com.example.sharingrecipeapp.R;
 import com.google.android.material.card.MaterialCardView;
@@ -47,6 +48,13 @@ public class NonUserFragment extends Fragment {
             }
         });
         btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+        btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);

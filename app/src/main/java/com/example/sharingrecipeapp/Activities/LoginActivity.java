@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     Button Login_btn;
 
     ProgressBar Login_progressbar;
-    TextView Login_txt_forgotpass;
+    TextView Login_txt_forgotpass, Login_txt_signup;
     private FirebaseAuth Login_auth;
 
     @Override
@@ -56,6 +56,13 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.login_edt_password);
         Login_progressbar = findViewById(R.id.login_progressbar);
         Login_txt_forgotpass = findViewById(R.id.login_txt_forgotpass);
+        Login_txt_signup = findViewById(R.id.login_txt_signup);
+        Login_txt_signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this,SignupActivity.class));
+            }
+        });
         Login_txt_forgotpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
