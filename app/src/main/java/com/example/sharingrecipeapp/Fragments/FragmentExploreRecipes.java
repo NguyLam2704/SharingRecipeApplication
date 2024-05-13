@@ -1,14 +1,12 @@
 package com.example.sharingrecipeapp.Fragments;
 
-import android.os.Bundle;
+import static com.example.sharingrecipeapp.Fragments.ExploreFragment.unAccent;
 
-import android.widget.FrameLayout;
-import com.google.android.material.tabs.TabLayout;
+import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
-import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
-
-
 import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
@@ -36,16 +31,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
-public class ExploreFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link FragmentExploreRecipes#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class FragmentExploreRecipes extends Fragment {
+
+
     private FragmentExploreBinding binding;
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
     RecipesAdapter Explore_recipesAdapter;
-    SearchView Explore_searchview;
+    SearchView Explore_searchview_recipes;
     ProgressBar Explore_progressbar;
     LinearLayout Explore_linear;
     ResultExploreAdapter Explore_adapter;
@@ -54,76 +54,60 @@ public class ExploreFragment extends Fragment {
     private FirebaseAuth Explore_firebaseAuth;
     private FirebaseFirestore Explore_db;
     List<String> List_ingre_db;
-    ///////////////////////////////////////////////////////
-    FrameLayout frameLayout;
-    TabLayout tabLayout;
 
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
-//    public ExploreFragment() {
-//        // Required empty public constructor
-//    }
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    public FragmentExploreRecipes() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment FragmentExploreRecipes.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static FragmentExploreRecipes newInstance(String param1, String param2) {
+        FragmentExploreRecipes fragment = new FragmentExploreRecipes();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        /////////////////////
-
-
-
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_explore, container, false);
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_explore_recipes, container, false);
         bottomNavigationCustomActivity = (BottomNavigationCustomActivity) getActivity();
-        Explore_linear = (LinearLayout) view.findViewById(R.id.explore_linearLayout);
-        Explore_progressbar = (ProgressBar) view.findViewById(R.id.explore_progressbar);
-        //Explore_searchview = (SearchView) view.findViewById(R.id.explore_searchbar);
-        frameLayout= (FrameLayout) view.findViewById(R.id.explore_framelayout);
-        tabLayout= (TabLayout) view.findViewById(R.id.explore_tabs);
-
-        getFragmentManager().beginTransaction().replace(R.id.explore_framelayout, new FragmentExploreRecipes())
-                .addToBackStack(null)
-                .commit();
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Fragment fragment=null;
-                switch (tab.getPosition()){
-                    case 0:
-                        fragment= new FragmentExploreRecipes();
-                        break;
-                    case 1:
-                        fragment= new FragmentExploreIngredient();
-                        break;
-                    case 2:
-                        fragment=new FragmentExploreCook();
-                }
-                getFragmentManager().beginTransaction().replace(R.id.explore_framelayout, fragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        //Explore_searchview.clearFocus();
-
-        //chuc nang search
-        /*
-        Explore_searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        Explore_searchview_recipes = (SearchView) view.findViewById(R.id.explore_searchbar_recipes);
+        Explore_searchview_recipes.clearFocus();
+        Explore_searchview_recipes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                Explore_searchName(query);
+                Explore_searchName(query);
                 return false;
             }
 
@@ -134,16 +118,15 @@ public class ExploreFragment extends Fragment {
                 return true;
             }
         });
-        Explore_recyclerViewRandom = (RecyclerView) view.findViewById(R.id.explore_recycler);
+        Explore_recyclerViewRandom = (RecyclerView) view.findViewById(R.id.explore_recycler_recipes);
         Explore_firebaseAuth = FirebaseAuth.getInstance();
         Explore_db = FirebaseFirestore.getInstance();
         setdataRecycRandom();
 
-         */
-        return view;
 
+
+        return view;
     }
-//tim kiem cong thuc
     private void Explore_searchName(String newtext)
     {
         List<Recipes> ResultSearchList = new ArrayList<>();
@@ -187,81 +170,17 @@ public class ExploreFragment extends Fragment {
                     //tạm
 
                     Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                    @Override
-                    public void onClickItemRecipe(Recipes recipes) {
-                        onClickGoToDetailFood(recipes);
-                    }
-                });
+                        @Override
+                        public void onClickItemRecipe(Recipes recipes) {
+                            onClickGoToDetailFood(recipes);
+                        }
+                    });
                     Explore_recyclerViewRandom.setAdapter(Explore_adapter);
                 }
 
             }
         });
     }
-//tim kiem nguyen lieu
-    private void Explore_searchIngre(String newtext)
-    {
-        List<Recipes> ResultSearchList = new ArrayList<>();
-
-        Explore_db.collection("Recipes").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.w("Error", "listen:error", error);
-                }
-                List <String> nguyenlieu = new ArrayList<>();
-                for (DocumentSnapshot documentSnapshot : value.getDocuments()){
-                    String id = documentSnapshot.getString("id");
-                    String image = documentSnapshot.getString("image");
-                    String name = documentSnapshot.getString("name");
-                    String save = String.valueOf(documentSnapshot.get("save"));
-                    String time = documentSnapshot.getString("timecook");
-                    nguyenlieu = (List<String>)documentSnapshot.get("NguyenLieu");
-                    for (String ingres_item : nguyenlieu)
-                    {
-                        if(unAccent(ingres_item.replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                        {
-                                ResultSearchList.add(new Recipes(id, image, name, save, time));
-                                break;
-                        }
-                    }
-                    //search ko co ket qua
-                    if(ResultSearchList.isEmpty())
-                    {
-                        Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                            @Override
-                            public void onClickItemRecipe(Recipes recipes) {
-                                onClickGoToDetailFood(recipes);
-                            }
-                        });
-                        Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-                    }
-                    else {
-                        Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                            @Override
-                            public void onClickItemRecipe(Recipes recipes) {
-                                onClickGoToDetailFood(recipes);
-                            }
-                        });
-                        Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-                    }
-                }
-            }
-        });
-    }
-
-    //chuyển có dấu thành không dấu
-    public static String unAccent(String s) {
-        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
-        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        if (s.equals("Đ") || s.equals("đ"))
-        {
-            return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replace("đ", "d");
-        }
-        return pattern.matcher(temp).replaceAll("").replace('đ','d').replace('Đ','D');
-
-    }
-
     private void setdataRecycRandom()
     {
         GridLayoutManager Explore_gridlayoutMng = new GridLayoutManager(getContext(),2);
@@ -298,4 +217,5 @@ public class ExploreFragment extends Fragment {
     private void onClickGoToDetailFood(Recipes recipes) {
         bottomNavigationCustomActivity.gotoFoodDetail(recipes);
     }
+
 }
