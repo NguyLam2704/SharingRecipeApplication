@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/sttBuoc"
+                android:paddingStart="4dp"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="Bước 1:"
+                android:textAlignment="viewStart"
+                android:textColor="@color/color_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/method"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:paddingStart="10dp"
+                android:paddingEnd="4dp"
+                android:text="Mực bạn nên chọn loại mực ống, còn tươi, phần đầu và thân còn dính vào nhau, có kích thước vừa phải. Khi mua về, bạn đem làm sạch, loại bỏ các chất bẩn bên trong mực rồi tách lớp vỏ tím bên ngoài. Tiếp theo, bạn bóp mực cùng với hỗn hợp gừng và rượu trắng để khử mùi tanh. Sau đó, rửa sạch mực lại lần nữa. Với cách làm này, mực nhồi thịt chiên giòn sẽ không bị tanh. Tách râu mực ra, băm nhỏ."
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/sttBuoc"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
