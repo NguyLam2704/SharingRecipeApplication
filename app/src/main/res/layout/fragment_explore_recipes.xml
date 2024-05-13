@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/explore_searchbar_recipes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_bound"
+        app:iconifiedByDefault="false"
+        app:defaultQueryHint="Tìm kiếm"
+        android:contextClickable="true"
+        app:queryBackground="@null"
+        app:searchIcon="@drawable/baseline_search"
+        app:closeIcon="@drawable/baseline_highlight_off_24"
+        android:theme="@style/explorecursor"/>
+    <TextView
+        android:id="@+id/txt_explore_recipes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Có bao nhieu ket qua theo yeu cau"
+        android:paddingLeft="15dp"
+        android:textSize="18sp"
+        android:textColor="#A8A8A8"
+        />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginStart="8dp"
+            android:id="@+id/explore_recycler_recipes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
