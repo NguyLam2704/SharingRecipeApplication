@@ -102,7 +102,9 @@ public class GroceriesFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         userID = auth.getUid();
         ingListView = binding.listGroceries;
+        ingListView.setNestedScrollingEnabled(false);
         recyclerView_re = binding.recyRecipeGroceries;
+        recyclerView_re.setNestedScrollingEnabled(false);
         dot = binding.btn;
         plus = binding.plus;
         AnhXa();
