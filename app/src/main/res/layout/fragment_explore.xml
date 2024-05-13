@@ -42,22 +42,43 @@
 
         <!--        </androidx.cardview.widget.CardView>-->
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/explore_searchbar"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/edittext_bound"
-            app:iconifiedByDefault="false"
-            app:defaultQueryHint="Tìm kiếm"
-            android:contextClickable="true"
-            app:queryBackground="@null"
-            app:searchIcon="@drawable/baseline_search"
-            app:closeIcon="@drawable/baseline_highlight_off_24"
-            android:theme="@style/explorecursor"/>
+            android:text="Khám phá"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
 
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/explore_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/color_primary"
+            app:tabSelectedTextColor="@color/color_primary">
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_monan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Món ăn"/>
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_nguyenlieu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nguyên liệu"/>
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_daubep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đầu bếp"/>
+        </com.google.android.material.tabs.TabLayout>
+        <FrameLayout
+            android:id="@+id/explore_framelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <!--
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +100,7 @@
                 android:layout_marginStart="24dp" />
         </androidx.core.widget.NestedScrollView>
 
-
+        -->
     </LinearLayout>
 
     <ProgressBar

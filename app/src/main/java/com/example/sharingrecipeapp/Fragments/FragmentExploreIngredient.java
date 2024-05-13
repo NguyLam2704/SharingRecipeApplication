@@ -2,13 +2,9 @@ package com.example.sharingrecipeapp.Fragments;
 
 import android.os.Bundle;
 
-import android.widget.FrameLayout;
-import com.google.android.material.tabs.TabLayout;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
-import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
-
-
 import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
@@ -41,164 +34,96 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class ExploreFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link FragmentExploreIngredient#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class FragmentExploreIngredient extends Fragment {
     private FragmentExploreBinding binding;
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
     RecipesAdapter Explore_recipesAdapter;
-    SearchView Explore_searchview;
+    SearchView Explore_searchview_ingredients;
     ProgressBar Explore_progressbar;
-    LinearLayout Explore_linear;
+    LinearLayout Explore_linear_ingredients;
     ResultExploreAdapter Explore_adapter;
     private RecyclerView Explore_recyclerViewRandom;
     private List<Recipes> Explore_listRecipes;
     private FirebaseAuth Explore_firebaseAuth;
     private FirebaseFirestore Explore_db;
     List<String> List_ingre_db;
-    ///////////////////////////////////////////////////////
-    FrameLayout frameLayout;
-    TabLayout tabLayout;
 
 
-//    public ExploreFragment() {
-//        // Required empty public constructor
-//    }
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    public FragmentExploreIngredient() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment FragmentExploreIngredient.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static FragmentExploreIngredient newInstance(String param1, String param2) {
+        FragmentExploreIngredient fragment = new FragmentExploreIngredient();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        /////////////////////
-
-
-
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_explore, container, false);
+        View view =  inflater.inflate(R.layout.fragment_explore_ingredient, container, false);
         bottomNavigationCustomActivity = (BottomNavigationCustomActivity) getActivity();
-        Explore_linear = (LinearLayout) view.findViewById(R.id.explore_linearLayout);
-        Explore_progressbar = (ProgressBar) view.findViewById(R.id.explore_progressbar);
-        //Explore_searchview = (SearchView) view.findViewById(R.id.explore_searchbar);
-        frameLayout= (FrameLayout) view.findViewById(R.id.explore_framelayout);
-        tabLayout= (TabLayout) view.findViewById(R.id.explore_tabs);
-
-        getFragmentManager().beginTransaction().replace(R.id.explore_framelayout, new FragmentExploreRecipes())
-                .addToBackStack(null)
-                .commit();
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Fragment fragment=null;
-                switch (tab.getPosition()){
-                    case 0:
-                        fragment= new FragmentExploreRecipes();
-                        break;
-                    case 1:
-                        fragment= new FragmentExploreIngredient();
-                        break;
-                    case 2:
-                        fragment=new FragmentExploreCook();
-                }
-                getFragmentManager().beginTransaction().replace(R.id.explore_framelayout, fragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        //Explore_searchview.clearFocus();
-
-        //chuc nang search
-        /*
-        Explore_searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        Explore_searchview_ingredients = (SearchView) view.findViewById(R.id.explore_searchbar_ingredients);
+        Explore_searchview_ingredients.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                Explore_searchName(query);
+                Explore_searchIngre(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Explore_searchName(newText);
-//                Explore_searchIngre(newText);
+                Explore_searchIngre(newText);
                 return true;
             }
         });
-        Explore_recyclerViewRandom = (RecyclerView) view.findViewById(R.id.explore_recycler);
+        Explore_recyclerViewRandom = (RecyclerView) view.findViewById(R.id.explore_recycler_ingredient);
         Explore_firebaseAuth = FirebaseAuth.getInstance();
         Explore_db = FirebaseFirestore.getInstance();
         setdataRecycRandom();
 
-         */
+
         return view;
-
     }
-//tim kiem cong thuc
-    private void Explore_searchName(String newtext)
-    {
-        List<Recipes> ResultSearchList = new ArrayList<>();
-        Explore_db.collection("Recipes").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.w("Error", "listen:error", error);
-                }
-                Explore_listRecipes = new ArrayList<>();
-                //lấy dữ liệu từ firebase
-                for (DocumentSnapshot documentSnapshot : value.getDocuments()){
-                    String id = documentSnapshot.getString("id");
-                    String image = documentSnapshot.getString("image");
-                    String name = documentSnapshot.getString("name");
-                    String save = String.valueOf(documentSnapshot.get("save"));
-                    String time = documentSnapshot.getString("timecook");
-//                    get list nguyen lieu
-//                    ingres = (List<String>) documentSnapshot.get("NguyenLieu");
-                    Explore_listRecipes.add(new Recipes(id, image, name, save, time));
-                }
-                for (Recipes recipes : Explore_listRecipes)
-                {
-                    if(unAccent(recipes.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                    {
-                        ResultSearchList.add(recipes);
-                    }
-                }
-                //search ko co ket qua
-                if(ResultSearchList.isEmpty())
-                {
-                    Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                        @Override
-                        public void onClickItemRecipe(Recipes recipes) {
-                            onClickGoToDetailFood(recipes);
-                        }
-                    });
-                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-                }
-                else{
-                    //tạm
 
-                    Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                    @Override
-                    public void onClickItemRecipe(Recipes recipes) {
-                        onClickGoToDetailFood(recipes);
-                    }
-                });
-                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-                }
 
-            }
-        });
-    }
-//tim kiem nguyen lieu
     private void Explore_searchIngre(String newtext)
     {
         List<Recipes> ResultSearchList = new ArrayList<>();
@@ -221,8 +146,8 @@ public class ExploreFragment extends Fragment {
                     {
                         if(unAccent(ingres_item.replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
                         {
-                                ResultSearchList.add(new Recipes(id, image, name, save, time));
-                                break;
+                            ResultSearchList.add(new Recipes(id, image, name, save, time));
+                            break;
                         }
                     }
                     //search ko co ket qua
@@ -298,4 +223,5 @@ public class ExploreFragment extends Fragment {
     private void onClickGoToDetailFood(Recipes recipes) {
         bottomNavigationCustomActivity.gotoFoodDetail(recipes);
     }
+
 }
