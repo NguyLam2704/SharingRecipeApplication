@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
@@ -44,6 +45,7 @@ public class FragmentExploreRecipes extends Fragment {
 
     private FragmentExploreBinding binding;
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
+    TextView txtRecipes;
     RecipesAdapter Explore_recipesAdapter;
     SearchView Explore_searchview_recipes;
     ProgressBar Explore_progressbar;
@@ -51,6 +53,7 @@ public class FragmentExploreRecipes extends Fragment {
     ResultExploreAdapter Explore_adapter;
     private RecyclerView Explore_recyclerViewRandom;
     private List<Recipes> Explore_listRecipes;
+    List<Recipes> Explore_listRecipes_suggest; // danh sach goi y
     private FirebaseAuth Explore_firebaseAuth;
     private FirebaseFirestore Explore_db;
     List<String> List_ingre_db;
@@ -102,6 +105,8 @@ public class FragmentExploreRecipes extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_explore_recipes, container, false);
         bottomNavigationCustomActivity = (BottomNavigationCustomActivity) getActivity();
+        txtRecipes= (TextView) view.findViewById(R.id.txt_explore_recipes);
+        txtRecipes.setText("Một số món gợi ý");
         Explore_searchview_recipes = (SearchView) view.findViewById(R.id.explore_searchbar_recipes);
         Explore_searchview_recipes.clearFocus();
         Explore_searchview_recipes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -158,17 +163,41 @@ public class FragmentExploreRecipes extends Fragment {
                 //search ko co ket qua
                 if(ResultSearchList.isEmpty())
                 {
-                    Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+
+                    Explore_listRecipes_suggest = new ArrayList<>();// tim lai danh sach, dieu kien có luot save lon
+                    Explore_db.collection("Recipes")
+                            //.whereGreaterThanOrEqualTo("Save",2)
+                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                            if (error != null) {
+                                                Log.w("Error", "listen:error", error);
+                                            }
+                                            //lấy dữ liệu từ firebase
+                                            for (DocumentSnapshot documentSnapshot : value.getDocuments()){
+                                                String id = documentSnapshot.getString("id");
+                                                String image = documentSnapshot.getString("image");
+                                                String name = documentSnapshot.getString("name");
+                                                String save = String.valueOf(documentSnapshot.get("save"));
+                                                String time = documentSnapshot.getString("timecook");
+
+                                                Explore_listRecipes_suggest.add(new Recipes(id, image, name, save, time));
+                                            }
+                                        }
+                                    });
+                    Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
                         @Override
                         public void onClickItemRecipe(Recipes recipes) {
                             onClickGoToDetailFood(recipes);
                         }
                     });
+                    txtRecipes.setText("Món ăn bạn tìm đang được cập nhật\nMột số món gợi ý");
                     Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+
                 }
                 else{
                     //tạm
-
+                    txtRecipes.setText("Có "+ResultSearchList.size()+" món ăn theo yêu cầu");
                     Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
                         @Override
                         public void onClickItemRecipe(Recipes recipes) {
