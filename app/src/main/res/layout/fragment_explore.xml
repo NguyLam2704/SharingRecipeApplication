@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.ExploreFragment"
     android:orientation="vertical"
+    android:background="@color/grey_background"
     >
 
     <!-- TODO: Update blank fragment layout -->
@@ -48,6 +49,7 @@
             android:text="Khám phá"
             android:paddingLeft="20dp"
             android:paddingTop="20dp"
+            android:textColor="@color/text_color"
             android:textSize="30sp"
             android:textStyle="bold"/>
 
@@ -57,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/color_primary"
+            android:background="@color/grey_background"
             app:tabSelectedTextColor="@color/color_primary">
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/tab_monan"

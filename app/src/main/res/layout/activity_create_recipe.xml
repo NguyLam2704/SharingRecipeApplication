@@ -85,7 +85,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/editTextText"
+                    android:id="@+id/newRcp_edt_name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
@@ -125,7 +125,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imageView5"
+                    android:id="@+id/newRcp_img_imgRcp"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
                     android:layout_marginStart="50dp"
@@ -317,7 +317,7 @@
             <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout14"
+                android:id="@+id/newRcp_rcl_ingre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -393,7 +393,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout14">
+                app:layout_constraintTop_toBottomOf="@+id/newRcp_rcl_ingre">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -414,7 +414,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
-                        android:id="@+id/editTextText3"
+                        android:id="@+id/newRcp_edt_time"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -439,7 +439,7 @@
                     android:layout_weight="1">
 
                     <EditText
-                        android:id="@+id/editTextText5"
+                        android:id="@+id/newRcp_edt_note"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -543,13 +543,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout16">
 
-                <TextView
-                    android:id="@+id/textView23"
+                <Button
+                    android:id="@+id/newRcp_btn_upload"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/color_primary"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="30dp"
-                    android:background="@drawable/btncook_background"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:text="Chia sẻ"
