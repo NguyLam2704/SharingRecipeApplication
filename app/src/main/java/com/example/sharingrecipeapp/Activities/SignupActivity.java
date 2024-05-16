@@ -153,6 +153,8 @@ public class SignupActivity extends AppCompatActivity  {
                                     public void onSuccess(Void unused) {
                                         Signup_progressbar.setVisibility(View.GONE);
                                         Button Login_btn = findViewById(R.id.Login_btn);
+                                        Signup_auth.signOut();
+
                                         Intent login_view = new Intent(SignupActivity.this, LoginActivity.class);
                                         startActivity(login_view);
 //                                        Login_btn.setOnClickListener(new View.OnClickListener() {
