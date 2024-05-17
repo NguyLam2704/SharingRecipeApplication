@@ -49,6 +49,7 @@ import java.util.List;
 
 
 public class PlanFragment extends Fragment {
+    static int RECIPE_HEIGHT = 272;
     private FragmentPlanBinding binding;
     private Calendar calendar;
     FirebaseFirestore db;
@@ -199,22 +200,27 @@ public class PlanFragment extends Fragment {
 
                         int position = viewHolder.getLayoutPosition();
                         String ID = recipesList.get(position).getId();
+                        String name = recipesList.get(position).getName();
                         String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
 
-                        Toast.makeText(binding.getRoot().getContext(), "Xoa " + ID, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(binding.getRoot().getContext(), "Đã xóa " + name, Toast.LENGTH_SHORT).show();
                         db.collection("PlanList").document(auth.getUid()).collection(week).document(date).update("recipes", FieldValue.arrayRemove(ID));
 
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
                                 recipesList.remove(position);
                                 viewHolder.getBindingAdapter().notifyDataSetChanged();
+                                if (!recipesList.isEmpty()){
+                                    selectRecycleView(date).setMinimumHeight(selectRecycleView(date).getHeight() - RECIPE_HEIGHT);
+                                }
                                 if (recipesList.isEmpty()){
-                                    ConstraintLayout setting = selectBtnSetting(date);
-                                    setting.setVisibility(View.GONE);
+                                    selectRecycleView(date).setVisibility(View.GONE);
+
+//                                    ConstraintLayout setting = selectBtnSetting(date);
+//                                    setting.setVisibility(View.GONE);
                                 }
                             }
                         }, 200); // 5 seconds
-
                         //Toast.makeText(binding.getRoot().getContext(), "Đã xoá món ăn", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -223,19 +229,14 @@ public class PlanFragment extends Fragment {
                 itemTouchHelper.attachToRecyclerView(recyclerView);
                 recyclerView.setAdapter(myAdapter);
                 recyclerView.setVisibility(View.VISIBLE);
-                selectBtnSetting(date).setVisibility(View.VISIBLE);
+//                selectBtnSetting(date).setVisibility(View.VISIBLE);
             }
 
                 if (!biTrung){
                     recipesList.add(recipes);
+                    selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT + selectRecycleView(date).getHeight() );
                     recyclerView.getAdapter().notifyDataSetChanged();
                 }
-
-
-//                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-//                    ft.detach(PlanFragment.newInstance()).attach(PlanFragment.newInstance() ).commit();
-
-
         }
     });
 
@@ -384,111 +385,6 @@ public class PlanFragment extends Fragment {
                     });
         }
     }
-//
-//
-//    private void PlanOfDay(String weekID){
-//
-//        turnOffRecyclerView();
-//
-//        List<String> date = new ArrayList<>();
-//        date.add("Thu2");
-//        date.add("Thu3");
-//        date.add("Thu4");
-//        date.add("Thu5");
-//        date.add("Thu6");
-//        date.add("Thu7");
-//        date.add("ChuNhat");
-//
-//
-//
-//        db.collection("PlanList").document(auth.getUid()).collection(weekID).get()
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()){
-//                        for (DocumentSnapshot doc : task.getResult().getDocuments()){
-//
-//                            List<String> tenRecipe = (List<String>) doc.get("recipes");
-//
-//                            List<Recipes> recipesList = selectListRecipes(doc.getId());
-//                            for (String i : tenRecipe) {
-//                                db.collection("Recipes").document(i).get()
-//                                        .addOnSuccessListener(documentSnapshot -> {
-//                                            String image = documentSnapshot.getString("image");
-//                                            String name = documentSnapshot.getString("name");
-//                                            String save = documentSnapshot.get("save").toString();
-//                                            String time = documentSnapshot.get("timecook").toString();
-//
-//                                            Recipes recipes = new Recipes(i, image, name, save, time);
-//
-//                                            if (!recipesList.contains(recipes)) {
-//                                                recipesList.add(recipes);
-//                                            }
-//
-//
-//                                            if (i.equals(tenRecipe.get(tenRecipe.size() - 1))) {
-//
-//                                                recyclerView = selectRecycleView(doc.getId());
-//                                                recyclerView.setVisibility(View.VISIBLE);
-//
-//                                                //recyclerView.setHasFixedSize(true);
-//
-//                                                ConstraintLayout setting = selectBtnSetting(doc.getId());
-//                                                setting.setVisibility(View.VISIBLE);
-//
-//                                                AdapterPlanListRecipes myAdapter = new AdapterPlanListRecipes();
-//
-//                                                myAdapter.setData(recipesList, new IClickOnItemRecipe() {
-//                                                    @Override
-//                                                    public void onClickItemRecipe(Recipes recipes) {
-//                                                        onClickGoToDetailFood(recipes);
-//                                                    }
-//                                                });
-//                                                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-//                                                    @Override
-//                                                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-//                                                        return false;
-//                                                    }
-//
-//                                                    @Override
-//                                                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//                                                        int position = viewHolder.getLayoutPosition();
-//
-//                                                        String ID = recipesList.get(position).getId();
-//                                                        String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
-//                                                        Toast.makeText(binding.getRoot().getContext(), "Xoa " + ID, Toast.LENGTH_SHORT).show();
-//                                                        db.collection("PlanList").document(auth.getUid()).collection(week).document(doc.getId()).update("recipes", FieldValue.arrayRemove(ID));
-//
-//                                                        new Handler().postDelayed(new Runnable() {
-//                                                            public void run() {
-//                                                                recipesList.remove(position);
-//                                                                viewHolder.getBindingAdapter().notifyDataSetChanged();
-//                                                                if (recipesList.isEmpty()){
-//                                                                    ConstraintLayout setting = selectBtnSetting(doc.getId());
-//                                                                    setting.setVisibility(View.GONE);
-//                                                                }
-//                                                            }
-//                                                        }, 200); // 5 seconds
-//
-//
-//
-//                                                        //PlanOfDay(week);
-//                                                        //Toast.makeText(binding.getRoot().getContext(), "Đã xoá món ăn", Toast.LENGTH_SHORT).show();
-//                                                    }
-//                                                });
-//                                                recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false));
-//
-//                                                itemTouchHelper.attachToRecyclerView(recyclerView);
-//                                                recyclerView.setAdapter(myAdapter);
-//                                            }
-//
-//
-//                                        });
-//                            }
-//
-//                        }
-//                    }
-//                });
-//    }
-
     List<Recipes> monAnThu2 = new ArrayList<>();
     List<Recipes> monAnThu3 = new ArrayList<>();
     List<Recipes> monAnThu4 = new ArrayList<>();
@@ -552,9 +448,7 @@ public class PlanFragment extends Fragment {
                         selectRecycleView(date).getAdapter().notifyDataSetChanged();
 
                         if (id.equals(list.get(list.size()-1))){
-                            selectRecycleView(date).setMinimumHeight(286 * list.size());
-//                            Toast.makeText(binding.getRoot().getContext(),String.valueOf(selectRecycleView(date).getHeight()),Toast.LENGTH_SHORT).show();
-                            //selectRecycleView(date).getAdapter().notifyDataSetChanged();
+                            selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT * list.size());
                         }
 
 
@@ -573,8 +467,8 @@ public class PlanFragment extends Fragment {
         recyclerView.setVisibility(View.VISIBLE);
 
 
-        ConstraintLayout setting = selectBtnSetting(date);
-        setting.setVisibility(View.VISIBLE);
+//        ConstraintLayout setting = selectBtnSetting(date);
+//        setting.setVisibility(View.VISIBLE);
 
         AdapterPlanListRecipes myAdapter = new AdapterPlanListRecipes();
 
@@ -596,17 +490,22 @@ public class PlanFragment extends Fragment {
 
                 String ID = recipesList.get(position).getId();
                 String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
-                Toast.makeText(binding.getRoot().getContext(), "Xoa " + ID, Toast.LENGTH_SHORT).show();
+                String name = recipesList.get(position).getName();
+                Toast.makeText(binding.getRoot().getContext(), "Đã xóa " + name, Toast.LENGTH_SHORT).show();
                 db.collection("PlanList").document(auth.getUid()).collection(week).document(date).update("recipes", FieldValue.arrayRemove(ID));
 
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
                         recipesList.remove(position);
                         viewHolder.getBindingAdapter().notifyDataSetChanged();
-                        selectRecycleView(date).setMinimumHeight(selectRecycleView(date).getHeight() - 286);
+                        if (!recipesList.isEmpty()){
+                            selectRecycleView(date).setMinimumHeight(selectRecycleView(date).getHeight() - RECIPE_HEIGHT);
+
+                        }
                         if (recipesList.isEmpty()){
-                            ConstraintLayout setting = selectBtnSetting(date);
-                            setting.setVisibility(View.GONE);
+                            //ConstraintLayout setting = selectBtnSetting(date);
+                            selectRecycleView(date).setVisibility(View.GONE);
+//                            setting.setVisibility(View.GONE);
                         }
                     }
                 }, 200); // 5 seconds
@@ -642,8 +541,8 @@ public class PlanFragment extends Fragment {
         date.add("ChuNhat");
 
         for (String dateOfWeek : date){
-            ConstraintLayout setting = selectBtnSetting(dateOfWeek);
-            setting.setVisibility(View.GONE);
+//            ConstraintLayout setting = selectBtnSetting(dateOfWeek);
+//            setting.setVisibility(View.GONE);
 
             recyclerView = selectRecycleView(dateOfWeek);
             recyclerView.setVisibility(View.GONE);

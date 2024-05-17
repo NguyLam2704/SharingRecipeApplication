@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
@@ -45,22 +46,26 @@ public class PlantoSavedActivity extends AppCompatActivity {
     ActivityPlantoSavedBinding binding;
     FirebaseAuth auth;
     FirebaseFirestore db;
+    TextView soluong;
+    Integer number = 0;
 
-    PlanFragment planFragment;
+    List<Recipes> recipesList;
 
     ImageButton back_btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_planto_saved);
+        setContentView(R.layout.activity_save_list);
         binding = ActivityPlantoSavedBinding.inflate(getLayoutInflater());
 
 
 
-        recyclerView = findViewById(R.id.List_save_recipes);
+        recyclerView = findViewById(R.id.recy_save);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        back_btn = findViewById(R.id.btn_Back_to_plan);
+        back_btn = findViewById(R.id.btn_back_profile);
+        soluong = findViewById(R.id.textTb);
+
         displaySavedRecipes();
 
 
@@ -81,7 +86,7 @@ public class PlantoSavedActivity extends AppCompatActivity {
                        for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
                            tenRecipes.add(documentSnapshot.get("Recipes").toString());
                        }
-                       ArrayList<Recipes> recipesList = new ArrayList<>();
+                       recipesList = new ArrayList<>();
                        for (String i : tenRecipes){
                            db.collection("Recipes").document(i).get()
                                    .addOnSuccessListener(documentSnapshot -> {
@@ -92,6 +97,8 @@ public class PlantoSavedActivity extends AppCompatActivity {
 
                                        Recipes recipes = new Recipes(i,image,name,save,time);
                                        recipesList.add(recipes);
+                                       number++;
+                                       soluong.setText("Bạn đã lưu được " + String.valueOf(number) +" món ăn");
 
                                        if (i == tenRecipes.get(tenRecipes.size()-1)){
                                            RecipesAdapter myAdapter = new RecipesAdapter();
