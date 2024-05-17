@@ -56,6 +56,7 @@ public class SaveListActivity extends AppCompatActivity {
 
     TextView soluong;
 
+    ArrayList<Recipes> recipesList;
     Integer number = 0;
     ImageButton back_btn;
 
@@ -92,7 +93,7 @@ public class SaveListActivity extends AppCompatActivity {
                         for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
                             tenRecipes.add(documentSnapshot.get("Recipes").toString());
                         }
-                        ArrayList<Recipes> recipesList = new ArrayList<>();
+                        recipesList = new ArrayList<>();
                         for (String i : tenRecipes){
                             db.collection("Recipes").document(i).get()
                                     .addOnSuccessListener(documentSnapshot -> {
