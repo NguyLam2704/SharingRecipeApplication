@@ -1,11 +1,12 @@
 package com.example.sharingrecipeapp.Classes;
 
 public class AddNguyenLieu {
-    String name, soluong, donvi;
+    String name, donvi;
+    Number soluong;
 
     public AddNguyenLieu(){}
 
-    public AddNguyenLieu(String name, String soluong, String donvi) {
+    public AddNguyenLieu(String name, Number soluong, String donvi) {
         this.name = name;
         this.soluong = soluong;
         this.donvi = donvi;
@@ -20,11 +21,15 @@ public class AddNguyenLieu {
         this.name = name;
     }
 
-    public String getSoluong() {
+    public Number getSoluong() {
+        double number = (double) soluong;
+        int intnum = (int) number;
+        if ( number == intnum)
+        {return intnum;}
         return soluong;
     }
 
-    public void setSoluong(String soluong) {
+    public void setSoluong(Number soluong) {
         this.soluong = soluong;
     }
 

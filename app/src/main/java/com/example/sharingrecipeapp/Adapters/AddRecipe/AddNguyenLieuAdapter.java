@@ -43,7 +43,7 @@ public class AddNguyenLieuAdapter extends RecyclerView.Adapter<AddNguyenLieuAdap
         if (getItemCount() != 0){
             holder.stt.setText((position + 1) + ": ");
             holder.name.setText(addNguyenLieuList.get(position).getName());
-            holder.sl.setText(addNguyenLieuList.get(position).getSoluong());
+            holder.sl.setText(addNguyenLieuList.get(position).getSoluong().toString());
             holder.donvi.setText(addNguyenLieuList.get(position).getDonvi());
 
         }

@@ -133,9 +133,6 @@ public class FoodDetailActivity extends AppCompatActivity {
         recycDonVi.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(),RecyclerView.VERTICAL,false));
 
 
-
-
-
         getSoluongLike(idRecipe);
         getSoluongSave(idRecipe);
         getUsers(idRecipe);
