@@ -31,10 +31,13 @@ import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetai
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
 import com.example.sharingrecipeapp.Adapters.ListInAdapter;
+import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterTenNguyenLieu;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.IClickOnItemSavedRecipe;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.ReGroAdapter;
+import com.example.sharingrecipeapp.Adapters.PlanList.AdapterPlanListRecipes;
 import com.example.sharingrecipeapp.Classes.Ingredient;
 import com.example.sharingrecipeapp.Classes.ListIngredient;
+import com.example.sharingrecipeapp.Classes.NguyenLieu;
 import com.example.sharingrecipeapp.Classes.ReGro;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Classes.SoLuongIngre;
@@ -50,6 +53,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sharingrecipeapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -59,6 +63,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.checker.units.qual.N;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,6 +72,15 @@ import java.util.Objects;
 public class GroceriesFragment extends Fragment {
     BottomNavigationCustomActivity bottomNavigationCustomActivity;
     ImageView plus;
+
+    RecyclerView tenNL;
+    List<NguyenLieu> nguyenLieuList;
+
+    List<NguyenLieu> listNL_da_mua;
+    FirebaseFirestore db;
+    FirebaseAuth auth;
+    String userID;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -84,6 +99,11 @@ public class GroceriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         com.example.sharingrecipeapp.databinding.FragmentGroceriesBinding binding = FragmentGroceriesBinding.inflate(inflater, container, false);
 
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        userID = auth.getUid();
+        listNL_da_mua = new ArrayList<>();
+
         plus = binding.plus;
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +117,40 @@ public class GroceriesFragment extends Fragment {
     private void DialogAdd(){
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_list_add);
+        displayNguyenLieu(dialog);
         dialog.show();
+
+
+    }
+
+    private void displayNguyenLieu(Dialog dialog) {
+        tenNL = dialog.findViewById(R.id.recyNL);
+        nguyenLieuList = new ArrayList<>();
+        AdapterTenNguyenLieu adapterTenNguyenLieu = new AdapterTenNguyenLieu();
+        adapterTenNguyenLieu.setData(nguyenLieuList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
+        tenNL.setLayoutManager(linearLayoutManager);
+        tenNL.setAdapter(adapterTenNguyenLieu);
+        db.collection("NguyenLieu").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (DocumentSnapshot doc : task.getResult()){
+                        String name = doc.getString("name");
+                        String id = doc.getString("id");
+                        String img = doc.getString("img");
+                        String donvi  = doc.getString("donvi");
+
+                        NguyenLieu nl = new NguyenLieu(donvi,id,name,img);
+                        nguyenLieuList.add(nl);
+                        adapterTenNguyenLieu.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
+        Toast.makeText(requireContext(),String.valueOf(nguyenLieuList.size()) ,Toast.LENGTH_SHORT).show();
+
+
     }
 
     private void onClickGoToDetailFood(String id) {
