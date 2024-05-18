@@ -23,12 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="24dp"
         android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+        app:layout_constraintTop_toBottomOf="@+id/layout2">
 
         <ImageView
             android:id="@+id/imageView1"
@@ -57,11 +57,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout1">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout14">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -70,7 +71,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:src="@drawable/baseline_user"
-            app:tint="@color/black"/>
+            app:tint="@color/black" />
 
         <TextView
             android:id="@+id/btn_change_profile"
@@ -95,14 +96,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout2">
+        app:layout_constraintTop_toBottomOf="@+id/layout1">
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
-            android:src="@drawable/outline_settings"
+            android:src="@drawable/baseline_share"
             app:tint="@color/black" />
 
         <TextView
@@ -112,7 +113,7 @@
             android:layout_marginVertical="15dp"
             android:layout_marginStart="10dp"
             android:gravity="center|start"
-            android:text="Cài đặt"
+            android:text="Công thức đã chia sẻ"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -152,21 +153,24 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/layout1"
+        android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/linearLayout3">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView"
             android:layout_width="165dp"
             android:layout_height="165dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:strokeColor="@color/grey_background"
-            app:strokeWidth="0.5dp"
             app:cardCornerRadius="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/grey_background"
+            app:strokeWidth="0.5dp"
             tools:ignore="MissingConstraints">
 
             <de.hdodenhof.circleimageview.CircleImageView
