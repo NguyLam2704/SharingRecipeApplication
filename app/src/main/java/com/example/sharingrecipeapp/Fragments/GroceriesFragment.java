@@ -31,6 +31,7 @@ import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetai
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
 import com.example.sharingrecipeapp.Adapters.ListInAdapter;
+import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterListNL;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterTenNguyenLieu;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.IClickOnItemSavedRecipe;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.ReGroAdapter;
@@ -70,13 +71,17 @@ import java.util.List;
 import java.util.Objects;
 
 public class GroceriesFragment extends Fragment {
+    static int HEIGHT = 0;
     BottomNavigationCustomActivity bottomNavigationCustomActivity;
+
+    FragmentGroceriesBinding binding;
     ImageView plus;
 
     RecyclerView tenNL;
     List<NguyenLieu> nguyenLieuList;
-
     List<NguyenLieu> listNL_da_mua;
+
+    AdapterListNL adapterListNL;
     FirebaseFirestore db;
     FirebaseAuth auth;
     String userID;
@@ -97,8 +102,7 @@ public class GroceriesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        com.example.sharingrecipeapp.databinding.FragmentGroceriesBinding binding = FragmentGroceriesBinding.inflate(inflater, container, false);
-
+        binding = FragmentGroceriesBinding.inflate(inflater,container,false);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         userID = auth.getUid();
@@ -111,7 +115,48 @@ public class GroceriesFragment extends Fragment {
                 DialogAdd();
             }
         });
+
+        displayNguyenLieu();
+
         return binding.getRoot();
+    }
+
+    private void displayNguyenLieu() {
+        nguyenLieuList = new ArrayList<>();
+        ListView listViewNL = binding.listGroceries;
+        listViewNL.setEnabled(false);
+        adapterListNL = new AdapterListNL(nguyenLieuList);
+        listViewNL.setAdapter(adapterListNL);
+
+        db.collection("ListNguyenLieuMua").whereEqualTo("idUser","HmY48QhzdQSzLoDFDSaaMGzDa8c2").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots){
+                        String name = doc.getString("name");
+                        String img = doc.getString("img");
+                        int SL = doc.getLong("SL").intValue();
+
+                        String donvi = doc.getString("donvi");
+                        boolean biTrung = false;
+
+                        for (int i = 0; i < nguyenLieuList.size();i++){
+                            if (nguyenLieuList.get(i).getName().equals(name)){
+                                nguyenLieuList.get(i).setSL(SL + nguyenLieuList.get(i).getSL());
+                                adapterListNL.notifyDataSetChanged();
+                                biTrung = true;
+                                break;
+                            }
+                        }
+
+                        if (!biTrung){
+                            nguyenLieuList.add(new NguyenLieu(SL,donvi,"",name,img));
+                            ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) listViewNL.getLayoutParams();
+                            HEIGHT += 150;
+                            lp.height = HEIGHT;
+                            listViewNL.setLayoutParams(lp);
+                            adapterListNL.notifyDataSetChanged();
+                        }
+                    }
+                });
     }
 
     private void DialogAdd(){
@@ -119,6 +164,13 @@ public class GroceriesFragment extends Fragment {
         dialog.setContentView(R.layout.dialog_list_add);
         displayNguyenLieu(dialog);
         dialog.show();
+        dialog.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayNguyenLieu();
+                dialog.dismiss();
+            }
+        });
 
 
     }
@@ -126,8 +178,7 @@ public class GroceriesFragment extends Fragment {
     private void displayNguyenLieu(Dialog dialog) {
         tenNL = dialog.findViewById(R.id.recyNL);
         nguyenLieuList = new ArrayList<>();
-        AdapterTenNguyenLieu adapterTenNguyenLieu = new AdapterTenNguyenLieu();
-        adapterTenNguyenLieu.setData(nguyenLieuList);
+        AdapterTenNguyenLieu adapterTenNguyenLieu = new AdapterTenNguyenLieu(requireContext(),nguyenLieuList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
         tenNL.setLayoutManager(linearLayoutManager);
         tenNL.setAdapter(adapterTenNguyenLieu);
@@ -148,9 +199,6 @@ public class GroceriesFragment extends Fragment {
                 }
             }
         });
-        Toast.makeText(requireContext(),String.valueOf(nguyenLieuList.size()) ,Toast.LENGTH_SHORT).show();
-
-
     }
 
     private void onClickGoToDetailFood(String id) {

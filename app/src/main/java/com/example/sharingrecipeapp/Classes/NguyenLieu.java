@@ -1,6 +1,23 @@
 package com.example.sharingrecipeapp.Classes;
 
 public class NguyenLieu {
+    public int getSL() {
+        return SL;
+    }
+
+    public NguyenLieu(int SL, String donvi, String id, String name, String img) {
+        this.SL = SL;
+        this.donvi = donvi;
+        this.id = id;
+        this.name = name;
+        this.img = img;
+    }
+
+    public void setSL(int SL) {
+        this.SL = SL;
+    }
+
+    int SL;
     String donvi;
     String id;
     String name;
