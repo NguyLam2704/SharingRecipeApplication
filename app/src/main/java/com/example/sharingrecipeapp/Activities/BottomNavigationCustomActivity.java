@@ -15,7 +15,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-
+import android.widget.ShareActionProvider;
 
 
 import com.example.sharingrecipeapp.Adapters.ViewPagerAdapter;
@@ -187,8 +187,8 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void gotoSetting() {
-        Intent intent = new Intent(this, SettingActivity.class);
+    public void gotoShared() {
+        Intent intent = new Intent(this, SharedListActivity.class);
         startActivity(intent);
     }
 

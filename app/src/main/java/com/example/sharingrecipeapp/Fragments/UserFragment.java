@@ -55,7 +55,7 @@ public class UserFragment extends Fragment {
     public static final int MY_REQUEST_CODE = 10;
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
     protected LinearLayout Saved,Change_profile, Setting, Logout;
-    protected TextView btn_Saved, btn_Change, btn_setting, btn_logout, text_name;
+    protected TextView btn_Saved, btn_Change, btn_shared, btn_logout, text_name;
     protected ImageView image_account;
     public FirebaseAuth firebaseAuth;
     protected FirebaseFirestore firestore;
@@ -74,7 +74,7 @@ public class UserFragment extends Fragment {
         Change_profile = view.findViewById(R.id.layout2);
         btn_Change = view.findViewById(R.id.btn_change_profile);
         Setting = view.findViewById(R.id.layout3);
-        btn_setting = view.findViewById(R.id.btn_setting);
+        btn_shared = view.findViewById(R.id.btn_setting);
         Logout = view.findViewById(R.id.layout4);
         btn_logout = view.findViewById(R.id.btn_logout);
         image_account = view.findViewById(R.id.image_user);
@@ -167,15 +167,15 @@ public class UserFragment extends Fragment {
         Setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomNavigationCustomActivity.gotoSetting();
+                bottomNavigationCustomActivity.gotoShared();
             }
         });
     }
     private void setOnClickBtnSetting(){
-        btn_setting.setOnClickListener(new View.OnClickListener() {
+        btn_shared.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomNavigationCustomActivity.gotoSetting();
+                bottomNavigationCustomActivity.gotoShared();
             }
         });
     }
