@@ -29,12 +29,35 @@
         app:layout_constraintTop_toTopOf="@id/cardView"
         app:layout_constraintBottom_toBottomOf="@id/cardView"
         app:layout_constraintStart_toEndOf="@id/cardView"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/editTextNumber"
         android:id="@+id/tenNL"
         android:layout_marginEnd="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:text="TextView" />
+
+    <EditText
+        app:layout_constraintTop_toTopOf="@id/cardView"
+        app:layout_constraintBottom_toBottomOf="@id/cardView"
+        app:layout_constraintEnd_toStartOf="@id/donvi"
+        android:layout_marginEnd="20dp"
+        android:id="@+id/editTextNumber"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:ems="10"
+        android:inputType="number" />
+    <TextView
+        android:id="@+id/donvi"
+        app:layout_constraintTop_toTopOf="@id/cardView"
+        app:layout_constraintBottom_toBottomOf="@id/cardView"
+        app:layout_constraintEnd_toStartOf="@id/addNL"
+        android:layout_marginEnd="20dp"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="donvi" />
 
     <View
         android:id="@+id/addNL"
