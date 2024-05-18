@@ -49,7 +49,8 @@ import java.util.List;
 
 
 public class PlanFragment extends Fragment {
-    static int RECIPE_HEIGHT = 272;
+    static int RECIPE_HEIGHT = 145;//272;
+    static int PADDING_RECIPE_HEIGHT = 130;//272;
     private FragmentPlanBinding binding;
     private Calendar calendar;
     FirebaseFirestore db;
@@ -189,7 +190,7 @@ public class PlanFragment extends Fragment {
                         onClickGoToDetailFood(recipes);
                     }
                     });
-                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
                     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                         return false;
@@ -211,7 +212,7 @@ public class PlanFragment extends Fragment {
                                 recipesList.remove(position);
                                 viewHolder.getBindingAdapter().notifyDataSetChanged();
                                 if (!recipesList.isEmpty()){
-                                    selectRecycleView(date).setMinimumHeight(selectRecycleView(date).getHeight() - RECIPE_HEIGHT);
+                                    selectRecycleView(date).setMinimumHeight(selectRecycleView(date).getHeight() - RECIPE_HEIGHT - PADDING_RECIPE_HEIGHT);
                                 }
                                 if (recipesList.isEmpty()){
                                     selectRecycleView(date).setVisibility(View.GONE);
@@ -478,7 +479,7 @@ public class PlanFragment extends Fragment {
                 onClickGoToDetailFood(recipes);
             }
         });
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -499,7 +500,7 @@ public class PlanFragment extends Fragment {
                         recipesList.remove(position);
                         viewHolder.getBindingAdapter().notifyDataSetChanged();
                         if (!recipesList.isEmpty()){
-                            selectRecycleView(date).setMinimumHeight(selectRecycleView(date).getHeight() - RECIPE_HEIGHT);
+                            selectRecycleView(date).setMinimumHeight(selectRecycleView(date).getHeight() - RECIPE_HEIGHT - PADDING_RECIPE_HEIGHT);
 
                         }
                         if (recipesList.isEmpty()){

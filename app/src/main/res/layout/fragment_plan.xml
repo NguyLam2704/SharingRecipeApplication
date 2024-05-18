@@ -173,8 +173,8 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="22dp"
+                            android:layout_height="23dp"
                             app:layout_constraintBottom_toBottomOf="@id/add2"
                             app:layout_constraintEnd_toEndOf="@+id/add2"
                             app:layout_constraintStart_toStartOf="@+id/add2"
