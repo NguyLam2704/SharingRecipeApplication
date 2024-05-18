@@ -74,6 +74,8 @@ public class FoodDetailActivity extends AppCompatActivity {
     RecyclerView recycIngre, recycSoLuong, recycDonVi, recycMethod;
     FirebaseUser current_user;
     SharedPreferences sharedPreferences;
+
+    TextView btnAddGro;
     SharedPreferences.Editor editor_like, editor_save;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +111,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         recycMethod = findViewById(R.id.recyMethod);
         recycSoLuong = findViewById(R.id.recySoLuong);
         recycDonVi = findViewById(R.id.recyDonVi);
+        btnAddGro = findViewById(R.id.btnAddGro);
 
 
         //Recycler không scroll
@@ -151,6 +154,14 @@ public class FoodDetailActivity extends AppCompatActivity {
             }
         });
 
+        btnAddGro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FoodDetailActivity.this, AddToGroceryActivity.class);
+                intent.putExtra("id", idRecipe);
+                startActivity(intent);
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -345,7 +356,7 @@ public class FoodDetailActivity extends AppCompatActivity {
 
     }
 
-    private void getSoluongSave(String idRecipe)
+    public void getSoluongSave(String idRecipe)
     {
         firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",idRecipe).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -490,9 +501,9 @@ public class FoodDetailActivity extends AppCompatActivity {
                         String dv = (String) snapshot.get("donvi");
                         Ingredient ingreList = new Ingredient(id, name, image, dv);
                         IngreList.add(ingreList);
-                        ingreAdapter.setData(IngreList, FoodDetailActivity.this);
+                        ingreAdapter.setData(IngreList);
                         recycIngre.setAdapter(ingreAdapter);
-                        donviAdapter.setData(IngreList, FoodDetailActivity.this);
+                        donviAdapter.setData(IngreList);
                         recycDonVi.setAdapter(donviAdapter);
                     } else {
                         Log.d(TAG, "Current data: null");

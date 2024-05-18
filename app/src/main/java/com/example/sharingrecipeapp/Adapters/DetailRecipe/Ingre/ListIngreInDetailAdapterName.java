@@ -25,16 +25,14 @@ public class ListIngreInDetailAdapterName extends RecyclerView.Adapter<ListIngre
     List<Ingredient> ingredientList;
     List<Ingredient> ingredientListOld;
 
-    FoodDetailActivity foodDetailActivity;
     GroceriesFragment groceriesFragment;
 
 
     Context context;
 
-    public void setData(List<Ingredient> list, FoodDetailActivity ac){
+    public void setData(List<Ingredient> list){
         this.ingredientList = list;
         this.ingredientListOld=list;
-        this.foodDetailActivity = ac;
         notifyDataSetChanged();
     }
     public void setData(List<Ingredient> list, GroceriesFragment ac){

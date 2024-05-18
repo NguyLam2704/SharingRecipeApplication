@@ -3,6 +3,13 @@ package com.example.sharingrecipeapp.Classes;
 public class Ingredient {
     String id, name, img, donvi;
 
+
+    public Ingredient(String id) {
+        this.id = id;
+        this.name = "";
+        this.img = "";
+        this.donvi = "";
+    }
     public Ingredient(String id, String name, String img, String donvi) {
         this.id = id;
         this.name = name;
