@@ -170,7 +170,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:strokeColor="@color/grey_background"
-            app:strokeWidth="0.5dp"
+            app:strokeWidth="1dp"
             tools:ignore="MissingConstraints">
 
             <de.hdodenhof.circleimageview.CircleImageView
