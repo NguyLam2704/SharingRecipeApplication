@@ -19,15 +19,15 @@
         app:searchIcon="@drawable/baseline_search"
         app:closeIcon="@drawable/baseline_highlight_off_24"
         android:theme="@style/explorecursor"/>
+
     <TextView
         android:id="@+id/txt_explore_cook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Có bao nhieu ket qua theo yeu cau"
         android:paddingLeft="15dp"
-        android:textSize="14sp"
+        android:text="Có bao nhieu ket qua theo yeu cau"
         android:textColor="@color/color_primary"
-        />
+        android:textSize="14sp" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -39,7 +39,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:background="@color/white"/>
+            android:background="@color/white" />
+        <!--        <androidx.recyclerview.widget.RecyclerView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_marginStart="8dp"-->
+        <!--            android:background="@color/white"-->
+        <!--            android:id="@+id/explore_recycler_recommend"/>-->
 
 
     </androidx.core.widget.NestedScrollView>

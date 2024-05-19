@@ -3,6 +3,7 @@ package com.example.sharingrecipeapp.Activities;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -31,6 +32,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +48,7 @@ public class SignupActivity extends AppCompatActivity  {
     private FirebaseAuth Signup_auth;
 
     FirebaseFirestore Signup_db;
+    FirebaseStorage Signup_stg;
 
     ProgressBar Signup_progressbar;
     String userID;
@@ -81,9 +85,11 @@ public class SignupActivity extends AppCompatActivity  {
 
         Signup_auth = FirebaseAuth.getInstance();
         Signup_db = FirebaseFirestore.getInstance();
+        Signup_stg = FirebaseStorage.getInstance();
         email = findViewById(R.id.signup_edt_email);
         password = findViewById(R.id.signup_edt_password);
         username = findViewById(R.id.signup_edt_username);
+
         Signup_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,16 +152,19 @@ public class SignupActivity extends AppCompatActivity  {
                                 new_user.put("username",Signup_getusername);
                                 new_user.put("password",Signup_getpassword);
                                 new_user.put("id",userID);
-                                new_user.put("avatar","");
-                                Signup_document.set(new_user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        Signup_progressbar.setVisibility(View.GONE);
-                                        Button Login_btn = findViewById(R.id.Login_btn);
-                                        Signup_auth.signOut();
+                                Signup_stg.getReference().child("Recipes/Fantafood.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    new_user.put("avatar",uri.toString());
+                                    Signup_document.set(new_user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Signup_progressbar.setVisibility(View.GONE);
+                                            Button Login_btn = findViewById(R.id.Login_btn);
+                                            Signup_auth.signOut();
 
-                                        Intent login_view = new Intent(SignupActivity.this, LoginActivity.class);
-                                        startActivity(login_view);
+                                            Intent login_view = new Intent(SignupActivity.this, LoginActivity.class);
+                                            startActivity(login_view);
 //                                        Login_btn.setOnClickListener(new View.OnClickListener() {
 //                                            @Override
 //                                            public void onClick(View v) {
@@ -163,9 +172,12 @@ public class SignupActivity extends AppCompatActivity  {
 //                                                startActivity(login_view);
 //                                            }
 //                                        });
-                                        Log.d(TAG, "DocumentSnapshot added with ID: " + Signup_document.getId());
-                                    }
-                                });
+                                            Log.d(TAG, "DocumentSnapshot added with ID: " + Signup_document.getId());
+                                        }
+                                    });
+                                }
+                            });
+
 
                         }
                         else
