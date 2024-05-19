@@ -15,10 +15,12 @@
         android:theme="@style/Theme.SharingRecipeApp"
         tools:targetApi="31">
         <activity
-            android:name=".Activities.AddToGroceryActivity"
+
+            android:name=".Activities.SharedListActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.SharedListActivity"
+            android:name=".Activities.AddToGroceryActivity"
+
             android:exported="false" />
         <activity
             android:name=".Activities.CreateRecipeActivity"
