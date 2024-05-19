@@ -26,7 +26,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-<<<<<<< HEAD
         android:orientation="vertical">
         <TextView
             android:id="@+id/txt_explore_cook"
@@ -45,16 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="24dp" />
-=======
-        android:background="@color/white">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/explore_recycler_cook"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:background="@color/white"/>
->>>>>>> 8f713cba9408e678c2318d046478cebb73355708
 
 
         </androidx.core.widget.NestedScrollView>

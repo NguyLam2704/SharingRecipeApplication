@@ -48,11 +48,11 @@
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:paddingTop="20dp"
-<<<<<<< HEAD
+
             android:text="Khám phá"
-=======
+
             android:textColor="@color/text_color"
->>>>>>> 8f713cba9408e678c2318d046478cebb73355708
+
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -62,11 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/color_primary"
-<<<<<<< HEAD
             app:tabRippleColor="@null"
-=======
             android:background="@color/grey_background"
->>>>>>> 8f713cba9408e678c2318d046478cebb73355708
             app:tabSelectedTextColor="@color/color_primary">
 
             <com.google.android.material.tabs.TabItem

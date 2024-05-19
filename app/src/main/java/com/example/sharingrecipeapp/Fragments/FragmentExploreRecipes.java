@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -119,10 +120,16 @@ public class FragmentExploreRecipes extends Fragment {
                                 }
                                 save = String.valueOf(idUser.size());
                                 Recipes Newrcp = new Recipes(id, image, name, save, time);
+                                Explore_listRecipes.add(Newrcp);
+                                if (idUser.size()>3){
+                                    Explore_listRecipes_suggest.add(Newrcp);
+                                }
                                 if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
                                 {
                                     ResultSearchList.add(Newrcp);
                                 }
+
+
                                 if(ResultSearchList.isEmpty()) {
                                     txtRecipes.setText("Không có kết quả phù hợp");
                                 }
@@ -130,63 +137,62 @@ public class FragmentExploreRecipes extends Fragment {
                                     //tạm
                                     txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
                                 }
-                                RecipesAdapter myAdapter = new RecipesAdapter();
-                                myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                                //RecipesAdapter myAdapter = new RecipesAdapter();
+//                                myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+//                                    @Override
+//                                    public void onClickItemRecipe(Recipes recipes) {
+//                                        onClickGoToDetailFood(recipes);
+//                                    }
+//                                });
+//                                Explore_recyclerViewRandom.setAdapter(myAdapter);
+                            }
+                            if(!ResultSearchList.isEmpty())
+                            {
+                                if (newtext.equals("")){
+                                    txtRecipes.setText("Một số món gợi ý");
+                                    Explore_adapter.setData(Explore_listRecipes,new IClickOnItemRecipe() {
+                                        @Override
+                                        public void onClickItemRecipe(Recipes recipes) {
+                                            onClickGoToDetailFood(recipes);
+                                        }
+                                    });
+                                }else
+                                {
+                                    txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                    Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                                        @Override
+                                        public void onClickItemRecipe(Recipes recipes) {
+                                            onClickGoToDetailFood(recipes);
+                                        }
+                                    });
+                                }
+
+                                Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+
+
+
+                            }
+                            else{
+                                Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
                                     @Override
                                     public void onClickItemRecipe(Recipes recipes) {
                                         onClickGoToDetailFood(recipes);
                                     }
                                 });
-                                Explore_recyclerViewRandom.setAdapter(myAdapter);
+                                txtRecipes.setText("Không tìm thấy kết quả phù hợp\nMột số món được yêu thích");
+                                Explore_recyclerViewRandom.setAdapter(Explore_adapter);
                             }
                         }
                     });
 //                    get list nguyen lieu
 //                    ingres = (List<String>) documentSnapshot.get("NguyenLieu");
-<<<<<<< HEAD
-                    Explore_listRecipes.add(new Recipes(id, image, name, save, time));
-                    if (Integer.parseInt(save)>2){
-                        Explore_listRecipes_suggest.add(new Recipes(id,image,name, save, time));
-                    }
-                }
-                // nếu save trong dữ lieu firebase lơn hơn 2 thì sẽ duoc luu trong danh sach
 
-                for (Recipes recipes : Explore_listRecipes)
-                {
-                    if(unAccent(recipes.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                    {
-                        ResultSearchList.add(recipes);
-                    }
+
                 }
+
                 //search ko co ket qua
-                if(!ResultSearchList.isEmpty())
-                {
-                    if (newtext.equals("")){
-                        txtRecipes.setText("Một số món gợi ý");
-                    }else
-                    {txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");}
-                    Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                        @Override
-                        public void onClickItemRecipe(Recipes recipes) {
-                            onClickGoToDetailFood(recipes);
-                        }
-                    });
-                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
 
 
-
-                }
-                else{
-                    Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
-                        @Override
-                        public void onClickItemRecipe(Recipes recipes) {
-                            onClickGoToDetailFood(recipes);
-                        }
-                    });
-                    txtRecipes.setText("Không tìm thấy kết quả phù hợp\nMột số món được yêu thích");
-                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-                }
-=======
 //                    Explore_listRecipes.add(new Recipes(id, image, name, save, time));
                 }
 //                for (Recipes recipes : Explore_listRecipes)
@@ -257,9 +263,8 @@ public class FragmentExploreRecipes extends Fragment {
 //                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
 //                }
 
->>>>>>> 8f713cba9408e678c2318d046478cebb73355708
 
-            }
+
         });
     }
     private void setdataRecycRandom()
