@@ -19,27 +19,38 @@
         app:searchIcon="@drawable/baseline_search"
         app:closeIcon="@drawable/baseline_highlight_off_24"
         android:theme="@style/explorecursor"/>
-    <TextView
-        android:id="@+id/txt_explore_recipes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Có bao nhieu ket qua theo yeu cau"
-        android:paddingLeft="15dp"
-        android:textSize="14sp"
-        android:textColor="@color/color_primary"
-        />
 
-    <androidx.core.widget.NestedScrollView
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginStart="8dp"
-            android:id="@+id/explore_recycler_recipes"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/txt_explore_recipes"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:text="Có bao nhieu ket qua theo yeu cau"
+            android:paddingLeft="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/color_primary"
+            />
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginStart="24dp"
+                android:id="@+id/explore_recycler_recipes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
 
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+</ScrollView>
+
 
 </LinearLayout>
