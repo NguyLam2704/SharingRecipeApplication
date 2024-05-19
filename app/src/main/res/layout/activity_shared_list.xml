@@ -38,7 +38,7 @@
         app:layout_constraintTop_toTopOf="@+id/tittle_SharedRecipes"
         app:layout_constraintVertical_bias="1.0" />
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/SearchShared"
         android:layout_width="369dp"
         android:layout_height="48dp"
@@ -47,15 +47,18 @@
         android:layout_marginTop="16dp"
         android:iconifiedByDefault="false"
         android:queryBackground="@android:color/transparent"
-        android:queryHint="Tìm kiếm"
-        android:searchIcon="@drawable/baseline_search"
-        android:textCursorDrawable="@drawable/color_cursor"
+        app:iconifiedByDefault="false"
+        app:defaultQueryHint="Tìm kiếm"
+        app:queryBackground="@null"
+        app:searchIcon="@drawable/baseline_search"
+        app:closeIcon="@drawable/baseline_highlight_off_24"
+        android:theme="@style/explorecursor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tittle_SharedRecipes" />
 
     <TextView
-        android:id="@+id/text1"
+        android:id="@+id/result_announce"
         android:layout_width="298dp"
         android:layout_height="28dp"
         android:layout_marginTop="8dp"
@@ -78,7 +81,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text1">
+        app:layout_constraintTop_toBottomOf="@+id/result_announce">
 
 
         <androidx.recyclerview.widget.RecyclerView
