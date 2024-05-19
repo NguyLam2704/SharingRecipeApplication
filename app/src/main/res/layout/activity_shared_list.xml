@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Activities.SharedListActivity">
+
+    <TextView
+        android:id="@+id/tittle_SharedRecipes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:lineHeight="28sp"
+        android:lineSpacingExtra="1sp"
+        android:text="Công thức đã chia sẻ"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="48dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="52dp"
+        android:background="@drawable/oval_btn_background"
+        android:src="@drawable/arrow_back"
+        app:layout_constraintBottom_toBottomOf="@+id/tittle_SharedRecipes"
+        app:layout_constraintEnd_toStartOf="@+id/tittle_SharedRecipes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tittle_SharedRecipes"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/SearchShared"
+        android:layout_width="369dp"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/edittext_bound"
+        android:layout_marginTop="16dp"
+        android:iconifiedByDefault="false"
+        android:queryBackground="@android:color/transparent"
+        app:iconifiedByDefault="false"
+        app:defaultQueryHint="Tìm kiếm"
+        app:queryBackground="@null"
+        app:searchIcon="@drawable/baseline_search"
+        app:closeIcon="@drawable/baseline_highlight_off_24"
+        android:theme="@style/explorecursor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tittle_SharedRecipes" />
+
+    <TextView
+        android:id="@+id/result_announce"
+        android:layout_width="298dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/line_save_background"
+        android:padding="3dp"
+        android:text="Bạn đã chia sẻ .... món ăn"
+        android:textAlignment="center"
+        android:textColor="#9F9F9F"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="@+id/SearchShared"
+        app:layout_constraintStart_toStartOf="@+id/SearchShared"
+        app:layout_constraintTop_toBottomOf="@+id/SearchShared" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="172dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/result_announce">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/SharedRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="23dp" />
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

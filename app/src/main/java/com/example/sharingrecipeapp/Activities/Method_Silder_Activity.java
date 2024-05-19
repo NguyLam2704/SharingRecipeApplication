@@ -47,6 +47,7 @@ public class Method_Silder_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         idRecipe = intent.getStringExtra("id");
 
+
         mViewPager2 = findViewById(R.id.view_pager_2);
         mCircleIndicator3 = findViewById(R.id.circle_indicator_3);
         btn = findViewById(R.id.img_btn_back_method);
@@ -88,6 +89,8 @@ public class Method_Silder_Activity extends AppCompatActivity {
                 });
         return methodList;
     }
+
+
 
 
 }

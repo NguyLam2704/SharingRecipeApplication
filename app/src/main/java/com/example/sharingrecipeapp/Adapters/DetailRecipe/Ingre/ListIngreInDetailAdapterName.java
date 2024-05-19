@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sharingrecipeapp.Activities.FoodDetailActivity;
 import com.example.sharingrecipeapp.Classes.Ingredient;
+import com.example.sharingrecipeapp.Fragments.GroceriesFragment;
 import com.example.sharingrecipeapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -24,18 +25,22 @@ public class ListIngreInDetailAdapterName extends RecyclerView.Adapter<ListIngre
     List<Ingredient> ingredientList;
     List<Ingredient> ingredientListOld;
 
-    FoodDetailActivity foodDetailActivity;
+    GroceriesFragment groceriesFragment;
 
 
     Context context;
 
-    public void setData(List<Ingredient> list, FoodDetailActivity ac){
+    public void setData(List<Ingredient> list){
         this.ingredientList = list;
         this.ingredientListOld=list;
-        this.foodDetailActivity = ac;
         notifyDataSetChanged();
     }
-
+    public void setData(List<Ingredient> list, GroceriesFragment ac){
+        this.ingredientList = list;
+        this.ingredientListOld=list;
+        this.groceriesFragment = ac;
+        notifyDataSetChanged();
+    }
     public ListIngreInDetailAdapterName(){
 
     }

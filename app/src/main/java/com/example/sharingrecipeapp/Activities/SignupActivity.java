@@ -84,7 +84,6 @@ public class SignupActivity extends AppCompatActivity  {
         email = findViewById(R.id.signup_edt_email);
         password = findViewById(R.id.signup_edt_password);
         username = findViewById(R.id.signup_edt_username);
-        Signup_progressbar = findViewById(R.id.signup_progressbar);
         Signup_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +152,8 @@ public class SignupActivity extends AppCompatActivity  {
                                     public void onSuccess(Void unused) {
                                         Signup_progressbar.setVisibility(View.GONE);
                                         Button Login_btn = findViewById(R.id.Login_btn);
+                                        Signup_auth.signOut();
+
                                         Intent login_view = new Intent(SignupActivity.this, LoginActivity.class);
                                         startActivity(login_view);
 //                                        Login_btn.setOnClickListener(new View.OnClickListener() {

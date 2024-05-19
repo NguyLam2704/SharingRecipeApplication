@@ -123,13 +123,17 @@ public class ExploreFragment extends Fragment {
         Explore_searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                Explore_searchName(query);
-                return false;
+                Explore_searchview.setBackgroundResource(R.drawable.edittext_bound);
+                Explore_progressbar.setVisibility(View.VISIBLE);
+                Explore_searchName(query);
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Explore_searchName(newText);
+
+                Explore_searchview.setBackgroundResource(R.drawable.query_bound);
+//                Explore_searchName(newText);
 //                Explore_searchIngre(newText);
                 return true;
             }
@@ -197,6 +201,7 @@ public class ExploreFragment extends Fragment {
 
             }
         });
+        Explore_progressbar.setVisibility(View.GONE);
     }
 //tim kiem nguyen lieu
     private void Explore_searchIngre(String newtext)

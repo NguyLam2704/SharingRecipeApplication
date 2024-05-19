@@ -2,9 +2,10 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.SharingRecipeApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-<!--        <item name="colorPrimary">@color/green</item>-->
+        <item name="colorPrimary">@color/grey_background</item>
         <item name="colorPrimaryVariant">@color/color_primary</item>
-        <item name="android:textColorHint">@color/grey_background</item>
+        <item name="android:textColorHint">@color/grey_heavy</item>
+        <item name="android:windowBackground">@color/grey_background</item>
     </style>
 
     <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
