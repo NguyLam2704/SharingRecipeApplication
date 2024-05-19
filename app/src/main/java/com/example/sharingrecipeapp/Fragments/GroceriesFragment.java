@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,6 +33,7 @@ import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
 import com.example.sharingrecipeapp.Adapters.ListInAdapter;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterListNL;
+import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterListNLDaMua;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterTenNguyenLieu;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.IClickOnItemSavedRecipe;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.ReGroAdapter;
@@ -57,6 +59,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -80,8 +83,8 @@ public class GroceriesFragment extends Fragment {
     RecyclerView tenNL;
     List<NguyenLieu> nguyenLieuList;
     List<NguyenLieu> listNL_da_mua;
-
     AdapterListNL adapterListNL;
+    AdapterListNLDaMua adapterListNLDaMua;
     FirebaseFirestore db;
     FirebaseAuth auth;
     String userID;
@@ -106,7 +109,12 @@ public class GroceriesFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         userID = auth.getUid();
+        nguyenLieuList = new ArrayList<>();
         listNL_da_mua = new ArrayList<>();
+        adapterListNLDaMua = new AdapterListNLDaMua(listNL_da_mua);
+
+        displayNguyenLieu();
+        displayNguyenLieuDaMua();
 
         plus = binding.plus;
         plus.setOnClickListener(new View.OnClickListener() {
@@ -116,27 +124,57 @@ public class GroceriesFragment extends Fragment {
             }
         });
 
-        displayNguyenLieu();
+
+
 
         return binding.getRoot();
     }
 
+    private void displayNguyenLieuDaMua() {
+        ListView listNLDaMua = binding.listNlDaMua;
+        adapterListNLDaMua.setData(adapterListNL,nguyenLieuList);
+        listNLDaMua.setAdapter(adapterListNLDaMua);
+
+        db.collection("ListNguyenLieuDaMua").whereEqualTo("idUser","HmY48QhzdQSzLoDFDSaaMGzDa8c2").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots){
+                        String name = doc.getString("name");
+                        String img = doc.getString("img");
+                        double SL = doc.getDouble("SL");
+                        String id = doc.getId();
+                        String donvi = doc.getString("donvi");
+
+                        listNL_da_mua.add(new NguyenLieu(SL,donvi,id,name,img));
+
+//                        if (listNL_da_mua.size() < 7){
+//                            ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) listNLDaMua.getLayoutParams();
+//                            HEIGHT = listNL_da_mua.size()* 150;
+//                            lp.height = HEIGHT;
+//                            listNLDaMua.setLayoutParams(lp);
+//                        }
+                        adapterListNLDaMua.notifyDataSetChanged();
+                        listNLDaMua.setAdapter(adapterListNLDaMua);
+                    }
+                });
+    }
+
     private void displayNguyenLieu() {
-        nguyenLieuList = new ArrayList<>();
         ListView listViewNL = binding.listGroceries;
-        listViewNL.setEnabled(false);
-        adapterListNL = new AdapterListNL(nguyenLieuList);
-        listViewNL.setAdapter(adapterListNL);
+        //listViewNL.setEnabled(false);
+        adapterListNL = new AdapterListNL(nguyenLieuList, adapterListNLDaMua, listNL_da_mua );
 
         db.collection("ListNguyenLieuMua").whereEqualTo("idUser","HmY48QhzdQSzLoDFDSaaMGzDa8c2").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots){
                         String name = doc.getString("name");
                         String img = doc.getString("img");
-                        int SL = doc.getLong("SL").intValue();
-
+                        double SL = doc.getDouble("SL");
+                        String id = doc.getId();
                         String donvi = doc.getString("donvi");
                         boolean biTrung = false;
+
+                        //Toast.makeText(binding.getRoot().getContext(),String.valueOf(SL),Toast.LENGTH_SHORT).show();
+
 
                         for (int i = 0; i < nguyenLieuList.size();i++){
                             if (nguyenLieuList.get(i).getName().equals(name)){
@@ -148,15 +186,41 @@ public class GroceriesFragment extends Fragment {
                         }
 
                         if (!biTrung){
-                            nguyenLieuList.add(new NguyenLieu(SL,donvi,"",name,img));
-                            ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) listViewNL.getLayoutParams();
-                            HEIGHT += 150;
-                            lp.height = HEIGHT;
-                            listViewNL.setLayoutParams(lp);
+                            nguyenLieuList.add(new NguyenLieu(SL,donvi,id,name,img));
+//                            if (nguyenLieuList.size() < 7){
+//                                ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) listViewNL.getLayoutParams();
+//                                HEIGHT = nguyenLieuList.size()* 150;
+//                                lp.height = HEIGHT;
+//                                listViewNL.setLayoutParams(lp);
+//                            }
+
                             adapterListNL.notifyDataSetChanged();
+                            listViewNL.setAdapter(adapterListNL);
                         }
                     }
                 });
+
+//        db.collection("ListNguyenLieuMua").whereEqualTo("idUser","HmY48QhzdQSzLoDFDSaaMGzDa8c2")
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                        for (DocumentChange dc : value.getDocumentChanges()) {
+//                            switch (dc.getType()) {
+//                                case ADDED:
+//                                adapterListNL.notifyDataSetChanged();
+//                                    break;
+//                                case MODIFIED:
+//
+//                                    break;
+//                                case REMOVED:
+//
+//                                    break;
+//                            }
+//                        }
+//                    }
+//
+//                });
+
     }
 
     private void DialogAdd(){
@@ -164,21 +228,23 @@ public class GroceriesFragment extends Fragment {
         dialog.setContentView(R.layout.dialog_list_add);
         displayNguyenLieu(dialog);
         dialog.show();
-        dialog.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.btn_hoan_tat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayNguyenLieu();
                 dialog.dismiss();
             }
         });
+
+
 
 
     }
 
     private void displayNguyenLieu(Dialog dialog) {
         tenNL = dialog.findViewById(R.id.recyNL);
-        nguyenLieuList = new ArrayList<>();
-        AdapterTenNguyenLieu adapterTenNguyenLieu = new AdapterTenNguyenLieu(requireContext(),nguyenLieuList);
+        List<NguyenLieu> tenNguyenLieuList = new ArrayList<>();
+        AdapterTenNguyenLieu adapterTenNguyenLieu = new AdapterTenNguyenLieu(requireContext(),tenNguyenLieuList);
+        adapterTenNguyenLieu.setData(adapterListNL,nguyenLieuList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
         tenNL.setLayoutManager(linearLayoutManager);
         tenNL.setAdapter(adapterTenNguyenLieu);
@@ -188,12 +254,11 @@ public class GroceriesFragment extends Fragment {
                 if (task.isSuccessful()){
                     for (DocumentSnapshot doc : task.getResult()){
                         String name = doc.getString("name");
-                        String id = doc.getString("id");
                         String img = doc.getString("img");
                         String donvi  = doc.getString("donvi");
 
-                        NguyenLieu nl = new NguyenLieu(donvi,id,name,img);
-                        nguyenLieuList.add(nl);
+                        NguyenLieu nl = new NguyenLieu(donvi,name,img);
+                        tenNguyenLieuList.add(nl);
                         adapterTenNguyenLieu.notifyDataSetChanged();
                     }
                 }
