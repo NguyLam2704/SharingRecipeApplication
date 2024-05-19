@@ -386,11 +386,11 @@ public class FoodDetailActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if(task.isSuccessful()){
-                            ArrayList<String> doc = (ArrayList<String>) task.getResult().get("SoLuong");
+                            ArrayList<Number> doc = (ArrayList<Number>) task.getResult().get("SoLuong");
                             if(!doc.isEmpty()){
                                 List<SoLuongIngre> soLuongIngreList = new ArrayList<SoLuongIngre>();
                                 for (int i = 0;i<doc.size();i++){
-                                    String sl = String.valueOf(doc.get(i));
+                                    Number sl = doc.get(i);
                                     soLuongIngreList.add(new SoLuongIngre(sl));
                                 }
                                 recycSoLuong.setAdapter(new ListIngreInDetailAdapterSoLuong(getApplicationContext(),soLuongIngreList));

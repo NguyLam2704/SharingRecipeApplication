@@ -172,7 +172,7 @@
 
         <TextView
             android:layout_marginTop="16dp"
-            android:id="@+id/textView24"
+            android:id="@+id/btnAdd"
             android:layout_width="300dp"
             android:layout_height="40dp"
             android:text="Thêm nguyên liệu"
