@@ -134,7 +134,7 @@ public class SaveListActivity extends AppCompatActivity {
                             save_db.collection("Recipes").document(i).get()
                                     .addOnSuccessListener(documentSnapshot -> {
 
-                                        db.collection("SaveRecipes").whereEqualTo("Recipes",i).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                        save_db.collection("SaveRecipes").whereEqualTo("Recipes",i).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                             @Override
                                             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
