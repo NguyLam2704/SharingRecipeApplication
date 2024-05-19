@@ -227,7 +227,6 @@ public class FragmentExploreCook extends Fragment {
                                     String id = queryDocumentSnapshot1.getString("id");
                                     String name = queryDocumentSnapshot1.getString("name");
                                     String time = queryDocumentSnapshot1.get("timecook").toString();
-//
                                     Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                         @Override
                                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -240,13 +239,11 @@ public class FragmentExploreCook extends Fragment {
                                             for (QueryDocumentSnapshot queryDocumentSnapshot2 : value)
                                             {
                                                 if(queryDocumentSnapshot2.get("idUsers") != null) {
-
                                                     idUser = (ArrayList<String>) queryDocumentSnapshot2.get("idUsers");
                                                 }
                                                 save = String.valueOf(idUser.size());
                                                 Recipes recipes = new Recipes(id,image,name,save,time);
                                                 Explore_listRecipes.add(recipes);
-                                                txtCooks.setText("Có " + Explore_listRecipes.size() +" kết quả phù hợp");
                                                 RecipesAdapter myAdapter = new RecipesAdapter();
                                                 myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {
                                                     @Override
@@ -257,34 +254,27 @@ public class FragmentExploreCook extends Fragment {
                                                 Explore_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                                                 Explore_recyclerView.setAdapter(myAdapter);
                                             }
-
+                                            txtCooks.setText("Có " + Explore_listRecipes.size() +" kết quả phù hợp");
                                         }
                                     });
                                 }
                             }
                         });
-//
-                    }
-                    if(Explore_listRecipes.isEmpty())
-                    {
-                        txtCooks.setText("Không có kết quả phù hợp");
-
-                    }
-//                    else
-//                    {
-//                        txtCooks.setText("Có " + Explore_listRecipes.size() +" kết quả phù hợp");
-//                    }
-                    RecipesAdapter myAdapter = new RecipesAdapter();
-                    myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {
-                        @Override
-                        public void onClickItemRecipe(Recipes recipes) {
-                            onClickGoToDetailFood(recipes);
+                        if(Explore_listRecipes.isEmpty())
+                        {
+                            txtCooks.setText("Không có kết quả phù hợp");
                         }
-                    });
-                    Explore_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                    Explore_recyclerView.setAdapter(myAdapter);
+                        RecipesAdapter myAdapter = new RecipesAdapter();
+                        myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {
+                            @Override
+                            public void onClickItemRecipe(Recipes recipes) {
+                                onClickGoToDetailFood(recipes);
+                            }
+                        });
+                        Explore_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                        Explore_recyclerView.setAdapter(myAdapter);
+                    }
                 }
-//
             }
         });
     }
