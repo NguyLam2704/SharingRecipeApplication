@@ -15,7 +15,6 @@
         android:theme="@style/Theme.SharingRecipeApp"
         tools:targetApi="31">
         <activity
-
             android:name=".Activities.SharedListActivity"
             android:exported="false" />
         <activity
@@ -48,6 +47,7 @@
             android:exported="false" />
         <activity
             android:name=".Activities.BottomNavigationCustomActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".Activities.WelcomeActivity"
