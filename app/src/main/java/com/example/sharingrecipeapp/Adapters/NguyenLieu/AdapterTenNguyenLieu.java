@@ -21,7 +21,9 @@ import com.example.sharingrecipeapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import org.checkerframework.checker.units.qual.N;
@@ -38,6 +40,8 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
     FirebaseFirestore db;
     FirebaseAuth auth;
     List<NguyenLieu> tenNL;
+    List<NguyenLieu> NL_Da_Them;
+    AdapterListNL adapterListNL;
 
     public AdapterTenNguyenLieu(Context context, List<NguyenLieu> tenNL) {
         this.context = context;
@@ -48,9 +52,9 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
         tenNL = new ArrayList<>();
     }
 
-    public void setData(List<NguyenLieu> list){
-        this.tenNL = list;
-        notifyDataSetChanged();
+    public void setData(AdapterListNL adapterListNL, List<NguyenLieu> NL){
+        this.adapterListNL = adapterListNL;
+        this.NL_Da_Them = NL;
     }
     @NonNull
     @Override
@@ -69,7 +73,28 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    //lay so luong tu edit text
                     EditText sl = holder.editText;
+                    Double soluong = Double.valueOf(sl.getText().toString());
+                    nguyenLieu.setSL(soluong);
+
+                    //Them nguyen lieu vao list nguyen lieu da them
+                    boolean biTrung = false;
+                    for (int i = 0; i < NL_Da_Them.size(); i++){
+                        if (NL_Da_Them.get(i).getName().equals(nguyenLieu.getName())){
+                            NL_Da_Them.get(i).setSL(NL_Da_Them.get(i).getSL() + nguyenLieu.getSL());
+                            biTrung = true;
+                        }
+                    }
+                    if (!biTrung){
+                        NL_Da_Them.add(nguyenLieu);
+                    }
+
+                    //Cap nhat lai ListView
+                    adapterListNL.notifyDataSetChanged();
+
+                    //Day du lieu len FireStore
                     db = FirebaseFirestore.getInstance();
                     auth = FirebaseAuth.getInstance();
                     if (!sl.getText().toString().equals("")){
@@ -78,10 +103,14 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
                         data.put("donvi",nguyenLieu.getDonvi());
                         data.put("idUser",auth.getUid());
                         data.put("img",nguyenLieu.getImg());
-                        data.put("SL",Integer.valueOf(sl.getText().toString()));
+                        data.put("SL",soluong);
+
                         db.collection("ListNguyenLieuMua").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
+                                Map<String,Object> data = new HashMap<>();
+                                data.put("id",documentReference.getId());
+                                nguyenLieu.setId(documentReference.getId());
                                 Toast.makeText(context,"Đã thêm nguyên liệu", Toast.LENGTH_SHORT).show();
                             }
                         });

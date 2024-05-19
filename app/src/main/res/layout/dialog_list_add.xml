@@ -73,7 +73,7 @@
         android:layout_weight="0.5">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_hoan_tat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -85,17 +85,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="Hủy"
-            android:textSize="20sp"
-            android:textColor="@color/color_primary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.473" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
