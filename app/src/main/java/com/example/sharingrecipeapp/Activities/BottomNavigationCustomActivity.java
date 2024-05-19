@@ -239,6 +239,10 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.view_pager,fragment);
         fragmentTransaction.commit();
     }
+    public void gotoLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
 
 }
 
