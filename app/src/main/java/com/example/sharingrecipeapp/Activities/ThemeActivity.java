@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -89,19 +90,32 @@ public class ThemeActivity extends AppCompatActivity {
                         listRecipes = new ArrayList<>();
                         for (DocumentSnapshot documentSnapshot : value.getDocuments()){
                             String id = documentSnapshot.getString("id");
-                            String image = documentSnapshot.getString("image");
-                            String name = documentSnapshot.getString("name");
-                            String save = String.valueOf(documentSnapshot.get("save"));
-                            String time = documentSnapshot.getString("timecook");
-                            listRecipes.add(new Recipes(id, image, name, save, time));
+                            firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                                    ArrayList<String> idUser = new ArrayList<>();
+                                    for (QueryDocumentSnapshot doc :value)
+                                    {
+                                        idUser = (ArrayList<String>) doc.get("idUsers");
+                                        String save = String.valueOf(idUser.size());
+                                        String image = documentSnapshot.getString("image");
+                                        String name = documentSnapshot.getString("name");
+                                        String time = documentSnapshot.getString("timecook");
+                                        listRecipes.add(new Recipes(id, image, name, save, time));
+                                        recipesAdapter.setData(listRecipes, new IClickOnItemRecipe() {
+                                            @Override
+                                            public void onClickItemRecipe(Recipes recipes) {
+                                                onClickGoToDetailFood(recipes);
+                                            }
+                                        });
+                                        recycFoodTheme.setAdapter(recipesAdapter);
+                                    }
+                                }
+                            });
+
                         }
-                        recipesAdapter.setData(listRecipes, new IClickOnItemRecipe() {
-                            @Override
-                            public void onClickItemRecipe(Recipes recipes) {
-                                onClickGoToDetailFood(recipes);
-                            }
-                        });
-                        recycFoodTheme.setAdapter(recipesAdapter);
+
                     }
                 });
     }
@@ -113,7 +127,7 @@ public class ThemeActivity extends AppCompatActivity {
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                                    for(DocumentSnapshot doc: value.getDocuments()){
+                                    for(QueryDocumentSnapshot doc: value){
                                         if(doc.exists()){
                                             String tenTheme = doc.getString("name");
                                             titleTheme.setText(tenTheme);

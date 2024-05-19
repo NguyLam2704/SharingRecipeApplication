@@ -11,7 +11,10 @@
         android:layout_width="232dp"
         android:layout_height="178dp"
         android:layout_gravity="center"
-        android:src="@drawable/logo_notext"
+
+        android:layout_marginTop="60dp"
+        android:src="@drawable/logo_textwhite"
+
         android:tint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,6 +52,20 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/btn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:textSize="15sp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="5dp"
+                android:text="Lưu và tạo công thức, lên kế hoạch bữa ăn và hơn thế"
+                android:textColor="@color/white" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
