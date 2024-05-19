@@ -28,10 +28,9 @@ public class ListIngreInDetailAdapterDonVi extends RecyclerView.Adapter<ListIngr
 
     Context context;
 
-    public void setData(List<Ingredient> list, FoodDetailActivity ac){
+    public void setData(List<Ingredient> list){
         this.ingredientList = list;
         this.ingredientListOld=list;
-        this.foodDetailActivity = ac;
         notifyDataSetChanged();
     }
 

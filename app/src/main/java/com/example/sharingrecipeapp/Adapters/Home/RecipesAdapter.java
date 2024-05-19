@@ -9,13 +9,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.R;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipesAdapter extends  RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder> implements Filterable {
@@ -23,6 +30,8 @@ public class RecipesAdapter extends  RecyclerView.Adapter<RecipesAdapter.Recipes
     private List<Recipes> mRecipes;
 
     private List<Recipes> mRecipesOld;
+
+    FirebaseFirestore firebaseFirestore;
 
     private IClickOnItemRecipe iClickOnItemRecipe;
 
@@ -49,9 +58,9 @@ public class RecipesAdapter extends  RecyclerView.Adapter<RecipesAdapter.Recipes
         Recipes recipes = mRecipes.get(position);
         if(recipes == null) return;
 
+        holder.save.setText(recipes.getSave());
         holder.title.setText(recipes.getName());
         holder.time.setText(recipes.getTimecook()+ " phút");
-        holder.save.setText(recipes.getSave());
         Glide.with(holder.img.getContext()).load(recipes.getImage()).into(holder.img);
 
         holder.materialCardView.setOnClickListener(new View.OnClickListener() {

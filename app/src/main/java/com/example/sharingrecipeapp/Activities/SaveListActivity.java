@@ -42,6 +42,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.Normalizer;
@@ -132,28 +133,71 @@ public class SaveListActivity extends AppCompatActivity {
                         for (String i : tenRecipes){
                             save_db.collection("Recipes").document(i).get()
                                     .addOnSuccessListener(documentSnapshot -> {
-                                        String image = documentSnapshot.getString("image");
-                                        String name = documentSnapshot.getString("name");
-                                        String save = documentSnapshot.get("save").toString();
-                                        String time = documentSnapshot.get("timecook").toString();
 
-                                        Recipes recipes = new Recipes(i,image,name,save,time);
+                                        db.collection("SaveRecipes").whereEqualTo("Recipes",i).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                                        recipesList.add(recipes);
-                                        number++;
-                                        soluong.setText("Bạn đã lưu được " + recipesList.size() +" món ăn");
-                                        if (i == tenRecipes.get(tenRecipes.size()-1)){
-                                            RecipesAdapter myAdapter = new RecipesAdapter();
-                                            myAdapter.setData(recipesList, new IClickOnItemRecipe() {
-                                                @Override
-                                                public void onClickItemRecipe(Recipes recipes) {
-                                                    onClickGoToDetailFood(recipes);
+                                                ArrayList<String> idUser = new ArrayList<>();
+                                                for (QueryDocumentSnapshot doc :value)
+                                                {
+                                                    if(doc.get("idUsers") != null)
+                                                    {
+                                                        idUser = (ArrayList<String>) doc.get("idUsers");
+                                                    }
+                                                    String save = String.valueOf(idUser.size());
+                                                    String image = documentSnapshot.getString("image");
+                                                    String name = documentSnapshot.getString("name");
+                                                    String time = documentSnapshot.getString("timecook");
+                                                    Recipes recipes = new Recipes(i,image,name,save,time);
+                                                    recipesList.add(recipes);
+                                                    if (i == tenRecipes.get(tenRecipes.size()-1)){
+                                                        RecipesAdapter myAdapter = new RecipesAdapter();
+                                                        myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+                                                            @Override
+                                                            public void onClickItemRecipe(Recipes recipes) {
+                                                                onClickGoToDetailFood(recipes);
+                                                            }
+                                                        });
+                                                        recy_ViewRecipes.setLayoutManager(new GridLayoutManager(binding.getRoot().getContext(), 2));
+                                                        recy_ViewRecipes.setAdapter(myAdapter);
+                                                    }
+//                                                    recipesRandomAdapter.setData(listRecipes, new IClickOnItemRecipe() {
+//                                                        @Override
+//                                                        public void onClickItemRecipe(Recipes recipes) {
+//                                                            onClickGoToDetailFood(recipes);
+//                                                        }
+//                                                    });
+//                                                    recyclerViewRandom.setAdapter(recipesRandomAdapter);
                                                 }
-                                            });
-                                            recy_ViewRecipes.setLayoutManager(new GridLayoutManager(binding.getRoot().getContext(), 2));
-                                            recy_ViewRecipes.setAdapter(myAdapter);
+                                            }
+                                        });
+                                        number++;
+                                        soluong.setText("Bạn đã lưu được " + String.valueOf(number) +" món ăn");
 
-                                        }
+//                                         String image = documentSnapshot.getString("image");
+//                                         String name = documentSnapshot.getString("name");
+//                                         String save = documentSnapshot.get("save").toString();
+//                                         String time = documentSnapshot.get("timecook").toString();
+
+//                                         Recipes recipes = new Recipes(i,image,name,save,time);
+
+//                                         recipesList.add(recipes);
+//                                         number++;
+//                                         soluong.setText("Bạn đã lưu được " + recipesList.size() +" món ăn");
+//                                         if (i == tenRecipes.get(tenRecipes.size()-1)){
+//                                             RecipesAdapter myAdapter = new RecipesAdapter();
+//                                             myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+//                                                 @Override
+//                                                 public void onClickItemRecipe(Recipes recipes) {
+//                                                     onClickGoToDetailFood(recipes);
+//                                                 }
+//                                             });
+//                                             recy_ViewRecipes.setLayoutManager(new GridLayoutManager(binding.getRoot().getContext(), 2));
+//                                             recy_ViewRecipes.setAdapter(myAdapter);
+
+//                                         }
+
 
                                     });
                         }

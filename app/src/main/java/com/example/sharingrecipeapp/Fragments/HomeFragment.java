@@ -150,7 +150,7 @@ public class HomeFragment extends Fragment {
                                                 onClickGoToDetailFood(recipes);
                                             }
                                         });
-                                       recyclerViewRate.setAdapter(recipesAdapter);
+                                        recyclerViewRate.setAdapter(recipesAdapter);
                                     }
                                 }
                             });
@@ -216,34 +216,34 @@ public class HomeFragment extends Fragment {
 
     private void setdataRecycTheme() {
 
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
-            recyclerViewTheme.setLayoutManager(linearLayoutManager);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
+        recyclerViewTheme.setLayoutManager(linearLayoutManager);
 
-            themeAdapter = new ThemeAdapter();
-            firebaseFirestore.collection("Theme")
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                            if (error != null) {
-                                Log.w("Error", "listen:error", error);
-                                return;
-                            }
-                            listTheme = new ArrayList<>();
-                            for (DocumentSnapshot snapshot : value.getDocuments()){
-                                String id = snapshot.getString("id");
-                                String name = snapshot.getString("name");
-                                String image = snapshot.getString("image");
-                                listTheme.add(new Theme(id, name, image));
-                            }
-                            themeAdapter.setData(listTheme, new iClickOnItemTheme() {
-                                @Override
-                                public void onClickItemTheme(Theme theme) {
-                                    onClickGoToDetailTheme(theme);
-                                }
-                            });
-                            recyclerViewTheme.setAdapter(themeAdapter);
+        themeAdapter = new ThemeAdapter();
+        firebaseFirestore.collection("Theme")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.w("Error", "listen:error", error);
+                            return;
                         }
-                    });
+                        listTheme = new ArrayList<>();
+                        for (DocumentSnapshot snapshot : value.getDocuments()){
+                            String id = snapshot.getString("id");
+                            String name = snapshot.getString("name");
+                            String image = snapshot.getString("image");
+                            listTheme.add(new Theme(id, name, image));
+                        }
+                        themeAdapter.setData(listTheme, new iClickOnItemTheme() {
+                            @Override
+                            public void onClickItemTheme(Theme theme) {
+                                onClickGoToDetailTheme(theme);
+                            }
+                        });
+                        recyclerViewTheme.setAdapter(themeAdapter);
+                    }
+                });
 
     }
 
@@ -254,5 +254,4 @@ public class HomeFragment extends Fragment {
 
 
 }
-
 

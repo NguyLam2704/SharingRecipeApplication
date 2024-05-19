@@ -10,44 +10,37 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cardCornerRadius="3dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:strokeColor="@color/grey_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/sttBuoc"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:textColor="@color/color_primary"
+            android:text="Bước "
+            />
+
+        <TextView
+            android:id="@+id/method"
+            android:paddingTop="11dp"
+            android:paddingStart="4dp"
+            android:paddingBottom="11dp"
+            android:paddingEnd="8dp"
+            android:layout_marginStart="80dp"
+            android:textAlignment="gravity"
+            android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/sttBuoc"
-                android:paddingStart="4dp"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:text="Bước 1:"
-                android:textAlignment="viewStart"
-                android:textColor="@color/color_primary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/method"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5"
-                android:paddingStart="10dp"
-                android:paddingEnd="4dp"
-                android:text="Mực bạn nên chọn loại mực ống, còn tươi, phần đầu và thân còn dính vào nhau, có kích thước vừa phải. Khi mua về, bạn đem làm sạch, loại bỏ các chất bẩn bên trong mực rồi tách lớp vỏ tím bên ngoài. Tiếp theo, bạn bóp mực cùng với hỗn hợp gừng và rượu trắng để khử mùi tanh. Sau đó, rửa sạch mực lại lần nữa. Với cách làm này, mực nhồi thịt chiên giòn sẽ không bị tanh. Tách râu mực ra, băm nhỏ."
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/sttBuoc"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:text="Bắc chảo lên bếp, cho vào chảo 1 ít dầu ăn rồi cho hành tím băm vào phi thơm.  Khi hành thơm, bạn cho tôm, thịt vào chảo cùng 1/2 muỗng cà phê tiêu, 1/2 muỗng cà phê bột ngọt, 1/3 muỗng cà phê muối, 1 muỗng cà phê nước mắm. Xào đều nhân với lửa vừa đến khi chín hoàn toàn.  Kế đến, cho vào chảo hành tây, cà rốt, nấm hương và tiếp tục xào đến khi rau củ chín." />
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

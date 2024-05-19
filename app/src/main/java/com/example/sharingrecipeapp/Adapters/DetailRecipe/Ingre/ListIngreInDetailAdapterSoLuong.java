@@ -50,7 +50,7 @@ public class ListIngreInDetailAdapterSoLuong extends RecyclerView.Adapter<ListIn
     @Override
     public void onBindViewHolder(@NonNull ListIngreInDetailAdapterSoLuong.SoLuongViewHolder holder, int position) {
         if(getItemCount() != 0){
-            holder.soluong.setText(soLuongIngreList.get(position).getSoluong());
+            holder.soluong.setText(String.valueOf(soLuongIngreList.get(position).getSoluong()));
         }
     }
 
