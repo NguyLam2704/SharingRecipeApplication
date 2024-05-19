@@ -356,9 +356,7 @@ public class AddToGroceryActivity extends AppCompatActivity implements CheckBoxL
     private Number convertslIngre (String number)
     {
         Number ingres ;
-
         ingres = Integer.valueOf(number);
-
         Number arrSlngre = ingres;
         return arrSlngre;
     }
