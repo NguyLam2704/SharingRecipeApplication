@@ -112,18 +112,19 @@ public class FragmentExploreIngredient extends Fragment {
         Explore_searchview_ingredients.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Explore_searchName(query);
-                //Explore_searchIngre(query);
+//                Explore_searchName(query);
+                Explore_searchIngre(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Explore_searchName(newText);
-                //Explore_searchIngre(newText);
+//                Explore_searchName(newText);
+                Explore_searchIngre(newText);
                 return true;
             }
         });
+
         Explore_recyclerViewRandom = (RecyclerView) view.findViewById(R.id.explore_recycler_ingredient);
         Explore_firebaseAuth = FirebaseAuth.getInstance();
         Explore_db = FirebaseFirestore.getInstance();
@@ -137,6 +138,7 @@ public class FragmentExploreIngredient extends Fragment {
     private void Explore_searchIngre(String newtext)
     {
         List<Recipes> ResultSearchList = new ArrayList<>();
+
 
         Explore_db.collection("Recipes").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -160,10 +162,25 @@ public class FragmentExploreIngredient extends Fragment {
                             break;
                         }
                     }
+                    if(!ResultSearchList.isEmpty()){
+                        if(newtext.equals(""))
+                        {
+                            txtIngredients.setText("Một số món gợi ý");
+                        }
+                        else {
+                        txtIngredients.setText("Có " + ResultSearchList.size() + " kết quả phù hợp");}
+                        Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                            @Override
+                            public void onClickItemRecipe(Recipes recipes) {
+                                onClickGoToDetailFood(recipes);
+                            }
+                        });
+                        Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+                    }
                     //search ko co ket qua
-                    if(ResultSearchList.isEmpty())
+                    else
                     {
-                        txtIngredients.setText("Đầu bếp bạn tìm kiếm hiện không có công thức nào \nMột số món gợi ý");
+                        txtIngredients.setText("Không tìm thấy kết quả phù hợp");
 
                         Explore_listRecipes_suggest=new ArrayList<>();
                         Explore_db.collection("Recipes")
@@ -187,7 +204,7 @@ public class FragmentExploreIngredient extends Fragment {
                                     }
                                 });
 
-                        Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                        Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
                             @Override
                             public void onClickItemRecipe(Recipes recipes) {
                                 onClickGoToDetailFood(recipes);
@@ -195,15 +212,7 @@ public class FragmentExploreIngredient extends Fragment {
                         });
                         Explore_recyclerViewRandom.setAdapter(Explore_adapter);
                     }
-                    else {
-                        Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                            @Override
-                            public void onClickItemRecipe(Recipes recipes) {
-                                onClickGoToDetailFood(recipes);
-                            }
-                        });
-                        Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-                    }
+
                 }
             }
         });

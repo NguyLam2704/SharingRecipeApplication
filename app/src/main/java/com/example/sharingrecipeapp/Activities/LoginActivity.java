@@ -19,11 +19,21 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sharingrecipeapp.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
@@ -35,8 +45,11 @@ public class LoginActivity extends AppCompatActivity {
     Button Login_btn;
 
     ProgressBar Login_progressbar;
-    TextView Login_txt_forgotpass, Login_txt_signup;
+    TextView Login_txt_forgotpass, Login_txt_signup, google;
+    GoogleSignInClient mGoogleSignInClient;
+    int RC_SIGN_IN = 20;
     private FirebaseAuth Login_auth;
+    FirebaseFirestore Login_db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,8 +62,20 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+        Login_db = FirebaseFirestore.getInstance();
         Login_btn = findViewById(R.id.login_btn);
+        google = findViewById(R.id.google);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(com.firebase.ui.auth.R.string.default_web_client_id))
+                .requestEmail().build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
+
+        google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gooleSignin();
+            }
+        });
 
         email = findViewById(R.id.login_edt_email);
         password = findViewById(R.id.login_edt_password);
@@ -147,5 +172,46 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void gooleSignin() {
+        Intent intent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(intent,RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RC_SIGN_IN)
+        {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try{
+                GoogleSignInAccount acc = task.getResult(ApiException.class);
+                firebaseauth(acc.getIdToken());
+            }
+            catch (Exception e){
+                Toast.makeText(this, "loi", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void firebaseauth(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
+        Login_auth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+//                if(task.isSuccessful())
+                {
+//                    FirebaseUser user = Login_auth.getCurrentUser();
+////                    HashMap<String,Object> map = new HashMap<>();
+////                    map.put("id",user.getUid());
+////                    map.put("username",user.getDisplayName());
+////                    map.put("avatar",user.getPhotoUrl().toString());
+//
+////                    Intent intent = new Intent(LoginActivity.this, BottomNavigationCustomActivity.class);
+////                    startActivity(intent);
+                }
+            }
+        });
     }
 }

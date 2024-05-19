@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "656957682275",
+    "firebase_url": "https://fantafood-3ea80-default-rtdb.firebaseio.com",
     "project_id": "fantafood-3ea80",
     "storage_bucket": "fantafood-3ea80.appspot.com"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.sharingrecipeapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "656957682275-q2bog57ncto91u6ga9vmmsnmajn166g1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sharingrecipeapp",
+            "certificate_hash": "0d6984f27158be0f085b3747fb8689e9c660b926"
+          }
+        },
+        {
+          "client_id": "656957682275-na9o42fdp7k8irv5b2gkpp2mpm03vrgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCohz-WQwgWUSY00G2vG_0QsYVS_LYVphQ"
@@ -20,7 +34,41 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656957682275-na9o42fdp7k8irv5b2gkpp2mpm03vrgo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656957682275:android:1c333224f422eec9c6be56",
+        "android_client_info": {
+          "package_name": "com.example.testfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "656957682275-na9o42fdp7k8irv5b2gkpp2mpm03vrgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCohz-WQwgWUSY00G2vG_0QsYVS_LYVphQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656957682275-na9o42fdp7k8irv5b2gkpp2mpm03vrgo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
