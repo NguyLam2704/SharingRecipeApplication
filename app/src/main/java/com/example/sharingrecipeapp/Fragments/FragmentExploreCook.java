@@ -203,8 +203,10 @@ public class FragmentExploreCook extends Fragment {
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null)
                 {
+                    Log.w("Error", "listen:error", error);
                     return;
                 }
+//
                 for (QueryDocumentSnapshot queryDocumentSnapshot : value)
                 {
                     String uid = queryDocumentSnapshot.getString("id");
@@ -215,22 +217,29 @@ public class FragmentExploreCook extends Fragment {
                         Explore_db.collection("Recipes").whereEqualTo("Users",find_user).addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                if(error != null)
+                                {
+                                    Log.w("Error", "listen:error", error);
+                                }
                                 for (QueryDocumentSnapshot queryDocumentSnapshot1 : value)
                                 {
                                     String image = queryDocumentSnapshot1.getString("image");
                                     String id = queryDocumentSnapshot1.getString("id");
                                     String name = queryDocumentSnapshot1.getString("name");
                                     String time = queryDocumentSnapshot1.get("timecook").toString();
-
+//
                                     Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                         @Override
                                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                            if(error != null)
+                                            {
+                                                Log.w("Error", "listen:error", error);
+                                            }
                                             ArrayList<String> idUser = new ArrayList<>();
                                             String save;
                                             for (QueryDocumentSnapshot queryDocumentSnapshot2 : value)
                                             {
-                                                if(queryDocumentSnapshot2.get("idUsers") != null)
-                                                {
+                                                if(queryDocumentSnapshot2.get("idUsers") != null) {
 
                                                     idUser = (ArrayList<String>) queryDocumentSnapshot2.get("idUsers");
                                                 }
@@ -254,12 +263,17 @@ public class FragmentExploreCook extends Fragment {
                                 }
                             }
                         });
-//                        ResultSearchList.add(Newrcp);
+//
                     }
                     if(Explore_listRecipes.isEmpty())
                     {
-                        txtCooks.setText("Có " + Explore_listRecipes.size() +" kết quả phù hợp");
+                        txtCooks.setText("Không có kết quả phù hợp");
+
                     }
+//                    else
+//                    {
+//                        txtCooks.setText("Có " + Explore_listRecipes.size() +" kết quả phù hợp");
+//                    }
                     RecipesAdapter myAdapter = new RecipesAdapter();
                     myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {
                         @Override
@@ -270,6 +284,7 @@ public class FragmentExploreCook extends Fragment {
                     Explore_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                     Explore_recyclerView.setAdapter(myAdapter);
                 }
+//
             }
         });
     }
