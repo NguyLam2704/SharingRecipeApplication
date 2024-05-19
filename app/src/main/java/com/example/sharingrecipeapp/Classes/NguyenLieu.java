@@ -1,11 +1,11 @@
 package com.example.sharingrecipeapp.Classes;
 
 public class NguyenLieu {
-    public int getSL() {
+    public double getSL() {
         return SL;
     }
 
-    public NguyenLieu(int SL, String donvi, String id, String name, String img) {
+    public NguyenLieu(double SL, String donvi, String id, String name, String img) {
         this.SL = SL;
         this.donvi = donvi;
         this.id = id;
@@ -13,11 +13,11 @@ public class NguyenLieu {
         this.img = img;
     }
 
-    public void setSL(int SL) {
+    public void setSL(double SL) {
         this.SL = SL;
     }
 
-    int SL;
+    double SL;
     String donvi;
     String id;
     String name;
@@ -26,9 +26,8 @@ public class NguyenLieu {
     public NguyenLieu() {
     }
 
-    public NguyenLieu(String donvi, String id, String name, String img) {
+    public NguyenLieu(String donvi, String name, String img) {
         this.donvi = donvi;
-        this.id = id;
         this.name = name;
         this.img = img;
     }
