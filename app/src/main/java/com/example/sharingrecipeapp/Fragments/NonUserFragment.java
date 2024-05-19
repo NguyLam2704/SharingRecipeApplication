@@ -22,7 +22,6 @@ import com.google.android.material.card.MaterialCardView;
 
 public class NonUserFragment extends Fragment {
 
-    protected LinearLayout linearLayout;
     protected TextView btn1, btn2;
 
 
@@ -37,16 +36,8 @@ public class NonUserFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_non_user, container, false);
 
-        linearLayout = view.findViewById(R.id.linear);
         btn1 = view.findViewById(R.id.btn1);
         btn2 = view.findViewById(R.id.btn2);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-            }
-        });
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -94,9 +94,6 @@ public class FoodDetailActivity extends AppCompatActivity {
         FdSDetail_save_btn = findViewById(R.id.detail_save_btn);
         FdSDetail_save_btn.setSelected(check_save);
 
-
-
-
         back = findViewById(R.id.backImg);
         viewPager2 = findViewById(R.id.viewpagerImage);
         viewPager2Avt = findViewById(R.id.viewPagerAvt);

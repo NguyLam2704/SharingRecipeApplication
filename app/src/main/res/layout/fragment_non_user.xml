@@ -3,63 +3,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/img_user"
-        android:layout_width="185dp"
-        android:layout_height="185dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="60dp"
-        android:src="@drawable/logo_notextwhite"
-        android:tint="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/material"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_user"
         app:strokeColor="@color/white">
 
-        <LinearLayout
-            android:id="@+id/linear"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/btn1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
             android:background="@color/color_primary"
-            android:orientation="vertical"
-            tools:layout_editor_absoluteX="20dp"
-            tools:layout_editor_absoluteY="269dp">
-
-            <TextView
-                android:id="@+id/btn1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:text="Đăng nhập vào tài khoản"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/btn2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="5dp"
-                android:textSize="15sp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="5dp"
-                android:text="Lưu và tạo công thức, lên kế hoạch bữa ăn và hơn thế"
-                android:textColor="@color/white" />
-        </LinearLayout>
+            android:padding="15dp"
+            android:text="Đăng nhập vào tài khoản"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_user"
+        android:layout_width="236dp"
+        android:layout_height="205dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="124dp"
+        android:src="@drawable/logo_notextorange"
+        android:tint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/btn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="Lưu và tạo công thức, lên kế hoạch bữa ăn và hơn thế"
+        android:textColor="@color/color_primary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/material" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
