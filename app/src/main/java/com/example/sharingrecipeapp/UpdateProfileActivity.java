@@ -3,6 +3,9 @@ package com.example.sharingrecipeapp;
 import static com.example.sharingrecipeapp.Fragments.UserFragment.MY_REQUEST_CODE;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +38,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
+import com.example.sharingrecipeapp.Activities.LoginActivity;
 import com.example.sharingrecipeapp.Fragments.UserFragment;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,6 +49,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -50,6 +58,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 
 import java.io.IOException;
 import java.net.PasswordAuthentication;
@@ -68,6 +78,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     Uri uri;
     String old_name, old_pass, old_avatarURL;
+    ProgressBar progressBar;
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -88,6 +99,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     });
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +113,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
         edit_pass = findViewById(R.id.edit_pass);
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
+        progressBar = findViewById(R.id.progressbar);
+
         return1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +122,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             }
         });
 
+        progressBar.setVisibility(View.INVISIBLE);
         showInfo();
         init_setListener();
 
@@ -168,80 +183,81 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
 
     private void onClickUpdateProfile() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        progressBar.setVisibility(View.VISIBLE);
         String full_name = edit_name.getText().toString();
-        String email = edit_email.getText().toString();
         String pass = edit_pass.getText().toString();
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(full_name)
-                .setPhotoUri(uri)
-                .build();
         if (full_name.isEmpty()) {
             Toast.makeText(UpdateProfileActivity.this, "Vui lòng nhập tên người dùng!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (email.isEmpty()) {
-            Toast.makeText(UpdateProfileActivity.this, "Vui lòng nhập email dùng!", Toast.LENGTH_SHORT).show();
             return;
         }
         if (pass.isEmpty() || pass.length() < 6) {
             Toast.makeText(UpdateProfileActivity.this, "Mật khẩu tối thiểu 6 kí tự!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(UpdateProfileActivity.this, "Email không tồn tại!", Toast.LENGTH_SHORT).show();
-            return;
+        if(!full_name.equals(old_name) || uri!=null || !pass.equals(old_pass)){
+            updateNameAvatar();
+            if(!pass.equals(old_pass)){
+                updatePass();
+            }
+            progressBar.setVisibility(View.INVISIBLE);
+            Toast.makeText(UpdateProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(UpdateProfileActivity.this, "Thông tin không có thay đổi", Toast.LENGTH_SHORT).show();
         }
-        if(!full_name.equals(old_name) || uri != null){
-            user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Map<String, Object> update_user = new HashMap<>();
-                        if (full_name != old_name)
-                            update_user.put("username", full_name);
-                        if (uri != null) {
-                            update_user.put("avatar", uri);
-                        }
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        db.collection("Users")
-                                .whereEqualTo("username", old_name).whereEqualTo("avatar", old_avatarURL)
-                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-                                            String documentID = documentSnapshot.getId();
-                                            db.collection("Users")
-                                                    .document(documentID)
-                                                    .update(update_user)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void unused) {
-                                                            Toast.makeText(UpdateProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(UpdateProfileActivity.this, "Thất bại, vui lòng tử lại sau!", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                        }
-                                    }
-                                });
+    }
+    private void updateNameAvatar(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String full_name = edit_name.getText().toString();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(full_name)
+                .setPhotoUri(uri)
+                .build();
+        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Map<String, Object> update_user = new HashMap<>();
+                    if (!full_name.equals(old_name))
+                        update_user.put("username", full_name);
+                    if (uri != null) {
+                        update_user.put("avatar", uri);
                     }
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("Users")
+                            .whereEqualTo("id", user.getUid())
+                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                                        DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                                        String documentID = documentSnapshot.getId();
+                                        db.collection("Users")
+                                                .document(documentID)
+                                                .update(update_user)
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(UpdateProfileActivity.this, "Thất bại, vui lòng tử lại sau!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+                                }
+                            });
                 }
-            });
-        }
-        if(!pass.equals(old_pass)) {
-            user.updatePassword(pass).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
+            }
+        });
+    }
+    private void updatePass() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String pass = edit_pass.getText().toString();
+        user.updatePassword(pass).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
                     Map<String, Object> update_pass = new HashMap<>();
                     update_pass.put("password", pass);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("Users").whereEqualTo("password", old_pass).get()
+                    db.collection("Users").whereEqualTo("id", user.getUid()).get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -249,18 +265,14 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                         DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
                                         String documentID = documentSnapshot.getId();
                                         db.collection("Users").document(documentID)
-                                                .update(update_pass).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void unused) {
-                                                        finish();
-                                                    }
-                                                });
+                                                .update(update_pass);
+                                    }else{
+                                        Toast.makeText(UpdateProfileActivity.this,"Loi trong",Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                 }
-            });
-        }
+            }
+        });
     }
-
 }
