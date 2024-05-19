@@ -134,6 +134,7 @@ public class FragmentExploreRecipes extends Fragment {
     }
     private void Explore_searchName(String newtext)
     {
+        Explore_listRecipes_suggest = new ArrayList<>();// tim lai danh sach, dieu kien có luot save lon
         List<Recipes> ResultSearchList = new ArrayList<>();
         Explore_db.collection("Recipes").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -152,7 +153,12 @@ public class FragmentExploreRecipes extends Fragment {
 //                    get list nguyen lieu
 //                    ingres = (List<String>) documentSnapshot.get("NguyenLieu");
                     Explore_listRecipes.add(new Recipes(id, image, name, save, time));
+                    if (Integer.parseInt(save)>2){
+                        Explore_listRecipes_suggest.add(new Recipes(id,image,name, save, time));
+                    }
                 }
+                // nếu save trong dữ lieu firebase lơn hơn 2 thì sẽ duoc luu trong danh sach
+
                 for (Recipes recipes : Explore_listRecipes)
                 {
                     if(unAccent(recipes.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
@@ -161,49 +167,31 @@ public class FragmentExploreRecipes extends Fragment {
                     }
                 }
                 //search ko co ket qua
-                if(ResultSearchList.isEmpty())
+                if(!ResultSearchList.isEmpty())
                 {
-
-                    Explore_listRecipes_suggest = new ArrayList<>();// tim lai danh sach, dieu kien có luot save lon
-                    Explore_db.collection("Recipes")
-                            //.whereGreaterThanOrEqualTo("Save",2)
-                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                            if (error != null) {
-                                                Log.w("Error", "listen:error", error);
-                                            }
-                                            //lấy dữ liệu từ firebase
-                                            for (DocumentSnapshot documentSnapshot : value.getDocuments()){
-                                                String id = documentSnapshot.getString("id");
-                                                String image = documentSnapshot.getString("image");
-                                                String name = documentSnapshot.getString("name");
-                                                String save = String.valueOf(documentSnapshot.get("save"));
-                                                String time = documentSnapshot.getString("timecook");
-
-                                                Explore_listRecipes_suggest.add(new Recipes(id, image, name, save, time));
-                                            }
-                                        }
-                                    });
-                    Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
-                        @Override
-                        public void onClickItemRecipe(Recipes recipes) {
-                            onClickGoToDetailFood(recipes);
-                        }
-                    });
-                    txtRecipes.setText("Món ăn bạn tìm đang được cập nhật\nMột số món gợi ý");
-                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-
-                }
-                else{
-                    //tạm
-                    txtRecipes.setText("Có "+ResultSearchList.size()+" món ăn theo yêu cầu");
+                    if (newtext.equals("")){
+                        txtRecipes.setText("Một số món gợi ý");
+                    }else
+                    {txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");}
                     Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
                         @Override
                         public void onClickItemRecipe(Recipes recipes) {
                             onClickGoToDetailFood(recipes);
                         }
                     });
+                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+
+
+
+                }
+                else{
+                    Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
+                        @Override
+                        public void onClickItemRecipe(Recipes recipes) {
+                            onClickGoToDetailFood(recipes);
+                        }
+                    });
+                    txtRecipes.setText("Không tìm thấy kết quả phù hợp\nMột số món được yêu thích");
                     Explore_recyclerViewRandom.setAdapter(Explore_adapter);
                 }
 

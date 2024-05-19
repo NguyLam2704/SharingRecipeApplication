@@ -8,9 +8,12 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,6 +50,7 @@ public class ExploreFragment extends Fragment {
     RecipesAdapter Explore_recipesAdapter;
     SearchView Explore_searchview;
     ProgressBar Explore_progressbar;
+    TabExploreAdapter adapter;
     LinearLayout Explore_linear;
     ResultExploreAdapter Explore_adapter;
     private RecyclerView Explore_recyclerViewRandom;
@@ -55,7 +59,8 @@ public class ExploreFragment extends Fragment {
     private FirebaseFirestore Explore_db;
     List<String> List_ingre_db;
     ///////////////////////////////////////////////////////
-    FrameLayout frameLayout;
+    private ViewPager2 viewPager;
+    private View mView;
     TabLayout tabLayout;
 
 
@@ -75,35 +80,20 @@ public class ExploreFragment extends Fragment {
 
 
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_explore, container, false);
+        mView =  inflater.inflate(R.layout.fragment_explore, container, false);
         bottomNavigationCustomActivity = (BottomNavigationCustomActivity) getActivity();
-        Explore_linear = (LinearLayout) view.findViewById(R.id.explore_linearLayout);
-        Explore_progressbar = (ProgressBar) view.findViewById(R.id.explore_progressbar);
+        Explore_linear = (LinearLayout) mView.findViewById(R.id.explore_linearLayout);
+        Explore_progressbar = (ProgressBar) mView.findViewById(R.id.explore_progressbar);
         //Explore_searchview = (SearchView) view.findViewById(R.id.explore_searchbar);
-        frameLayout= (FrameLayout) view.findViewById(R.id.explore_framelayout);
-        tabLayout= (TabLayout) view.findViewById(R.id.explore_tabs);
-
-        getFragmentManager().beginTransaction().replace(R.id.explore_framelayout, new FragmentExploreRecipes())
-                .addToBackStack(null)
-                .commit();
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        viewPager = (ViewPager2) mView.findViewById(R.id.explore_viewpage);
+        tabLayout= (TabLayout) mView.findViewById(R.id.explore_tabs);
+        //viewPager.setSaveEnabled(false);
+        adapter= new TabExploreAdapter(this);
+        viewPager.setAdapter(adapter);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Fragment fragment=null;
-                switch (tab.getPosition()){
-                    case 0:
-                        fragment= new FragmentExploreRecipes();
-                        break;
-                    case 1:
-                        fragment= new FragmentExploreIngredient();
-                        break;
-                    case 2:
-                        fragment=new FragmentExploreCook();
-                }
-                getFragmentManager().beginTransaction().replace(R.id.explore_framelayout, fragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-
+                viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -116,6 +106,16 @@ public class ExploreFragment extends Fragment {
 
             }
         });
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                tabLayout.getTabAt(position).select();
+            }
+        });
+
+
+
         //Explore_searchview.clearFocus();
 
         //chuc nang search
@@ -140,7 +140,7 @@ public class ExploreFragment extends Fragment {
         setdataRecycRandom();
 
          */
-        return view;
+        return mView;
 
     }
 //tim kiem cong thuc
