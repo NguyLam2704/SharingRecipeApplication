@@ -127,7 +127,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
                 String NewRcp_name = NewRcp_edt_nameRcp.getText().toString();
                 String NewRcp_time = NewRcp_edt_time.getText().toString();
                 String NewRcp_note = NewRcp_edt_note.getText().toString();
-                StorageReference img_stg = NewRcp_stg.getReference().child("Recipes/"+uri.getLastPathSegment());
+                StorageReference img_stg = NewRcp_stg.getReference().child("user/"+uri.getLastPathSegment());
                 DocumentReference user = NewRcp_db.collection("Users").document(NewRcp_user.getUid());
                 UploadTask upload_NewRcp_img = img_stg.putFile(uri);
                 upload_NewRcp_img.addOnFailureListener(new OnFailureListener() {
