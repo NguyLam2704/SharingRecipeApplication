@@ -64,6 +64,8 @@ public class HomeFragment extends Fragment {
 
     private List<Recipes> listRecipes;
 
+    private List<Recipes> listRecipesRate;
+
     private List<Theme> listTheme;
     ImageView img_food, btn_create;
     private FirebaseAuth firebaseAuth;
@@ -118,6 +120,7 @@ public class HomeFragment extends Fragment {
 
         recipesAdapter = new RecipesAdapter();
         firebaseFirestore.collection("Recipes")
+                .whereEqualTo("trending",true)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -125,7 +128,7 @@ public class HomeFragment extends Fragment {
                             Log.w("Error", "listen:error", error);
                             return;
                         }
-                        //listRecipes = new ArrayList<>();
+                        listRecipesRate = new ArrayList<>();
                         for (DocumentSnapshot documentSnapshot : value.getDocuments()){
                             String id = documentSnapshot.getString("id");
                             firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -143,8 +146,8 @@ public class HomeFragment extends Fragment {
                                         String name = documentSnapshot.getString("name");
                                         String save = String.valueOf(idUser.size());
                                         String time = documentSnapshot.getString("timecook");
-                                        //listRecipes.add(new Recipes(id, image, name, save, time));
-                                        recipesAdapter.setData(listRecipes, new IClickOnItemRecipe() {
+                                        listRecipesRate.add(new Recipes(id, image, name, save, time));
+                                        recipesAdapter.setData(listRecipesRate, new IClickOnItemRecipe() {
                                             @Override
                                             public void onClickItemRecipe(Recipes recipes) {
                                                 onClickGoToDetailFood(recipes);
@@ -189,10 +192,7 @@ public class HomeFragment extends Fragment {
                                     ArrayList<String> idUser = new ArrayList<>();
                                     for (QueryDocumentSnapshot doc :value)
                                     {
-                                        if(doc.get("idUsers") != null)
-                                        {
-                                            idUser = (ArrayList<String>) doc.get("idUsers");
-                                        }
+                                        idUser = (ArrayList<String>) doc.get("idUsers");
                                         String save = String.valueOf(idUser.size());
                                         String image = documentSnapshot.getString("image");
                                         String name = documentSnapshot.getString("name");
@@ -250,8 +250,6 @@ public class HomeFragment extends Fragment {
     private void onClickGoToDetailTheme(Theme theme) {
         bottomNavigationCustomActivity.gotoThemeDetail(theme);
     }
-
-
 
 }
 

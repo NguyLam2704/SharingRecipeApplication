@@ -8,24 +8,30 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_user"
-        android:layout_width="185dp"
-        android:layout_height="185dp"
+        android:layout_width="232dp"
+        android:layout_height="178dp"
         android:layout_gravity="center"
+
         android:layout_marginTop="60dp"
-        android:src="@drawable/logo_notext"
+        android:src="@drawable/logo_textwhite"
+
         android:tint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/material"
+        app:strokeWidth="10dp"
+        app:cardCornerRadius="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_user"
-        app:strokeColor="@color/white">
+        app:strokeColor="@color/color_primary">
 
         <LinearLayout
             android:id="@+id/linear"
@@ -41,11 +47,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="5dp"
+                android:layout_margin="10dp"
                 android:text="Đăng nhập vào tài khoản"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
 
             <TextView
                 android:id="@+id/btn2"
@@ -57,9 +64,23 @@
                 android:textSize="15sp"
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="5dp"
-                android:text="Lưu và tạo công thức, lên kế hoạc bữa ăn và hơn thế"
+                android:text="Lưu và tạo công thức, lên kế hoạch bữa ăn và hơn thế"
                 android:textColor="@color/white" />
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/btn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="Lưu và tạo công thức, lên kế hoạc bữa ăn và hơn thế"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/material" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
