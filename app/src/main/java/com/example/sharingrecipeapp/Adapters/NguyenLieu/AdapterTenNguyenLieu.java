@@ -41,7 +41,7 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
     FirebaseAuth auth;
     List<NguyenLieu> tenNL;
     List<NguyenLieu> NL_Da_Them;
-    AdapterListNL adapterListNL;
+    AdapterListNLDaThem adapterListNL;
 
     public AdapterTenNguyenLieu(Context context, List<NguyenLieu> tenNL) {
         this.context = context;
@@ -52,7 +52,7 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
         tenNL = new ArrayList<>();
     }
 
-    public void setData(AdapterListNL adapterListNL, List<NguyenLieu> NL){
+    public void setData(AdapterListNLDaThem adapterListNL, List<NguyenLieu> NL){
         this.adapterListNL = adapterListNL;
         this.NL_Da_Them = NL;
     }
@@ -65,6 +65,7 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
 
     @Override
     public void onBindViewHolder(@NonNull TenNguyenLieuViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         NguyenLieu nguyenLieu = tenNL.get(position);
         if (nguyenLieu != null){
             // Set giao dien
