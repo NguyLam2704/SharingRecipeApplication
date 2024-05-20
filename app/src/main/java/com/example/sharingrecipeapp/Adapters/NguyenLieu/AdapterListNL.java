@@ -20,7 +20,9 @@ import com.example.sharingrecipeapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -116,6 +118,16 @@ public class AdapterListNL extends BaseAdapter {
 
     private void deleteNguyenLieuDaThem(NguyenLieu nguyenLieu) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        db.collection("ListNguyenLieuMua").whereEqualTo("name",nguyenLieu.getName()).whereEqualTo("idUser",auth.getUid())
+                        .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot doc : queryDocumentSnapshots){
+                            db.collection("ListNguyenLieuMua").document(doc.getId()).delete();
+                        }
+                    }
+                });
         db.collection("ListNguyenLieuMua").document(nguyenLieu.getId()).delete();
     }
 
