@@ -17,7 +17,6 @@
             android:id="@+id/textView19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:paddingTop="10dp"
             android:text="Danh sách nguyên liệu"
             android:paddingStart="20dp"
@@ -31,11 +30,6 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="700dp"
-        android:background="@color/grey_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -58,7 +52,7 @@
         <ListView
             android:id="@+id/list_groceries"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -101,13 +95,12 @@
         <ListView
             android:id="@+id/list_nl_da_mua"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtChecked" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 
 </LinearLayout>

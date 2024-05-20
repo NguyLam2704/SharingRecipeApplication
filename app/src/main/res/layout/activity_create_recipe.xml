@@ -510,6 +510,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
@@ -534,6 +535,8 @@
                     android:layout_marginTop="8dp"
                     android:text="Châu Á"
                     android:textSize="20sp"
+                    android:theme="@style/color_checkBox"
+                    android:button="@drawable/image_checkbox"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
@@ -544,6 +547,8 @@
                     android:layout_marginEnd="50dp"
                     android:text="Châu Âu"
                     android:textSize="20sp"
+                    android:theme="@style/color_checkBox"
+                    android:button="@drawable/image_checkbox"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/checkBox2" />
 
@@ -552,8 +557,12 @@
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
+                    android:layout_marginTop="16dp"
+                    android:button="@drawable/image_checkbox"
                     android:text="Việt Nam"
                     android:textSize="20sp"
+                    android:theme="@style/color_checkBox"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
 
@@ -561,9 +570,12 @@
                     android:id="@+id/checkBox5"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="50dp"
+                    android:button="@drawable/image_checkbox"
                     android:text="Thái Lan"
                     android:textSize="20sp"
+                    android:theme="@style/color_checkBox"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/checkBox3" />
 
