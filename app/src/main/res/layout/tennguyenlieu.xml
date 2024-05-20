@@ -17,57 +17,63 @@
 
         <ImageView
             android:id="@+id/imgNL"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            />
 
     </androidx.cardview.widget.CardView>
 
     <TextView
-        app:layout_constraintTop_toTopOf="@id/cardView"
-        app:layout_constraintBottom_toBottomOf="@id/cardView"
-        app:layout_constraintStart_toEndOf="@id/cardView"
-        app:layout_constraintEnd_toEndOf="@id/editTextNumber"
         android:id="@+id/tenNL"
-        android:layout_marginEnd="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
         android:textAlignment="center"
-        android:text="TextView" />
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/cardView"
+        app:layout_constraintEnd_toStartOf="@+id/editTextNumber"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/cardView"
+        app:layout_constraintTop_toTopOf="@id/cardView" />
 
     <EditText
-        app:layout_constraintTop_toTopOf="@id/cardView"
-        app:layout_constraintBottom_toBottomOf="@id/cardView"
-        app:layout_constraintEnd_toStartOf="@id/donvi"
-        android:layout_marginEnd="20dp"
         android:id="@+id/editTextNumber"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_marginEnd="20dp"
         android:ems="10"
-        android:inputType="number" />
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/cardView"
+        app:layout_constraintEnd_toStartOf="@id/donvi"
+        app:layout_constraintTop_toTopOf="@id/cardView" />
+
     <TextView
         android:id="@+id/donvi"
-        app:layout_constraintTop_toTopOf="@id/cardView"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:text="dv"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/cardView"
         app:layout_constraintEnd_toStartOf="@id/addNL"
-        android:layout_marginEnd="20dp"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="donvi" />
+        app:layout_constraintTop_toTopOf="@id/cardView" />
 
     <View
         android:id="@+id/addNL"
         android:layout_width="28dp"
         android:layout_height="28dp"
+        android:layout_marginEnd="2dp"
         android:background="@drawable/plan_btn_add_background"
-        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/cardView"
-        app:layout_constraintBottom_toBottomOf="@id/cardView"/>
+        app:layout_constraintTop_toTopOf="@id/cardView" />
 
     <ImageView
         android:layout_width="22dp"

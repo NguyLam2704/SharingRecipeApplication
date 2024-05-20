@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imgin"
+        android:id="@+id/img_damua"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="24dp"
@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/namein"
+        android:id="@+id/name_damua"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -24,12 +24,12 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.058"
-        app:layout_constraintStart_toEndOf="@+id/imgin"
+        app:layout_constraintStart_toEndOf="@+id/img_damua"
         app:layout_constraintTop_toTopOf="parent"
         android:inputType="number"/>
 
     <EditText
-        android:id="@+id/quantityin"
+        android:id="@+id/SL_damua"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -42,24 +42,24 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/donvi_dathem"
+        app:layout_constraintEnd_toStartOf="@+id/donvi_damua"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
 
     <TextView
-        android:id="@+id/donvi_dathem"
+        android:id="@+id/donvi_damua"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/checkIn"
-        app:layout_constraintEnd_toStartOf="@+id/checkIn"
-        app:layout_constraintTop_toTopOf="@id/checkIn" />
+        app:layout_constraintBottom_toBottomOf="@id/checkIn_damua"
+        app:layout_constraintEnd_toStartOf="@+id/checkIn_damua"
+        app:layout_constraintTop_toTopOf="@id/checkIn_damua" />
 
     <CheckBox
-        android:id="@+id/checkIn"
+        android:id="@+id/checkIn_damua"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginTop="8dp"
@@ -67,5 +67,6 @@
         android:theme="@style/color_checkBox"
         android:button="@drawable/image_checkbox"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/black"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

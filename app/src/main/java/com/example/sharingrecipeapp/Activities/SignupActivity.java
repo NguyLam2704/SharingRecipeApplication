@@ -33,7 +33,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,11 +48,10 @@ public class SignupActivity extends AppCompatActivity  {
 
     FirebaseFirestore Signup_db;
     FirebaseStorage Signup_stg;
-
     ProgressBar Signup_progressbar;
     String userID;
     Button Signup_btn;
-//    @Override
+    //    @Override
 //    public void onClick(View v) {
 //        if (v.getId() == R.id.signup_returns)
 //        {
@@ -82,14 +80,13 @@ public class SignupActivity extends AppCompatActivity  {
 
 
         Signup_btn = findViewById(R.id.signup_btn);
-
+        Signup_stg = FirebaseStorage.getInstance();
         Signup_auth = FirebaseAuth.getInstance();
         Signup_db = FirebaseFirestore.getInstance();
-        Signup_stg = FirebaseStorage.getInstance();
         email = findViewById(R.id.signup_edt_email);
         password = findViewById(R.id.signup_edt_password);
         username = findViewById(R.id.signup_edt_username);
-
+        Signup_progressbar = findViewById(R.id.signup_progressbar);
         Signup_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,12 +128,12 @@ public class SignupActivity extends AppCompatActivity  {
                         {
                             FirebaseUser verify_user = Signup_auth.getCurrentUser();
                             verify_user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    StyleableToast.makeText(SignupActivity.this,"Email xác thực đã được gửi ",R.style.mytoast).show();
-                                    Signup_progressbar.setVisibility(View.GONE);
-                                }
-                            })
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            StyleableToast.makeText(SignupActivity.this,"Email xác thực đã được gửi ",R.style.mytoast).show();
+                                            Signup_progressbar.setVisibility(View.GONE);
+                                        }
+                                    })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
@@ -144,15 +141,15 @@ public class SignupActivity extends AppCompatActivity  {
                                         }
                                     });
 //                                StyleableToast.makeText(SignupActivity.this,"Xác thực thành công",R.style.mytoast).show();
-                                userID = Signup_auth.getCurrentUser().getUid();
-                                DocumentReference Signup_document = Signup_db.collection("Users").document(userID);
-                                Map<String,Object> new_user = new HashMap<>();
+                            userID = Signup_auth.getCurrentUser().getUid();
+                            DocumentReference Signup_document = Signup_db.collection("Users").document(userID);
+                            Map<String,Object> new_user = new HashMap<>();
 
-                                new_user.put("email",Signup_getemail);
-                                new_user.put("username",Signup_getusername);
-                                new_user.put("password",Signup_getpassword);
-                                new_user.put("id",userID);
-                                Signup_stg.getReference().child("Recipes/Fantafood.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            new_user.put("email",Signup_getemail);
+                            new_user.put("username",Signup_getusername);
+                            new_user.put("password",Signup_getpassword);
+                            new_user.put("id",userID);
+                            Signup_stg.getReference().child("user/Fantafood.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     new_user.put("avatar",uri.toString());
@@ -162,7 +159,6 @@ public class SignupActivity extends AppCompatActivity  {
                                             Signup_progressbar.setVisibility(View.GONE);
                                             Button Login_btn = findViewById(R.id.Login_btn);
                                             Signup_auth.signOut();
-
                                             Intent login_view = new Intent(SignupActivity.this, LoginActivity.class);
                                             startActivity(login_view);
 //                                        Login_btn.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +173,7 @@ public class SignupActivity extends AppCompatActivity  {
                                     });
                                 }
                             });
+//                            new_user.put("avatar","");
 
 
                         }

@@ -1,12 +1,18 @@
 package com.example.sharingrecipeapp.Fragments;
 
 
+import static androidx.core.app.NotificationCompat.getColor;
+
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +27,7 @@ import android.widget.ImageView;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 import com.example.sharingrecipeapp.Activities.FoodDetailActivity;
+import com.example.sharingrecipeapp.Activities.LoginActivity;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.ThemeAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.iClickOnItemTheme;
@@ -35,6 +42,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -45,6 +53,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
@@ -71,6 +80,7 @@ public class HomeFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
+    private FirebaseUser currentUser;
     ProgressDialog progressDialog;
 
     private List<Method> mMethodList;
@@ -91,6 +101,7 @@ public class HomeFragment extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        currentUser = firebaseAuth.getCurrentUser();
 
         recyclerViewRate = (RecyclerView) view.findViewById(R.id.recyRate);
         recyclerViewRandom = (RecyclerView) view.findViewById(R.id.recyRanDom);
@@ -103,16 +114,45 @@ public class HomeFragment extends Fragment {
         setdataRecycTheme();
 
 
-        btn_create.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomNavigationCustomActivity.gotoAddRecipe();
-            }
-        });
 
+        btn_create.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(currentUser ==null){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+                        builder.setTitle("Thông báo");
+                        builder.setMessage("Vui lòng đăng nhập để tiếp tục");
+                        builder.setPositiveButton("Đăng nhập", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                bottomNavigationCustomActivity.gotoLogin();
+                            }
+                        });
+                        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @SuppressLint("ResourceAsColor")
+                            @Override
+                            public void onShow(DialogInterface abc) {
+                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.color_primary));
+                                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.color_primary));
+                            }
+                        });
+                        dialog.show();
+                    }else{
+                        bottomNavigationCustomActivity.gotoAddRecipe();
+                    }
+                }
+            });
         return view;
     }
-
 
     private void setdataRecycRate() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);

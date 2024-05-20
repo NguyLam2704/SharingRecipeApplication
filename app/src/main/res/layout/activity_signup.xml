@@ -26,11 +26,12 @@
         android:id="@+id/signup_returns"
         android:layout_width="48dp"
         android:layout_height="26dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="52dp"
         android:background="@drawable/oval_btn_background"
-        android:backgroundTint="@color/grey_background"
         android:src="@drawable/arrow_back"
         app:layout_constraintBottom_toBottomOf="@+id/tittle_Createuser"
+        app:layout_constraintEnd_toStartOf="@+id/tittle_Createuser"
+        app:layout_constraintHorizontal_bias="0.941"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tittle_Createuser"
         app:layout_constraintVertical_bias="1.0" />
@@ -139,73 +140,11 @@
         app:layout_constraintStart_toStartOf="@+id/signup_edt_username"
         app:layout_constraintTop_toBottomOf="@+id/tittle_password" />
 
-    <!--        android:visibility="gone"/>-->
-
-    <TextView
-        android:id="@+id/tittle_gioitinh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:gravity="center_vertical"
-        android:lineHeight="26sp"
-        android:lineSpacingExtra="7sp"
-        android:text="Giới tính"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/signup_edt_password"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/signup_edt_password"
-        app:layout_constraintTop_toBottomOf="@+id/signup_edt_password" />
-
-    <EditText
-        android:id="@+id/signup_edt_gioitinh"
-        android:layout_width="377dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="52dp"
-        android:background="@drawable/edittext_bound"
-        android:drawablePadding="8dp"
-        android:hint="Nhập giới tính"
-        android:padding="12dp"
-        android:textColor="@color/black"
-        android:textCursorDrawable="@drawable/color_cursor"
-        app:layout_constraintEnd_toEndOf="@+id/signup_edt_password"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tittle_gioitinh"
-        app:layout_constraintTop_toBottomOf="@+id/signup_edt_password" />
-
-    <TextView
-        android:id="@+id/tittle_ngaysinh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:gravity="center_vertical"
-        android:lineHeight="26sp"
-        android:lineSpacingExtra="7sp"
-        android:text="Ngày sinh"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/signup_edt_gioitinh"
-        app:layout_constraintTop_toBottomOf="@+id/signup_edt_gioitinh" />
-
-    <DatePicker
-        android:id="@+id/datePicker1"
-        android:layout_width="304dp"
-        android:layout_height="141dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/edittext_bound"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        app:layout_constraintEnd_toEndOf="@+id/signup_edt_gioitinh"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/tittle_ngaysinh"
-        app:layout_constraintTop_toBottomOf="@+id/signup_edt_gioitinh" />
-
     <Button
         android:id="@+id/signup_btn"
         android:layout_width="324dp"
         android:layout_height="60dp"
-        android:layout_marginTop="272dp"
+        android:layout_marginTop="28dp"
         android:backgroundTint="@color/color_primary"
         android:gravity="center"
         android:text="Đăng kí"
@@ -217,19 +156,21 @@
         app:layout_constraintStart_toStartOf="@+id/signup_edt_password"
         app:layout_constraintTop_toBottomOf="@+id/signup_edt_password" />
 
+    <!--        android:visibility="gone"/>-->
+
     <ProgressBar
         android:id="@+id/signup_progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="@color/color_primary"
         android:progressTint="#FF9800"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/signup_btn"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/signup_btn"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.441" />
+        app:layout_constraintVertical_bias="0.734"
+        android:visibility="gone"
+        android:indeterminateTint="@color/color_primary"/>
 
-    <!--    <include layout="@layout/privacy"/>-->
+    <include layout="@layout/privacy"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
