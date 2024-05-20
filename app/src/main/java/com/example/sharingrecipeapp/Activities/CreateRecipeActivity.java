@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,13 +20,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Adapters.AddRecipe.AddMethodAdapter;
 import com.example.sharingrecipeapp.Adapters.AddRecipe.AddNguyenLieuAdapter;
+import com.example.sharingrecipeapp.Adapters.NguyenLieu.NewRcpIngreAdapter;
 import com.example.sharingrecipeapp.Classes.AddMethod;
 import com.example.sharingrecipeapp.Classes.AddNguyenLieu;
+import com.example.sharingrecipeapp.Classes.NewRcpIngre;
 import com.example.sharingrecipeapp.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,10 +39,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -71,7 +80,8 @@ public class CreateRecipeActivity extends AppCompatActivity {
     FirebaseStorage NewRcp_stg;
     FirebaseAuth NewRcp_auth;
     Uri uri;
-
+    Spinner NewRcp_spinnerIngre;
+    ArrayList<NewRcpIngre> NewRcp_IngreList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +118,9 @@ public class CreateRecipeActivity extends AppCompatActivity {
         NewRcp_edt_time = findViewById(R.id.newRcp_edt_time);
         NewRcp_edt_note = findViewById(R.id.newRcp_edt_note);
 
+        NewRcp_spinnerIngre = findViewById(R.id.newRcp_spinner_ingre);
+        NewRcp_IngreList = new ArrayList<>();
+
 //      firebase init
         NewRcp_db = FirebaseFirestore.getInstance();
         NewRcp_stg = FirebaseStorage.getInstance();
@@ -118,6 +131,28 @@ public class CreateRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ChooseImg();
+            }
+        });
+
+//        fetch list nguyenlieu
+        NewRcp_db.collection("NguyenLieu").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(error != null)
+                {
+                    return;
+                }
+                for (QueryDocumentSnapshot queryDocumentSnapshot : value)
+                {
+                    String ingre_name = queryDocumentSnapshot.getString("name");
+                    String ingre_dv = queryDocumentSnapshot.getString("donvi");
+                    String ingre_id = queryDocumentSnapshot.getString("id");
+                    String ingre_img = queryDocumentSnapshot.getString("img");
+                    NewRcp_IngreList.add(new NewRcpIngre(ingre_img,ingre_name,ingre_dv,ingre_id));
+                }
+                NewRcpIngreAdapter newRcpIngreAdapter = new NewRcpIngreAdapter(CreateRecipeActivity.this,R.layout.item_newrcpingre,NewRcp_IngreList);
+                NewRcp_spinnerIngre.setAdapter(newRcpIngreAdapter);
+
             }
         });
 //////////////////////////////////////////////////////////////////////////upload
@@ -306,7 +341,11 @@ public class CreateRecipeActivity extends AppCompatActivity {
         {
             return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replace("đ", "d");
         }
-        return pattern.matcher(temp).replaceAll("").replace('đ','d').replace('Đ','D');
+        return pattern.matcher(temp).replaceAll("").replace('đ','d').replace('Đ','D').replace(" ","").replace("A","a")
+                .replace("Z","z").replace("B","b").replace("C","c").replace("D","d").replace("I","i").replace("F","f")
+                .replace("G","g").replace("H","h").replace("E","e").replace("J","j").replace("K","k").replace("Y","y")
+                .replace("L","l").replace("M","m").replace("N","n").replace("O","o").replace("P","p").replace("Q","q").replace("R","r")
+                .replace("S","s").replace("T","t").replace("U","u").replace("V","v").replace("W","w").replace("X","x");
 
     }
 
@@ -328,7 +367,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
         ArrayList<String> ingres = new ArrayList<String>();
         for (AddNguyenLieu ingre : ingreList)
         {
-            ingres.add(ingre.getName().toString());
+            ingres.add(unAccent(ingre.getName().toString()));
         }
         String[] arrNameingre = ingres.toArray(new String[0]);
         return arrNameingre;
