@@ -81,9 +81,13 @@ public class GroceriesFragment extends Fragment {
     ImageView plus;
 
     RecyclerView tenNL;
+
+    ListView listViewNL;
     List<NguyenLieu> nguyenLieuList;
-    List<NguyenLieu> listNL_da_mua;
     AdapterListNL adapterListNL;
+
+    ListView listNLDaMua;
+    List<NguyenLieu> listNL_da_mua;
     AdapterListNLDaMua adapterListNLDaMua;
     FirebaseFirestore db;
     FirebaseAuth auth;
@@ -109,9 +113,18 @@ public class GroceriesFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         userID = auth.getUid();
+
         nguyenLieuList = new ArrayList<>();
         listNL_da_mua = new ArrayList<>();
+
         adapterListNLDaMua = new AdapterListNLDaMua(listNL_da_mua);
+        listViewNL = binding.listGroceries;
+        adapterListNL = new AdapterListNL(nguyenLieuList, adapterListNLDaMua, listNL_da_mua );
+        listViewNL.setAdapter(adapterListNL);
+
+        listNLDaMua = binding.listNlDaMua;
+        adapterListNLDaMua.setData(adapterListNL,nguyenLieuList);
+        listNLDaMua.setAdapter(adapterListNLDaMua);
 
         displayNguyenLieu();
         displayNguyenLieuDaMua();
@@ -131,9 +144,7 @@ public class GroceriesFragment extends Fragment {
     }
 
     private void displayNguyenLieuDaMua() {
-        ListView listNLDaMua = binding.listNlDaMua;
-        adapterListNLDaMua.setData(adapterListNL,nguyenLieuList);
-        listNLDaMua.setAdapter(adapterListNLDaMua);
+
 
         db.collection("ListNguyenLieuDaMua").whereEqualTo("idUser","HmY48QhzdQSzLoDFDSaaMGzDa8c2").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -159,9 +170,8 @@ public class GroceriesFragment extends Fragment {
     }
 
     private void displayNguyenLieu() {
-        ListView listViewNL = binding.listGroceries;
+        listViewNL.setMinimumHeight(100);
         //listViewNL.setEnabled(false);
-        adapterListNL = new AdapterListNL(nguyenLieuList, adapterListNLDaMua, listNL_da_mua );
 
         db.collection("ListNguyenLieuMua").whereEqualTo("idUser","HmY48QhzdQSzLoDFDSaaMGzDa8c2").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -195,7 +205,6 @@ public class GroceriesFragment extends Fragment {
 //                            }
 
                             adapterListNL.notifyDataSetChanged();
-                            listViewNL.setAdapter(adapterListNL);
                         }
                     }
                 });
@@ -244,11 +253,13 @@ public class GroceriesFragment extends Fragment {
         tenNL = dialog.findViewById(R.id.recyNL);
         List<NguyenLieu> tenNguyenLieuList = new ArrayList<>();
         AdapterTenNguyenLieu adapterTenNguyenLieu = new AdapterTenNguyenLieu(requireContext(),tenNguyenLieuList);
+
         adapterTenNguyenLieu.setData(adapterListNL,nguyenLieuList);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
         tenNL.setLayoutManager(linearLayoutManager);
         tenNL.setAdapter(adapterTenNguyenLieu);
-        db.collection("NguyenLieu").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("NguyenLieu").orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
