@@ -65,20 +65,26 @@ public class FragmentExploreRecipes extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_explore_recipes, container, false);
         bottomNavigationCustomActivity = (BottomNavigationCustomActivity) getActivity();
         txtRecipes= (TextView) view.findViewById(R.id.txt_explore_recipes);
-        txtRecipes.setText("Một số món gợi ý");
+        txtRecipes.setText("Một số công thức gợi ý");
         Explore_searchview_recipes = (SearchView) view.findViewById(R.id.explore_searchbar_recipes);
         Explore_searchview_recipes.clearFocus();
         Explore_searchview_recipes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                Explore_searchview_recipes.setBackgroundResource(R.drawable.edittext_bound);
                 Explore_searchName(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Explore_searchName(newText);
-//                Explore_searchIngre(newText);
+                Explore_searchview_recipes.setBackgroundResource(R.drawable.query_bound);
+                if(newText.equals(""))
+                {
+                    Explore_searchview_recipes.setBackgroundResource(R.drawable.edittext_bound);
+//                    recipesList.clear();
+                    setdataRecycRandom();
+                }
                 return true;
             }
         });

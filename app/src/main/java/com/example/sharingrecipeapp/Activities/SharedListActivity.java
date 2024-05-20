@@ -56,8 +56,13 @@ public class SharedListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shared_list);
 
-        back_btn = findViewById(R.id.btn_back);
-        back_btn.setOnClickListener(v -> finish());
+        back_btn = findViewById(R.id.btn_backprofile);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         soluong = findViewById(R.id.result_announce);
         share_searchbar = findViewById(R.id.SearchShared);
         share_auth = FirebaseAuth.getInstance();

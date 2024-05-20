@@ -178,13 +178,14 @@ public class HomeFragment extends Fragment {
                                     ArrayList<String> idUser = new ArrayList<>();
                                     for (QueryDocumentSnapshot doc :value)
                                     {
+
                                         if(doc.get("idUsers") != null)
                                         {
                                             idUser = (ArrayList<String>) doc.get("idUsers");
                                         }
+                                        String save = String.valueOf(idUser.size());
                                         String image = documentSnapshot.getString("image");
                                         String name = documentSnapshot.getString("name");
-                                        String save = String.valueOf(idUser.size());
                                         String time = documentSnapshot.getString("timecook");
                                         listRecipesRate.add(new Recipes(id, image, name, save, time));
                                         recipesAdapter.setData(listRecipesRate, new IClickOnItemRecipe() {
@@ -232,7 +233,13 @@ public class HomeFragment extends Fragment {
                                     ArrayList<String> idUser = new ArrayList<>();
                                     for (QueryDocumentSnapshot doc :value)
                                     {
-                                        idUser = (ArrayList<String>) doc.get("idUsers");
+
+
+                                        if(doc.get("idUsers") != null)
+                                        {
+                                            idUser = (ArrayList<String>) doc.get("idUsers");
+
+                                        }
                                         String save = String.valueOf(idUser.size());
                                         String image = documentSnapshot.getString("image");
                                         String name = documentSnapshot.getString("name");
