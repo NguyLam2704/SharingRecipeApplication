@@ -278,7 +278,7 @@ public class FragmentExploreCook extends Fragment {
             }
         });
     }
-//    chuyển có dấu thành không dấu
+    //    chuyển có dấu thành không dấu
     public static String unAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");

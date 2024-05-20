@@ -12,6 +12,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterTenNguyenLieu;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.IClickOnItemSavedRecipe;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.ReGroAdapter;
 import com.example.sharingrecipeapp.Adapters.PlanList.AdapterPlanListRecipes;
+import com.example.sharingrecipeapp.Classes.AddNguyenLieu;
 import com.example.sharingrecipeapp.Classes.Ingredient;
 import com.example.sharingrecipeapp.Classes.ListIngredient;
 import com.example.sharingrecipeapp.Classes.NguyenLieu;
@@ -59,6 +61,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -78,8 +81,9 @@ public class GroceriesFragment extends Fragment {
     BottomNavigationCustomActivity bottomNavigationCustomActivity;
 
     FragmentGroceriesBinding binding;
-    ImageView plus;
-
+    ImageView plus, write;
+    Button AddNL;
+    EditText editName, editSl, editDv;
     RecyclerView tenNL;
 
     ListView listViewNL;
@@ -138,15 +142,13 @@ public class GroceriesFragment extends Fragment {
         });
 
 
-
-
         return binding.getRoot();
     }
 
     private void displayNguyenLieuDaMua() {
 
 
-        db.collection("ListNguyenLieuDaMua").whereEqualTo("idUser","HmY48QhzdQSzLoDFDSaaMGzDa8c2").get()
+        db.collection("ListNguyenLieuDaMua").whereEqualTo("idUser",userID).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots){
                         String name = doc.getString("name");
@@ -173,7 +175,7 @@ public class GroceriesFragment extends Fragment {
         listViewNL.setMinimumHeight(100);
         //listViewNL.setEnabled(false);
 
-        db.collection("ListNguyenLieuMua").whereEqualTo("idUser","HmY48QhzdQSzLoDFDSaaMGzDa8c2").get()
+        db.collection("ListNguyenLieuMua").whereEqualTo("idUser",userID).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots){
                         String name = doc.getString("name");
@@ -236,6 +238,25 @@ public class GroceriesFragment extends Fragment {
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_list_add);
         displayNguyenLieu(dialog);
+        write = dialog.findViewById(R.id.write);
+        write.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialoga = new Dialog(requireContext());
+                dialoga.setContentView(R.layout.dialog_nhapnguyenlieu);
+                editName = dialoga.findViewById(R.id.editTenNL);
+                editDv = dialoga.findViewById(R.id.editDV);
+                editSl = dialoga.findViewById(R.id.editSL);
+                AddNL = dialoga.findViewById(R.id.NhapNL);
+                AddNL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addNguyenLieu();
+                    }
+                });
+                dialoga.show();
+            }
+        });
         dialog.show();
         dialog.findViewById(R.id.btn_hoan_tat).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,8 +297,14 @@ public class GroceriesFragment extends Fragment {
             }
         });
     }
+    private void addNguyenLieu() {
+        String strName = editName.getText().toString().trim();
+        String strSL = editSl.getText().toString().trim();
+        String strDonVi = editDv.getText().toString().trim();
 
-    private void onClickGoToDetailFood(String id) {
-        bottomNavigationCustomActivity.gotoFoodDetail(id);
+        if(TextUtils.isEmpty(strName) || TextUtils.isEmpty(strSL) || TextUtils.isEmpty(strDonVi)){
+            Toast.makeText(getActivity(),"Vui lòng điền đầy đủ các thông tin",Toast.LENGTH_SHORT).show();
+        }
     }
+
 }

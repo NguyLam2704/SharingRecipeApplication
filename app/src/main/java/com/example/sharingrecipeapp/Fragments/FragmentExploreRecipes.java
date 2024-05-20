@@ -169,8 +169,6 @@ public class FragmentExploreRecipes extends Fragment {
 
                                 Explore_recyclerViewRandom.setAdapter(Explore_adapter);
 
-
-
                             }
                             else{
                                 Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
