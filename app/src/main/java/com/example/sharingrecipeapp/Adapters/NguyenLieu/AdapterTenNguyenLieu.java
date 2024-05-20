@@ -67,6 +67,7 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
     public void onBindViewHolder(@NonNull TenNguyenLieuViewHolder holder, int position) {
         NguyenLieu nguyenLieu = tenNL.get(position);
         if (nguyenLieu != null){
+            // Set giao dien
             holder.tenNL.setText(nguyenLieu.getName());
             holder.donvi.setText(nguyenLieu.getDonvi());
             Picasso.get().load(nguyenLieu.getImg()).into(holder.imageView);
@@ -76,45 +77,51 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
 
                     //lay so luong tu edit text
                     EditText sl = holder.editText;
-                    Double soluong = Double.valueOf(sl.getText().toString());
-                    nguyenLieu.setSL(soluong);
 
-                    //Them nguyen lieu vao list nguyen lieu da them
-                    boolean biTrung = false;
-                    for (int i = 0; i < NL_Da_Them.size(); i++){
-                        if (NL_Da_Them.get(i).getName().equals(nguyenLieu.getName())){
-                            NL_Da_Them.get(i).setSL(NL_Da_Them.get(i).getSL() + nguyenLieu.getSL());
-                            biTrung = true;
-                        }
-                    }
-                    if (!biTrung){
-                        NL_Da_Them.add(nguyenLieu);
-                    }
+                    //Check xem edit text co rong hay khong
+                    if (!sl.getText().toString().isEmpty()){
+                        Double soluong = Double.valueOf(sl.getText().toString());
+                        nguyenLieu.setSL(soluong);
 
-                    //Cap nhat lai ListView
-                    adapterListNL.notifyDataSetChanged();
-
-                    //Day du lieu len FireStore
-                    db = FirebaseFirestore.getInstance();
-                    auth = FirebaseAuth.getInstance();
-                    if (!sl.getText().toString().equals("")){
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("name",nguyenLieu.getName());
-                        data.put("donvi",nguyenLieu.getDonvi());
-                        data.put("idUser",auth.getUid());
-                        data.put("img",nguyenLieu.getImg());
-                        data.put("SL",soluong);
-
-                        db.collection("ListNguyenLieuMua").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Map<String,Object> data = new HashMap<>();
-                                data.put("id",documentReference.getId());
-                                nguyenLieu.setId(documentReference.getId());
-                                Toast.makeText(context,"Đã thêm nguyên liệu", Toast.LENGTH_SHORT).show();
+                        //Them nguyen lieu vao list nguyen lieu da them
+                        boolean biTrung = false;
+                        for (int i = 0; i < NL_Da_Them.size(); i++){
+                            if (NL_Da_Them.get(i).getName().equals(nguyenLieu.getName())){
+                                NL_Da_Them.get(i).setSL(NL_Da_Them.get(i).getSL() + nguyenLieu.getSL());
+                                biTrung = true;
                             }
-                        });
-                    }else {
+                        }
+
+                        // Cap nhat lai list nguyen lieu
+                        if (!biTrung) {
+                            NL_Da_Them.add(nguyenLieu);
+                        }
+
+                        //Cap nhat lai ListView
+                        adapterListNL.notifyDataSetChanged();
+
+                        //Day du lieu len FireStore
+                        db = FirebaseFirestore.getInstance();
+                        auth = FirebaseAuth.getInstance();
+                        if (!sl.getText().toString().equals("")){
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("name",nguyenLieu.getName());
+                            data.put("donvi",nguyenLieu.getDonvi());
+                            data.put("idUser",auth.getUid());
+                            data.put("img",nguyenLieu.getImg());
+                            data.put("SL",soluong);
+
+                            db.collection("ListNguyenLieuMua").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Map<String,Object> data = new HashMap<>();
+                                    data.put("id",documentReference.getId());
+                                    nguyenLieu.setId(documentReference.getId());
+                                    Toast.makeText(context,"Đã thêm nguyên liệu", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    } else {
                         Toast.makeText(context,"Bạn cần thêm số lượng", Toast.LENGTH_SHORT).show();
                     }
                 }
