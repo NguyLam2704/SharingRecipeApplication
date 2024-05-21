@@ -37,29 +37,29 @@
         android:id="@+id/editTextNumber"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="24dp"
         android:ems="10"
         android:gravity="center"
         android:inputType="numberDecimal"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/cardView"
+        app:layout_constraintBottom_toBottomOf="@id/tenNL"
         app:layout_constraintEnd_toStartOf="@id/donvi"
-        app:layout_constraintTop_toTopOf="@id/cardView" />
+        app:layout_constraintTop_toTopOf="@id/tenNL" />
 
     <TextView
         android:id="@+id/donvi"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="36dp"
         android:paddingStart="8dp"
         android:text="dv"
         android:textColor="@color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNumber"
+        app:layout_constraintBottom_toBottomOf="@+id/tenNL"
         app:layout_constraintEnd_toStartOf="@id/addNL"
-        app:layout_constraintTop_toTopOf="@+id/editTextNumber"
-        app:layout_constraintVertical_bias="0.55" />
+        app:layout_constraintTop_toTopOf="@+id/tenNL"
+        app:layout_constraintVertical_bias="0.8" />
 
     <View
         android:id="@+id/addNL"
@@ -67,9 +67,9 @@
         android:layout_height="28dp"
         android:layout_marginEnd="2dp"
         android:background="@drawable/plan_btn_add_background"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tenNL"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/tenNL" />
 
     <ImageView
         android:layout_width="22dp"
@@ -78,5 +78,6 @@
         app:layout_constraintEnd_toEndOf="@+id/addNL"
         app:layout_constraintStart_toStartOf="@+id/addNL"
         app:layout_constraintTop_toTopOf="@+id/addNL"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/plan_btn_add" />
 </androidx.constraintlayout.widget.ConstraintLayout>
