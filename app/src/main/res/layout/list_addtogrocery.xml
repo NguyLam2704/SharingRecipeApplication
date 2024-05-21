@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/img"
+        android:id="@+id/imgAddGro"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
@@ -16,22 +16,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/nameAdd"
+        android:id="@+id/nameAddGro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/img"
+        app:layout_constraintBottom_toBottomOf="@+id/imgAddGro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toEndOf="@+id/img"
-        app:layout_constraintTop_toTopOf="@+id/img" />
+        app:layout_constraintStart_toEndOf="@+id/imgAddGro"
+        app:layout_constraintTop_toTopOf="@+id/imgAddGro" />
 
 
     <TextView
-        android:id="@+id/SLAdd"
+        android:id="@+id/slAddGro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="184dp"
@@ -42,13 +42,13 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/img"
+        app:layout_constraintStart_toEndOf="@+id/imgAddGro"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.625"
         android:autofillHints="" />
 
     <TextView
-        android:id="@+id/DvAdd"
+        android:id="@+id/dvAddGro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="212dp"
@@ -58,18 +58,18 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/img"
+        app:layout_constraintStart_toEndOf="@+id/imgAddGro"
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
-        android:id="@+id/checkAdd"
+        android:id="@+id/checkAddGro"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="28dp"
         android:button="@drawable/image_checkbox"
         android:theme="@style/color_checkBox"
-        app:layout_constraintBottom_toBottomOf="@+id/img"
+        app:layout_constraintBottom_toBottomOf="@+id/imgAddGro"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img" />
+        app:layout_constraintTop_toTopOf="@+id/imgAddGro" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
