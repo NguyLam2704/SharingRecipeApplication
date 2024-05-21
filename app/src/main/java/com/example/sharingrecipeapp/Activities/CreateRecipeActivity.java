@@ -162,7 +162,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         donviNL.setText( NewRcp_IngreList.get(position).getDv());
-                        Toast.makeText(CreateRecipeActivity.this, "run", Toast.LENGTH_SHORT).show();
                         pos = position;
 
                         if(position == NewRcp_IngreList.size()-1)
@@ -327,7 +326,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
         }
         nguyenLieuAdapter.notifyDataSetChanged();
         recy_nguyenlieu.scrollToPosition(nguyenLieuList.size() - 1);
-        Toast.makeText(CreateRecipeActivity.this, "now", Toast.LENGTH_SHORT).show();
 
         if(pos == NewRcp_IngreList.size()-1)
         {
@@ -342,7 +340,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
             soluongNl.setText("");
             donviNL.setText( NewRcp_IngreList.get(pos).getDv());
         }
-        Toast.makeText(CreateRecipeActivity.this, "no", Toast.LENGTH_SHORT).show();
     }
 
     private void addmethod() {

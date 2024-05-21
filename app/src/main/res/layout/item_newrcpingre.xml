@@ -7,17 +7,17 @@
 
     <ImageView
         android:id="@+id/img_ingre"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/avocado"
         android:layout_centerVertical="true"
-
-        android:layout_marginStart="8dp"/>
+        android:layout_marginStart="6dp"/>
     <TextView
         android:id="@+id/NewRcp_name_ingre"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Name"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:layout_toRightOf="@id/img_ingre"
         android:layout_centerVertical="true"

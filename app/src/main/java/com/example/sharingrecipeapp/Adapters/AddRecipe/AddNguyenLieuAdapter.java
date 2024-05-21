@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,11 +42,9 @@ public class AddNguyenLieuAdapter extends RecyclerView.Adapter<AddNguyenLieuAdap
     @Override
     public void onBindViewHolder(@NonNull AddNguyenLieuAdapter.MyViewHolder holder, int position) {
         if (getItemCount() != 0){
-            holder.stt.setText((position + 1) + ": ");
             holder.name.setText(addNguyenLieuList.get(position).getNewRcpIngre().getName());
             holder.sl.setText(addNguyenLieuList.get(position).getSoluong().toString());
             holder.donvi.setText(addNguyenLieuList.get(position).getNewRcpIngre().getDv());
-
         }
 
     }
@@ -57,10 +56,11 @@ public class AddNguyenLieuAdapter extends RecyclerView.Adapter<AddNguyenLieuAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, sl, donvi, stt;
+        TextView name, sl, donvi;
+        ImageView imageView;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            stt = itemView.findViewById(R.id.sothutu);
+            imageView = itemView.findViewById(R.id.sothutu);
             name = itemView.findViewById(R.id.name);
             sl = itemView.findViewById(R.id.sl);
             donvi = itemView.findViewById(R.id.donvi);
