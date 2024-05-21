@@ -80,7 +80,7 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
                     EditText sl = holder.editText;
 
                     //Check xem edit text co rong hay khong
-                    if (!sl.getText().toString().isEmpty()){
+                    if (!sl.getText().toString().isEmpty() && !sl.getText().toString().equals("0")){
                         Double soluong = Double.valueOf(sl.getText().toString());
                         nguyenLieu.setSL(soluong);
 

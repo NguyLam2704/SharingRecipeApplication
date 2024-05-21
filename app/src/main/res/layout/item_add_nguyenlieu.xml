@@ -2,34 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp">
+    android:layout_height="wrap_content">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        app:cardCornerRadius="3dp"
-        android:layout_height="match_parent"
-        app:strokeColor="@color/grey_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
+            <ImageView
                 android:id="@+id/sothutu"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:text="100"
-                android:paddingStart="5dp"
-                android:textColor="@color/color_primary"
                 android:textAlignment="viewStart"
-                android:textSize="18sp"
+                android:textColor="@color/color_primary"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -38,42 +26,38 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="64dp"
-                android:paddingStart="4dp"
+                android:layout_marginStart="8dp"
+                android:paddingStart="8dp"
                 android:text="Têngfdfgfgfdg"
-                android:textAlignment="viewStart"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/sl"
-                app:layout_constraintHorizontal_bias="0.0"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/sothutu"
                 app:layout_constraintStart_toEndOf="@+id/sothutu"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/sothutu" />
 
             <TextView
                 android:id="@+id/sl"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:paddingEnd="4dp"
+                android:layout_marginStart="200dp"
                 android:text="40"
-                android:textStyle="bold"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/donvi"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/sothutu"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/donvi"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
+                android:layout_marginStart="8dp"
                 android:text="kg"
-                android:textStyle="bold"
-                android:textAlignment="viewStart"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/sl"
                 app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

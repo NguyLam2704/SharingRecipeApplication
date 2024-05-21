@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,8 +72,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
     List<AddNguyenLieu> nguyenLieuList;
     RecyclerView recy_method, recy_nguyenlieu;
     ImageView btnBack;
-    TextView btnAddMethod, btnAddNguyenLieu;
-    Button NewRcp_btn_upload;
+    Button btnAddMethod, btnAddNguyenLieu, NewRcp_btn_upload;
     ImageView NewRcp_img_imgRcp;
     EditText NewRcp_edt_nameRcp, NewRcp_edt_time, NewRcp_edt_note;
     FirebaseFirestore NewRcp_db;
@@ -116,6 +116,23 @@ public class CreateRecipeActivity extends AppCompatActivity {
         nguyenLieuAdapter = new AddNguyenLieuAdapter();
         nguyenLieuAdapter.setData(nguyenLieuList);
         recy_nguyenlieu.setAdapter(nguyenLieuAdapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getLayoutPosition();
+
+                nguyenLieuList.remove(position);
+                nguyenLieuAdapter.notifyDataSetChanged();
+            }
+        });
+
+        itemTouchHelper.attachToRecyclerView(recy_nguyenlieu);
 
         NewRcp_edt_nameRcp = findViewById(R.id.newRcp_edt_name);
         NewRcp_img_imgRcp = findViewById(R.id.newRcp_img_imgRcp);
@@ -162,7 +179,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         donviNL.setText( NewRcp_IngreList.get(position).getDv());
-                        Toast.makeText(CreateRecipeActivity.this, "run", Toast.LENGTH_SHORT).show();
                         pos = position;
 
                         if(position == NewRcp_IngreList.size()-1)
@@ -185,111 +201,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
             }
         });
-//////////////////////////////////////////////////////////////////////////upload
-        NewRcp_btn_upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isChaua = Chaua.isSelected();
-                boolean isChauau = Chauau.isSelected();
-                boolean isVietnam = Vietnam.isSelected();
-                boolean isThailan = Thailan.isSelected();
-
-                String NewRcp_name = NewRcp_edt_nameRcp.getText().toString();
-                String NewRcp_time = NewRcp_edt_time.getText().toString();
-                String NewRcp_note = NewRcp_edt_note.getText().toString();
-                StorageReference img_stg = NewRcp_stg.getReference().child("user/"+uri.getLastPathSegment());
-                DocumentReference user = NewRcp_db.collection("Users").document(NewRcp_user.getUid());
-                UploadTask upload_NewRcp_img = img_stg.putFile(uri);
-                upload_NewRcp_img.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        })
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Task<Uri> dowloadURL = taskSnapshot.getStorage().getDownloadUrl();
-                                dowloadURL.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Map<String,Object> NewRcp = new HashMap<>();
-                                        NewRcp.put("name",NewRcp_name);
-                                        NewRcp.put("id",unAccent(NewRcp_name.replace(" ","")));
-                                        NewRcp.put("method",Arrays.asList(convertMethod(methodList)));
-                                        NewRcp.put("NguyenLieu",Arrays.asList(convertNameIngre(nguyenLieuList)));
-                                        NewRcp.put("SoLuong",Arrays.asList(convertslIngre(nguyenLieuList)));
-                                        NewRcp.put("timecook",NewRcp_time);
-                                        NewRcp.put("note",NewRcp_note);
-                                        NewRcp.put("Users", user);
-                                        NewRcp.put("chaua",isChaua);
-                                        NewRcp.put("chauau",isChauau);
-                                        NewRcp.put("vietnam",isVietnam);
-                                        NewRcp.put("thailan",isThailan);
-                                        NewRcp.put("image",uri.toString());
-                                        DocumentReference CreateNewRcp = NewRcp_db.collection("Recipes").document(unAccent(NewRcp_name.replace(" ","")));
-                                        CreateNewRcp.set(NewRcp).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Toast.makeText(CreateRecipeActivity.this, "successfully", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                        ///add to nguyenlieu
-                                        NewRcp_stg.getReference().child("ingredients_icon/logo_gro.png").getDownloadUrl()
-                                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                    @Override
-                                                    public void onSuccess(Uri uri) {
-                                                        for (AddNguyenLieu ingre : nguyenLieuList) {
-                                                            Map<String,Object> Newingre = new HashMap<>();
-                                                            Newingre.put("id", unAccent(ingre.getName().replace(" ","")));
-                                                            Newingre.put("donvi", ingre.getDonvi().toString());
-                                                            Newingre.put("name",ingre.getName().toString());
-
-                                                            DocumentReference CreateIngre = NewRcp_db.collection("NguyenLieu").document(unAccent(ingre.getName().replace(" ", "")));
-                                                            CreateIngre.update(Newingre).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                        @Override
-                                                                        public void onSuccess(Void unused) {
-                                                                            Toast.makeText(CreateRecipeActivity.this, "ok", Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    })
-                                                                    .addOnFailureListener(new OnFailureListener() {
-                                                                        @Override
-                                                                        public void onFailure(@NonNull Exception e) {
-                                                                            Newingre.put("img",uri.toString());
-                                                                            CreateIngre.set(Newingre).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                @Override
-                                                                                public void onSuccess(Void unused) {
-
-                                                                                }
-                                                                            });
-                                                                        }
-                                                                    });
-
-                                                        }
-                                                    }
-                                                });
-
-                                    }
-                                });
-                                    }
-                                });
-                Toast.makeText(CreateRecipeActivity.this, "success", Toast.LENGTH_SHORT).show();
-                Map<String ,Object> NewRcp_addsave = new HashMap<>();
-                NewRcp_addsave.put("Recipes",unAccent(NewRcp_name.replace(" ","")));
-                NewRcp_addsave.put("idUsers",Arrays.asList());
-                NewRcp_db.collection("SaveRecipes").document(unAccent(NewRcp_name.replace(" ",""))).set(NewRcp_addsave)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d(TAG, "DocumentSnapshot successfully written!");
-                            }
-                        });
-
-
-                            }
-                        });
-
-//        ///////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////upload
         btnAddNguyenLieu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -327,7 +239,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
         }
         nguyenLieuAdapter.notifyDataSetChanged();
         recy_nguyenlieu.scrollToPosition(nguyenLieuList.size() - 1);
-        Toast.makeText(CreateRecipeActivity.this, "now", Toast.LENGTH_SHORT).show();
 
         if(pos == NewRcp_IngreList.size()-1)
         {
@@ -342,7 +253,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
             soluongNl.setText("");
             donviNL.setText( NewRcp_IngreList.get(pos).getDv());
         }
-        Toast.makeText(CreateRecipeActivity.this, "no", Toast.LENGTH_SHORT).show();
     }
 
     private void addmethod() {
@@ -351,6 +261,22 @@ public class CreateRecipeActivity extends AppCompatActivity {
             return;
         }
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getLayoutPosition();
+
+                methodList.remove(position);
+                methodAdapter.notifyDataSetChanged();
+            }
+        });
+
+        itemTouchHelper.attachToRecyclerView(recy_method);
         methodList.add(new AddMethod(strMethod));
         methodAdapter.notifyDataSetChanged();
         recy_method.scrollToPosition(methodList.size() - 1);
@@ -358,7 +284,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
         method.setText("");
 
     }
-    //////////////////////////////////upload img
+//    //////////////////////////////////upload img
     private void ChooseImg()
     {
         Intent chooseimg = new Intent().setType("image/*").setAction(Intent.ACTION_GET_CONTENT);
@@ -384,7 +310,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
             }
         }
     });
-    ////////////////////////////////////////////////////////////////////
+//    ////////////////////////////////////////////////////////////////////
 //    chuan hoa chuoi
     public static String unAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);

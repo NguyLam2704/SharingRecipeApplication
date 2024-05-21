@@ -43,6 +43,13 @@ public class Forgotpass extends AppCompatActivity {
             }
         });
 
+        Forgot_edt_email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) Forgot_edt_email.setBackgroundResource(R.drawable.query_bound);
+                else  Forgot_edt_email.setBackgroundResource(R.drawable.edittext_bound);
+            }
+        });
         Forgot_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
