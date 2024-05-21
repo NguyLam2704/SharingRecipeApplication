@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -83,9 +84,7 @@ public class AddToGroceryActivity extends AppCompatActivity implements CheckBoxL
 
     ImageView btnClose;
 
-    TextView btnAdd;
-
-    Uri uri;
+    Button btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,18 +102,9 @@ public class AddToGroceryActivity extends AppCompatActivity implements CheckBoxL
         recyNguyenLieu = findViewById(R.id.recyAddNguyenLieu);
         recyNguyenLieu.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(), RecyclerView.VERTICAL, false));
 
-        recySoLuong = findViewById(R.id.recyAddSL);
-        recySoLuong.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(), RecyclerView.VERTICAL, false));
-
-        recyDonVi = findViewById(R.id.recyAddDonVi);
-        recyDonVi.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(), RecyclerView.VERTICAL, false));
-
-        recyCheckBox = findViewById(R.id.recyCheckBox);
-        recyCheckBox.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(), RecyclerView.VERTICAL, false));
-
         getRecipes(idRecipe);
         getSoLuongIngre(idRecipe);
-        //CheckBox(idRecipe);
+        CheckBox(idRecipe);
 
         NewIngre_db = FirebaseFirestore.getInstance();
         NewIngre_stg = FirebaseStorage.getInstance();

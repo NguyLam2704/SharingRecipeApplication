@@ -375,18 +375,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <ImageView
                     android:id="@+id/btnAddGro"
-                    android:layout_width="78dp"
+                    android:layout_width="50dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/cons_background"
-                    android:drawableStart="@drawable/baseline_add"
-                    android:drawablePadding="2dp"
+                    android:layout_marginEnd="32dp"
                     android:gravity="center_vertical"
                     android:paddingStart="2dp"
-                    android:text="Grocery"
+                    android:src="@drawable/baseline_add"
                     android:textColor="@color/color_primary"
                     app:layout_constraintBottom_toTopOf="@+id/constraintLayout7"
                     app:layout_constraintEnd_toEndOf="parent"
