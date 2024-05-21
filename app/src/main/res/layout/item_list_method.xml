@@ -29,7 +29,7 @@
             android:paddingStart="4dp"
             android:paddingBottom="11dp"
             android:paddingEnd="8dp"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="90dp"
             android:textAlignment="gravity"
             android:background="@color/white"
             android:layout_width="match_parent"

@@ -1,7 +1,7 @@
 package com.example.sharingrecipeapp.Classes;
 
 public class Recipes {
-    String id, image, name, save, timecook;
+    String id, image, name, save, timecook, username;
 
     public Recipes() {
     }
@@ -18,6 +18,15 @@ public class Recipes {
         this.name = name;
         this.save = save;
         this.timecook = timecook;
+    }
+
+    public Recipes(String id, String image, String name, String save, String timecook, String username) {
+        this.id = id;
+        this.image = image;
+        this.name = name;
+        this.save = save;
+        this.timecook = timecook;
+        this.username = username;
     }
 
     public String getId() {
@@ -58,5 +67,13 @@ public class Recipes {
 
     public void setTimecook(String timecook) {
         this.timecook = timecook;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

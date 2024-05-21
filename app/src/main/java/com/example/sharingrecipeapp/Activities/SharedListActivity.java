@@ -98,50 +98,50 @@ public class SharedListActivity extends AppCompatActivity {
     private void displayShareRecipes(){
         DocumentReference current_user = share_db.collection("Users").document(user.getUid());
         share_db.collection("Recipes")
-                 .whereEqualTo("Users",current_user)
+                .whereEqualTo("Users",current_user)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null)
-                {
-                    return;
-                }
-                recipesList = new ArrayList<>();
-                for (QueryDocumentSnapshot queryDocumentSnapshot : value)
-                {
-                    String image = queryDocumentSnapshot.getString("image");
-                    String id = queryDocumentSnapshot.getString("id");
-                    String name = queryDocumentSnapshot.getString("name");
-                    String time = queryDocumentSnapshot.get("timecook").toString();
-                    share_db.collection("SaveRecipes").whereEqualTo("Recipes", id).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                            ArrayList<String> idUser = new ArrayList<>();
-                            for (QueryDocumentSnapshot doc :value){
-                                if(doc.get("idUsers") != null)
-                                {
-                                    idUser = (ArrayList<String>) doc.get("idUsers");
-                                }
-                                String save = String.valueOf(idUser.size());
-                                recipesList.add(new Recipes(id,image,name,save,time));
-                                soluong.setText("Bạn đã đăng tải " + recipesList.size() +" món ăn");
-                                RecipesAdapter ShareAdapter = new RecipesAdapter();
-                                ShareAdapter.setData(recipesList, new IClickOnItemRecipe() {
-                                    @Override
-                                    public void onClickItemRecipe(Recipes recipes) {
-                                        onClickGoToDetailFood(recipes);
-                                    }
-                                });
-                                share_rcy.setLayoutManager(new GridLayoutManager(binding.getRoot().getContext(), 2));
-                                share_rcy.setAdapter(ShareAdapter);
-                            }
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null)
+                        {
+                            return;
                         }
-                    });
+                        recipesList = new ArrayList<>();
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : value)
+                        {
+                            String image = queryDocumentSnapshot.getString("image");
+                            String id = queryDocumentSnapshot.getString("id");
+                            String name = queryDocumentSnapshot.getString("name");
+                            String time = queryDocumentSnapshot.get("timecook").toString();
+                            share_db.collection("SaveRecipes").whereEqualTo("Recipes", id).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    ArrayList<String> idUser = new ArrayList<>();
+                                    for (QueryDocumentSnapshot doc :value){
+                                        if(doc.get("idUsers") != null)
+                                        {
+                                            idUser = (ArrayList<String>) doc.get("idUsers");
+                                        }
+                                        String save = String.valueOf(idUser.size());
+                                        recipesList.add(new Recipes(id,image,name,save,time));
+                                        soluong.setText("Bạn đã đăng tải " + recipesList.size() +" món ăn");
+                                        RecipesAdapter ShareAdapter = new RecipesAdapter();
+                                        ShareAdapter.setData(recipesList, new IClickOnItemRecipe() {
+                                            @Override
+                                            public void onClickItemRecipe(Recipes recipes) {
+                                                onClickGoToDetailFood(recipes);
+                                            }
+                                        });
+                                        share_rcy.setLayoutManager(new GridLayoutManager(binding.getRoot().getContext(), 2));
+                                        share_rcy.setAdapter(ShareAdapter);
+                                    }
+                                }
+                            });
 
-                }
+                        }
 
-            }
-        });
+                    }
+                });
     }
     private void onClickGoToDetailFood(Recipes recipes){
         Intent intent = new Intent(this, FoodDetailActivity.class);
