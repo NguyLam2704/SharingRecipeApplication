@@ -17,12 +17,11 @@
             android:id="@+id/Text_buoc"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="20sp"
-            android:textStyle="bold"
             android:padding="8dp"
+            android:text="Bước: 13"
             android:textColor="@color/color_primary"
-            android:text="Bước "
-            />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/method_text"
@@ -30,7 +29,7 @@
             android:paddingStart="4dp"
             android:paddingBottom="11dp"
             android:paddingEnd="8dp"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="90dp"
             android:textAlignment="gravity"
             android:background="@color/white"
             android:layout_width="match_parent"
