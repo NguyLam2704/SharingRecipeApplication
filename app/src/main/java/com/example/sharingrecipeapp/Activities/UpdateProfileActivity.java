@@ -1,21 +1,11 @@
-package com.example.sharingrecipeapp;
+package com.example.sharingrecipeapp.Activities;
 
-import static com.example.sharingrecipeapp.Fragments.UserFragment.MY_REQUEST_CODE;
-
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,18 +21,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
-import com.example.sharingrecipeapp.Activities.CreateRecipeActivity;
-import com.example.sharingrecipeapp.Activities.LoginActivity;
-import com.example.sharingrecipeapp.Fragments.UserFragment;
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.example.sharingrecipeapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,26 +32,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import org.checkerframework.checker.units.qual.N;
-
 import java.io.IOException;
-import java.net.PasswordAuthentication;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class UpdateProfileActivity extends AppCompatActivity {
     BottomNavigationCustomActivity bottomNavigationCustomActivity;
@@ -108,7 +81,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+        edit_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(UpdateProfileActivity.this,"Không thể chỉnh sửa thông tin này",Toast.LENGTH_SHORT).show();
+            }
+        });
         showInfo();
         init_setListener();
 

@@ -220,6 +220,7 @@
                         android:id="@+id/recyclerView_Thu2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
                         android:nestedScrollingEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -310,11 +311,11 @@
                         android:id="@+id/recyclerView_Thu3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
                         android:nestedScrollingEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu3"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/Thu3" />
 
 
 
@@ -400,6 +401,7 @@
                         android:id="@+id/recyclerView_Thu4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
                         android:nestedScrollingEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -491,12 +493,12 @@
                         android:id="@+id/recyclerView_Thu5"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
                         android:nestedScrollingEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu5"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/Thu5" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -583,12 +585,12 @@
                         android:id="@+id/recyclerView_Thu6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
                         android:nestedScrollingEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu6"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/Thu6" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -675,12 +677,12 @@
                         android:id="@+id/recyclerView_Thu7"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
                         android:nestedScrollingEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Thu7"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/Thu7" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -768,12 +770,12 @@
                         android:id="@+id/recyclerView_ChuNhat"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
                         android:nestedScrollingEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ChuNhat"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/ChuNhat" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

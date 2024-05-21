@@ -13,13 +13,8 @@ import android.content.DialogInterface;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ShareActionProvider;
 
 
-import com.example.sharingrecipeapp.Adapters.ViewPagerAdapter;
-import com.example.sharingrecipeapp.Classes.ReGro;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Classes.Theme;
 import com.example.sharingrecipeapp.Fragments.ExploreFragment;
@@ -31,7 +26,6 @@ import com.example.sharingrecipeapp.Fragments.UserFragment;
 import com.example.sharingrecipeapp.R;
 
 //import com.example.sharingrecipeapp.databinding.ActivityHomeBinding;
-import com.example.sharingrecipeapp.UpdateProfileActivity;
 import com.example.sharingrecipeapp.databinding.ActivityBottomNavigationCustomBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;

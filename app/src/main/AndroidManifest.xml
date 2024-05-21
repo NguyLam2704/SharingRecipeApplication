@@ -43,7 +43,7 @@
             android:name=".Activities.SaveListActivity"
             android:exported="false" />
         <activity
-            android:name=".UpdateProfileActivity"
+            android:name=".Activities.UpdateProfileActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.BottomNavigationCustomActivity"
