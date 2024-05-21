@@ -17,7 +17,6 @@
             android:id="@+id/textView19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:paddingTop="10dp"
             android:text="Danh sách nguyên liệu"
             android:paddingStart="20dp"
@@ -31,9 +30,7 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
+  
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -44,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="Nguyên liệu"
             android:textColor="@color/color_primary"
             android:textSize="20sp"
@@ -55,10 +52,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_groceries"
             android:layout_width="match_parent"
-
-            android:layout_height="320dp"
-            android:layout_marginTop="24dp"
-
+            android:layout_height="300dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,20 +63,20 @@
             android:id="@+id/add2"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="35dp"
             android:background="@drawable/plan_btn_add_background"
+            app:layout_constraintBottom_toBottomOf="@+id/textView3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/textView3" />
 
         <ImageView
             android:id="@+id/plus"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="35dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView3"
             app:srcCompat="@drawable/plan_btn_add" />
 
         <TextView
@@ -89,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:text="Đã mua"
             android:textColor="@color/color_primary"
             android:textSize="18sp"
@@ -100,13 +95,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_nl_da_mua"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:layout_marginTop="24dp"
+            android:layout_height="300dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtChecked" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </LinearLayout>
