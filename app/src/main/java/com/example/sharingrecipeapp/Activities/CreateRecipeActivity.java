@@ -72,8 +72,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
     List<AddNguyenLieu> nguyenLieuList;
     RecyclerView recy_method, recy_nguyenlieu;
     ImageView btnBack;
-    TextView btnAddMethod, btnAddNguyenLieu;
-    Button NewRcp_btn_upload;
+    Button btnAddMethod, btnAddNguyenLieu, NewRcp_btn_upload;
     ImageView NewRcp_img_imgRcp;
     EditText NewRcp_edt_nameRcp, NewRcp_edt_time, NewRcp_edt_note;
     FirebaseFirestore NewRcp_db;
