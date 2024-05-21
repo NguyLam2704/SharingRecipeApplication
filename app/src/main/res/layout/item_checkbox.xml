@@ -18,6 +18,8 @@
             android:layout_height="24dp"
             android:layout_margin="4dp"
             android:gravity="center"
+            android:theme="@style/color_checkBox"
+            android:button="@drawable/baseline_check_box_outline_blank_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

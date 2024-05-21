@@ -75,7 +75,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     FirebaseUser current_user;
     SharedPreferences sharedPreferences;
 
-    TextView btnAddGro;
+    ImageView btnAddGro;
     SharedPreferences.Editor editor_like, editor_save;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -515,4 +515,5 @@ public class FoodDetailActivity extends AppCompatActivity {
         intent.putExtra("id", idRecipe);
         startActivity(intent);
     }
+
 }

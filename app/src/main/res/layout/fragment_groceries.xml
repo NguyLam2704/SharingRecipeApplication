@@ -40,6 +40,7 @@
             android:id="@+id/cons2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -83,8 +84,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_groceries"
-            android:layout_weight="1"
-
+            android:minHeight="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="true"
@@ -116,7 +116,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_weight="1"
+            android:minHeight="80dp"
             android:id="@+id/list_nl_da_mua"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
