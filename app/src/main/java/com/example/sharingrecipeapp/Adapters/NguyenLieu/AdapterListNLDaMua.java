@@ -54,7 +54,9 @@ public class AdapterListNLDaMua extends RecyclerView.Adapter<ListNLDaMuaViewHold
         } else {
             sl = String.valueOf(nguyenLieu.getSL());
         }
+
         holder.editText.setText(sl);
+        holder.editText.setEnabled(false);
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -117,6 +118,23 @@ public class CreateRecipeActivity extends AppCompatActivity {
         nguyenLieuAdapter.setData(nguyenLieuList);
         recy_nguyenlieu.setAdapter(nguyenLieuAdapter);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getLayoutPosition();
+
+                nguyenLieuList.remove(position);
+                nguyenLieuAdapter.notifyDataSetChanged();
+            }
+        });
+
+        itemTouchHelper.attachToRecyclerView(recy_nguyenlieu);
+
         NewRcp_edt_nameRcp = findViewById(R.id.newRcp_edt_name);
         NewRcp_img_imgRcp = findViewById(R.id.newRcp_img_imgRcp);
         NewRcp_btn_upload = findViewById(R.id.newRcp_btn_upload);
@@ -185,7 +203,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
             }
         });
 ////////////////////////////////////////////////////////////////////////////upload
-        NewRcp_btn_upload.setOnClickListener(new View.OnClickListener() {
+        btnAddNguyenLieu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addNguyenLieu();
@@ -244,6 +262,22 @@ public class CreateRecipeActivity extends AppCompatActivity {
             return;
         }
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getLayoutPosition();
+
+                methodList.remove(position);
+                methodAdapter.notifyDataSetChanged();
+            }
+        });
+
+        itemTouchHelper.attachToRecyclerView(recy_method);
         methodList.add(new AddMethod(strMethod));
         methodAdapter.notifyDataSetChanged();
         recy_method.scrollToPosition(methodList.size() - 1);

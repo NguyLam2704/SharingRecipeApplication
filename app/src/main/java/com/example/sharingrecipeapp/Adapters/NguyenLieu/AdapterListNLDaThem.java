@@ -57,6 +57,8 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
             sl = String.valueOf(nguyenLieu.getSL());
         }
         holder.editText.setText(sl);
+        holder.editText.setEnabled(false);
+
         holder.donvi.setText(nguyenLieu.getDonvi());
         Picasso.get().load(nguyenLieu.getImg()).into(holder.imageView);
 
