@@ -280,12 +280,10 @@ public class GroceriesFragment extends Fragment {
         String strSL = editSl.getText().toString().trim();
         String strDonVi = editDv.getText().toString().trim();
         String img = "https://firebasestorage.googleapis.com/v0/b/fantafood-3ea80.appspot.com/o/ingredients_icon%2Flogo_gro.png?alt=media&token=3deb24f9-1edb-4a88-8963-308278a9e9ee";
-        double soluong = Double.valueOf(strSL);
-//
         if(TextUtils.isEmpty(strName) || TextUtils.isEmpty(strSL) || TextUtils.isEmpty(strDonVi)){
             Toast.makeText(getActivity(),"Vui lòng điền đầy đủ các thông tin",Toast.LENGTH_SHORT).show();
         }else {
-
+            double soluong = Double.valueOf(strSL);
             //ktra xem co trung ten NL khong
             db.collection("NguyenLieu").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override

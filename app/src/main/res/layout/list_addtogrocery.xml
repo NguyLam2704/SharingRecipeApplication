@@ -6,69 +6,70 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imgin"
+        android:id="@+id/img"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/namein"
+        android:id="@+id/nameAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number"
         android:text="Name"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/imgin"
+        app:layout_constraintBottom_toBottomOf="@+id/img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toEndOf="@+id/imgin"
-        app:layout_constraintTop_toTopOf="@+id/imgin" />
+        app:layout_constraintStart_toEndOf="@+id/img"
+        app:layout_constraintTop_toTopOf="@+id/img" />
 
 
-    <EditText
-        android:id="@+id/quantityin"
+    <TextView
+        android:id="@+id/SLAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="184dp"
         android:background="@drawable/edittext_background"
         android:backgroundTint="@color/grey_background"
-        android:gravity="center"
-        android:inputType="numberDecimal"
+        android:layout_marginTop="8dp"
         android:text="SL"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgin"
+        app:layout_constraintStart_toEndOf="@+id/img"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625" />
+        app:layout_constraintVertical_bias="0.625"
+        android:autofillHints="" />
 
     <TextView
-        android:id="@+id/donvi_dathem"
-        android:layout_width="80dp"
+        android:id="@+id/DvAdd"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="212dp"
+        android:layout_marginTop="8dp"
+        android:text="dv"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgin"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.454" />
+        app:layout_constraintStart_toEndOf="@+id/img"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
-        android:id="@+id/checkIn"
+        android:id="@+id/checkAdd"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="28dp"
         android:button="@drawable/image_checkbox"
         android:theme="@style/color_checkBox"
-        app:layout_constraintBottom_toBottomOf="@+id/imgin"
+        app:layout_constraintBottom_toBottomOf="@+id/img"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imgin" />
+        app:layout_constraintTop_toTopOf="@+id/img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
