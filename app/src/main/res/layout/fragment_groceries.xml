@@ -30,7 +30,7 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+  
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -49,7 +49,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_groceries"
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -92,7 +92,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/list_groceries" />
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_nl_da_mua"
             android:layout_width="match_parent"
             android:layout_height="300dp"
