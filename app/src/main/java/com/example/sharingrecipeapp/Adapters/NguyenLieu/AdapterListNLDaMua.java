@@ -3,12 +3,10 @@ package com.example.sharingrecipeapp.Adapters.NguyenLieu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sharingrecipeapp.Classes.NguyenLieu;
 import com.example.sharingrecipeapp.R;
@@ -22,54 +20,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AdapterListNLDaMua extends BaseAdapter {
-
+public class AdapterListNLDaMua extends RecyclerView.Adapter<ListNLDaMuaViewHolder> {
     List<NguyenLieu> daMua;
     List<NguyenLieu> list;
-    AdapterListNL adapterListNL;
+    AdapterListNLDaThem adapterListNL;
 
     public AdapterListNLDaMua(List<NguyenLieu> daMua) {
         this.daMua = daMua;
     }
 
-    public AdapterListNLDaMua(List<NguyenLieu> daMua, AdapterListNL adapterListNL, List<NguyenLieu> list) {
-        this.daMua = daMua;
-        this.list = list;
-        this.adapterListNL = adapterListNL;
-    }
-
-    public void setData(AdapterListNL adapterListNL, List<NguyenLieu> list){
+    public void setData(AdapterListNLDaThem adapterListNL, List<NguyenLieu> list){
         this.adapterListNL = adapterListNL;
         this.list = list;
     }
 
-
+    @NonNull
     @Override
-    public int getCount() {
-        return daMua.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public ListNLDaMuaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.nguyenlieudamua,parent,false);
+        return new ListNLDaMuaViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ListNLDaMuaViewHolder holder, int position) {
         NguyenLieu nguyenLieu = daMua.get(position);
 
-        ImageView imageView = view.findViewById(R.id.img_damua);
-        TextView name = view.findViewById(R.id.name_damua);
-        EditText editText = view.findViewById(R.id.SL_damua);
-        TextView donvi = view.findViewById(R.id.donvi_damua);
-        CheckBox checkBox_NL = view.findViewById(R.id.checkIn_damua);
-        checkBox_NL.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.donvi.setText(nguyenLieu.getDonvi());
+        Picasso.get().load(nguyenLieu.getImg()).into(holder.imageView);
+        holder.name.setText(nguyenLieu.getName());
+        String sl;
+        if (nguyenLieu.getSL() == (int) nguyenLieu.getSL()){
+            sl = String.valueOf( (int) nguyenLieu.getSL());
+        } else {
+            sl = String.valueOf(nguyenLieu.getSL());
+        }
+        holder.editText.setText(sl);
+
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 NguyenLieu nl = daMua.get(position);
@@ -101,19 +88,12 @@ public class AdapterListNLDaMua extends BaseAdapter {
                 }
             }
         });
+        holder.checkBox.setChecked(true);
+    }
 
-        donvi.setText(nguyenLieu.getDonvi());
-        Picasso.get().load(nguyenLieu.getImg()).into(imageView);
-        name.setText(nguyenLieu.getName());
-        String sl;
-        if (nguyenLieu.getSL() == (int) nguyenLieu.getSL()){
-            sl = String.valueOf( (int) nguyenLieu.getSL());
-        } else {
-            sl = String.valueOf(nguyenLieu.getSL());
-        }
-        editText.setText(sl);
-        checkBox_NL.setChecked(true);
-        return view;
+    @Override
+    public int getItemCount() {
+        return daMua.size();
     }
 
     private void deleteNguyenLieuDaThem(NguyenLieu nguyenLieu) {

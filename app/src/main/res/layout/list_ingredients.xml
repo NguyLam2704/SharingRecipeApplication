@@ -31,10 +31,10 @@
 
     <EditText
         android:id="@+id/quantityin"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/edittext_background"
         android:backgroundTint="@color/grey_background"
         android:gravity="center"
@@ -52,13 +52,14 @@
         android:id="@+id/donvi_dathem"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:layout_marginTop="2dp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@id/checkIn"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/quantityin"
         app:layout_constraintEnd_toStartOf="@+id/checkIn"
-        app:layout_constraintTop_toTopOf="@id/checkIn" />
+        app:layout_constraintTop_toTopOf="@+id/quantityin"
+        app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/checkIn"

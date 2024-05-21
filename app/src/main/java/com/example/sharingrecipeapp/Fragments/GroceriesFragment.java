@@ -2,57 +2,32 @@
 
 package com.example.sharingrecipeapp.Fragments;
 
-import static android.content.ContentValues.TAG;
 import static android.widget.Toast.makeText;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
-import com.example.sharingrecipeapp.Activities.FoodDetailActivity;
-import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetailAdapterName;
-import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetailAdapterSoLuong;
-import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
-import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
-import com.example.sharingrecipeapp.Adapters.ListInAdapter;
-import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterListNL;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterListNLDaMua;
+import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterListNLDaThem;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterTenNguyenLieu;
-import com.example.sharingrecipeapp.Adapters.NguyenLieu.IClickOnItemSavedRecipe;
-import com.example.sharingrecipeapp.Adapters.NguyenLieu.ReGroAdapter;
-import com.example.sharingrecipeapp.Adapters.PlanList.AdapterPlanListRecipes;
-import com.example.sharingrecipeapp.Classes.AddNguyenLieu;
-import com.example.sharingrecipeapp.Classes.Ingredient;
-import com.example.sharingrecipeapp.Classes.ListIngredient;
 import com.example.sharingrecipeapp.Classes.NguyenLieu;
-import com.example.sharingrecipeapp.Classes.ReGro;
-import com.example.sharingrecipeapp.Classes.Recipes;
-import com.example.sharingrecipeapp.Classes.SoLuongIngre;
 import com.example.sharingrecipeapp.databinding.FragmentGroceriesBinding;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -61,20 +36,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.N;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 public class GroceriesFragment extends Fragment {
     static int HEIGHT = 0;
@@ -86,11 +56,11 @@ public class GroceriesFragment extends Fragment {
     EditText editName, editSl, editDv;
     RecyclerView tenNL;
 
-    ListView listViewNL;
+    RecyclerView listViewNL;
     List<NguyenLieu> nguyenLieuList;
-    AdapterListNL adapterListNL;
+    AdapterListNLDaThem adapterListNL;
 
-    ListView listNLDaMua;
+    RecyclerView listNLDaMua;
     List<NguyenLieu> listNL_da_mua;
     AdapterListNLDaMua adapterListNLDaMua;
     FirebaseFirestore db;
@@ -122,12 +92,15 @@ public class GroceriesFragment extends Fragment {
         listNL_da_mua = new ArrayList<>();
 
         adapterListNLDaMua = new AdapterListNLDaMua(listNL_da_mua);
+
         listViewNL = binding.listGroceries;
-        adapterListNL = new AdapterListNL(nguyenLieuList, adapterListNLDaMua, listNL_da_mua );
+        adapterListNL = new AdapterListNLDaThem(nguyenLieuList, adapterListNLDaMua, listNL_da_mua );
+        listViewNL.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false));
         listViewNL.setAdapter(adapterListNL);
 
         listNLDaMua = binding.listNlDaMua;
         adapterListNLDaMua.setData(adapterListNL,nguyenLieuList);
+        listNLDaMua.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false));
         listNLDaMua.setAdapter(adapterListNLDaMua);
 
         displayNguyenLieu();
@@ -145,8 +118,6 @@ public class GroceriesFragment extends Fragment {
     }
 
     private void displayNguyenLieuDaMua() {
-
-
         db.collection("ListNguyenLieuDaMua").whereEqualTo("idUser",userID).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots){
@@ -157,23 +128,34 @@ public class GroceriesFragment extends Fragment {
                         String donvi = doc.getString("donvi");
 
                         listNL_da_mua.add(new NguyenLieu(SL,donvi,id,name,img));
-
-//                        if (listNL_da_mua.size() < 7){
-//                            ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) listNLDaMua.getLayoutParams();
-//                            HEIGHT = listNL_da_mua.size()* 150;
-//                            lp.height = HEIGHT;
-//                            listNLDaMua.setLayoutParams(lp);
-//                        }
                         adapterListNLDaMua.notifyDataSetChanged();
-                        listNLDaMua.setAdapter(adapterListNLDaMua);
                     }
                 });
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getLayoutPosition();
+
+                deleteNLDaMua(listNL_da_mua.get(position));
+                listNL_da_mua.remove(position);
+                adapterListNLDaMua.notifyDataSetChanged();
+            }
+        });
+
+        itemTouchHelper.attachToRecyclerView(listNLDaMua);
+    }
+
+    private void deleteNLDaMua(NguyenLieu nguyenLieu) {
+        db.collection("ListNguyenLieuDaMua").document(nguyenLieu.getId()).delete();
     }
 
     private void displayNguyenLieu() {
-        listViewNL.setMinimumHeight(100);
-        //listViewNL.setEnabled(false);
-
         db.collection("ListNguyenLieuMua").whereEqualTo("idUser",userID).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots){
@@ -183,9 +165,6 @@ public class GroceriesFragment extends Fragment {
                         String id = doc.getId();
                         String donvi = doc.getString("donvi");
                         boolean biTrung = false;
-
-                        //Toast.makeText(binding.getRoot().getContext(),String.valueOf(SL),Toast.LENGTH_SHORT).show();
-
 
                         for (int i = 0; i < nguyenLieuList.size();i++){
                             if (nguyenLieuList.get(i).getName().equals(name)){
@@ -198,39 +177,42 @@ public class GroceriesFragment extends Fragment {
 
                         if (!biTrung){
                             nguyenLieuList.add(new NguyenLieu(SL,donvi,id,name,img));
-//                            if (nguyenLieuList.size() < 7){
-//                                ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) listViewNL.getLayoutParams();
-//                                HEIGHT = nguyenLieuList.size()* 150;
-//                                lp.height = HEIGHT;
-//                                listViewNL.setLayoutParams(lp);
-//                            }
-
                             adapterListNL.notifyDataSetChanged();
                         }
                     }
                 });
 
-//        db.collection("ListNguyenLieuMua").whereEqualTo("idUser","HmY48QhzdQSzLoDFDSaaMGzDa8c2")
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//                        for (DocumentChange dc : value.getDocumentChanges()) {
-//                            switch (dc.getType()) {
-//                                case ADDED:
-//                                adapterListNL.notifyDataSetChanged();
-//                                    break;
-//                                case MODIFIED:
-//
-//                                    break;
-//                                case REMOVED:
-//
-//                                    break;
-//                            }
-//                        }
-//                    }
-//
-//                });
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
 
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getLayoutPosition();
+
+                deleteNLDaThem(nguyenLieuList.get(position));
+                nguyenLieuList.remove(position);
+
+                adapterListNL.notifyDataSetChanged();
+            }
+        });
+
+        itemTouchHelper.attachToRecyclerView(listViewNL);
+    }
+
+    private void deleteNLDaThem(NguyenLieu nguyenLieu) {
+        db.collection("ListNguyenLieuMua").whereEqualTo("name",nguyenLieu.getName()).whereEqualTo("idUser",auth.getUid())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot doc : queryDocumentSnapshots){
+                            db.collection("ListNguyenLieuMua").document(doc.getId()).delete();
+                        }
+                    }
+                });
+        db.collection("ListNguyenLieuMua").document(nguyenLieu.getId()).delete();
     }
 
     private void DialogAdd(){
@@ -251,6 +233,7 @@ public class GroceriesFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         addNguyenLieu();
+                        dialoga.dismiss();
                     }
                 });
                 dialoga.show();
@@ -263,10 +246,6 @@ public class GroceriesFragment extends Fragment {
                 dialog.dismiss();
             }
         });
-
-
-
-
     }
 
     private void displayNguyenLieu(Dialog dialog) {
@@ -300,10 +279,55 @@ public class GroceriesFragment extends Fragment {
         String strName = editName.getText().toString().trim();
         String strSL = editSl.getText().toString().trim();
         String strDonVi = editDv.getText().toString().trim();
-
+        String img = "https://firebasestorage.googleapis.com/v0/b/fantafood-3ea80.appspot.com/o/ingredients_icon%2Flogo_gro.png?alt=media&token=3deb24f9-1edb-4a88-8963-308278a9e9ee";
+        double soluong = Double.valueOf(strSL);
+//
         if(TextUtils.isEmpty(strName) || TextUtils.isEmpty(strSL) || TextUtils.isEmpty(strDonVi)){
             Toast.makeText(getActivity(),"Vui lòng điền đầy đủ các thông tin",Toast.LENGTH_SHORT).show();
+        }else {
+
+            //ktra xem co trung ten NL khong
+            db.collection("NguyenLieu").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    boolean biTrung = false;
+                    for (DocumentSnapshot doc : queryDocumentSnapshots){
+                        String dbName = doc.getString("name").toLowerCase();
+                        if (strName.toLowerCase().equals(dbName)){
+                            Toast.makeText(binding.getRoot().getContext(),"Nguyen lieu da co",Toast.LENGTH_SHORT).show();
+                            biTrung = true;
+                            break;
+                        }
+                    }
+
+                    if (!biTrung){
+                        NguyenLieu nl = new NguyenLieu(soluong,strDonVi,"",strName,img);
+
+                        Map<String,Object> data = new HashMap<>();
+                        data.put("name",strName);
+                        data.put("donvi",strDonVi);
+                        data.put("SL",soluong);
+                        data.put("idUser",auth.getUid());
+                        data.put("img",img);
+
+                        db.collection("ListNguyenLieuMua").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Map<String,Object> data = new HashMap<>();
+                                data.put("id",documentReference.getId());
+                                nl.setId(documentReference.getId());
+                                documentReference.update(data);
+                            }
+                        });
+
+                        nguyenLieuList.add(nl);
+                        adapterListNL.notifyDataSetChanged();
+                    }
+
+                }
+            });
         }
+
     }
 
 }
