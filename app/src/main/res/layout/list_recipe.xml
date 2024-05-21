@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -23,15 +23,31 @@
                 android:id="@+id/imageView_food"
                 android:layout_width="170dp"
                 android:layout_height="150dp"
-                android:scaleType="fitXY"
                 android:layout_gravity="center"
                 android:background="@drawable/image_detail_backgroud"
+                android:scaleType="fitXY"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:src="@mipmap/ic_launcher_round"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" ></ImageView>
+                app:layout_constraintTop_toTopOf="parent"></ImageView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/txtUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:textStyle="italic"
+                android:textAlignment="viewStart"
+                android:text="Tên người dùng" />
+
+        </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
