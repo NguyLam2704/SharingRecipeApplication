@@ -30,7 +30,7 @@
         android:layout_marginEnd="52dp"
         android:background="@drawable/oval_btn_background"
         android:backgroundTint="@color/grey_background"
-        android:src="@drawable/arrow_back"
+        android:src="@drawable/arrow_back_item"
         app:layout_constraintBottom_toBottomOf="@+id/tittle_SaveRecipes"
         app:layout_constraintEnd_toStartOf="@+id/tittle_SaveRecipes"
         app:layout_constraintStart_toStartOf="parent"

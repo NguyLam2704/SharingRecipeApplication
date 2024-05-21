@@ -29,7 +29,7 @@
         android:layout_marginStart="16dp"
         android:background="@drawable/oval_btn_background"
         android:backgroundTint="@color/grey_background"
-        android:src="@drawable/arrow_back"
+        android:src="@drawable/arrow_back_item"
         app:layout_constraintBottom_toBottomOf="@+id/tittle_Login"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tittle_Login"

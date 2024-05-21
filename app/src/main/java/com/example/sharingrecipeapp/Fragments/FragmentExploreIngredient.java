@@ -75,6 +75,7 @@ public class FragmentExploreIngredient extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
 //                Explore_searchName(query);
+                Explore_searchview_ingredients.setBackgroundResource(R.drawable.edittext_bound);
                 Explore_searchIngre(query);
                 return false;
             }
@@ -82,7 +83,14 @@ public class FragmentExploreIngredient extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
 //                Explore_searchName(newText);
-                Explore_searchIngre(newText);
+                Explore_searchview_ingredients.setBackgroundResource(R.drawable.query_bound);
+                if(newText.equals(""))
+                {
+                    Explore_searchview_ingredients.setBackgroundResource(R.drawable.edittext_bound);
+//                    recipesList.clear();
+                    setdataRecycRandom();
+                }
+//                Explore_searchIngre(newText);
                 return true;
             }
         });
@@ -167,7 +175,7 @@ public class FragmentExploreIngredient extends Fragment {
 
                                 if(newtext.equals(""))
                                 {
-                                    txtIngredients.setText("Một số món gợi ý");
+                                    txtIngredients.setText("Một số công thức gợi ý");
                                     Explore_adapter.setData(Explore_listRecipes,new IClickOnItemRecipe() {
                                         @Override
                                         public void onClickItemRecipe(Recipes recipes) {

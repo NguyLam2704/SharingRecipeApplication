@@ -49,6 +49,7 @@ public class RecipesRandomAdapter extends  RecyclerView.Adapter<RecipesRandomAda
         Recipes recipes = mRecipes.get(position);
         if(recipes == null) return;
 
+        holder.username.setText(recipes.getUsername());
         holder.title.setText(recipes.getName());
         holder.time.setText(recipes.getTimecook()+ " phút");
         holder.save.setText(recipes.getSave());
@@ -77,12 +78,13 @@ public class RecipesRandomAdapter extends  RecyclerView.Adapter<RecipesRandomAda
 
 
     public static class RecipesViewHolder extends RecyclerView.ViewHolder{
-        TextView title, time, save;
+        TextView title, time, save, username;
         ImageView img;
 
         MaterialCardView materialCardView;
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
+            username = itemView.findViewById(R.id.txtUserName);
             title = itemView.findViewById(R.id.textView_title);
             time = itemView.findViewById(R.id.textView_time);
             save = itemView.findViewById(R.id.textView_save);

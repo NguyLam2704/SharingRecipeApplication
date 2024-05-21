@@ -31,7 +31,6 @@ public class RecipesAdapter extends  RecyclerView.Adapter<RecipesAdapter.Recipes
 
     private List<Recipes> mRecipesOld;
 
-    FirebaseFirestore firebaseFirestore;
 
     private IClickOnItemRecipe iClickOnItemRecipe;
 
@@ -58,6 +57,7 @@ public class RecipesAdapter extends  RecyclerView.Adapter<RecipesAdapter.Recipes
         Recipes recipes = mRecipes.get(position);
         if(recipes == null) return;
 
+        holder.username.setText(recipes.getUsername());
         holder.save.setText(recipes.getSave());
         holder.title.setText(recipes.getName());
         holder.time.setText(recipes.getTimecook()+ " phút");
@@ -86,12 +86,13 @@ public class RecipesAdapter extends  RecyclerView.Adapter<RecipesAdapter.Recipes
 
 
     public static class RecipesViewHolder extends RecyclerView.ViewHolder{
-        TextView title, time, save;
+        TextView title, time, save, username;
         ImageView img;
 
         MaterialCardView materialCardView;
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
+            username = itemView.findViewById(R.id.txtUserName);
             title = itemView.findViewById(R.id.textView_title);
             time = itemView.findViewById(R.id.textView_time);
             save = itemView.findViewById(R.id.textView_save);
