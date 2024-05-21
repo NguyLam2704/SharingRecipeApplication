@@ -160,134 +160,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView14" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout13"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout12">
-
-                <TextView
-                    android:id="@+id/textView22"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="23dp"
-                    android:layout_marginTop="24dp"
-                    android:text="Nguyên liệu"
-                    android:textColor="@color/black"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recy_NL"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="23dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginEnd="23dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView22" />
-
-                <EditText
-                    android:id="@+id/editTextNameNL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="23dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="23dp"
-                    android:background="@drawable/btncook_background"
-                    android:backgroundTint="@color/white"
-                    android:drawablePadding="8dp"
-                    android:hint="Nhập tên nguyên liệu"
-                    android:padding="12dp"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@drawable/color_cursor"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recy_NL" />
-
-                <LinearLayout
-                    android:id="@+id/linearLayout4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="23dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="23dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextNameNL">
-
-                    <EditText
-                        android:id="@+id/editTextslnl"
-                        android:layout_width="100dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/btncook_background"
-                        android:backgroundTint="@color/white"
-                        android:drawablePadding="8dp"
-                        android:hint="Số lượng"
-                        android:padding="12dp"
-                        android:textColor="@color/black"
-                        android:textCursorDrawable="@drawable/color_cursor" />
-
-                    <EditText
-                        android:id="@+id/editTextDonVi"
-                        android:layout_width="100dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/btncook_background"
-                        android:drawablePadding="8dp"
-                        android:hint="Đơn vị"
-                        android:backgroundTint="@color/white"
-                        android:padding="12dp"
-                        android:textColor="@color/black"
-                        android:textCursorDrawable="@drawable/color_cursor" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/btnAddNguyenLieu"
-                    android:layout_width="80dp"
-                    android:layout_height="33dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/edittext_bound"
-                    android:backgroundTint="@color/color_primary"
-                    android:gravity="center"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:text="Thêm"
-                    android:textColor="@color/white"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
-
-                <Spinner
-                    android:id="@+id/newRcp_spinner_ingre"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginBottom="4dp"
-                    
-                    app:layout_constraintBottom_toTopOf="@+id/recy_NL"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.052"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:background="@drawable/bg_spinner_list"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
             <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
             <!--                android:id="@+id/constraintLayout15"-->
             <!--                android:layout_width="match_parent"-->
@@ -354,6 +226,143 @@
             <!--                    app:layout_constraintStart_toStartOf="parent"-->
             <!--                    app:layout_constraintTop_toBottomOf="@+id/editTextText2" />-->
             <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout13"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout12">
+
+                <TextView
+                    android:id="@+id/textView22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="24dp"
+                    android:text="Nguyên liệu"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recy_NL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="23dp"
+                    app:layout_constraintBottom_toTopOf="@id/editTextNameNL"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView22"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <EditText
+                    android:id="@+id/editTextNameNL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="23dp"
+                    android:background="@drawable/btncook_background"
+                    android:backgroundTint="@color/white"
+                    android:drawablePadding="8dp"
+                    android:hint="Nhập tên nguyên liệu"
+                    android:padding="12dp"
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/newRcp_spinner_ingre" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="23dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="@+id/editTextNameNL"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/editTextNameNL"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextNameNL">
+
+                    <EditText
+                        android:id="@+id/editTextslnl"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btncook_background"
+                        android:backgroundTint="@color/white"
+                        android:drawablePadding="8dp"
+                        android:hint="Số lượng"
+                        android:padding="12dp"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/color_cursor" />
+
+                    <EditText
+                        android:id="@+id/editTextDonVi"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btncook_background"
+                        android:backgroundTint="@color/white"
+                        android:drawablePadding="8dp"
+                        android:hint="Đơn vị"
+                        android:padding="12dp"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/color_cursor" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/btnAddNguyenLieu"
+                    android:layout_width="80dp"
+                    android:layout_height="33dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/edittext_bound"
+                    android:backgroundTint="@color/color_primary"
+                    android:gravity="center"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="Thêm"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+                <Spinner
+                    android:id="@+id/newRcp_spinner_ingre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_spinner_list"
+                    app:layout_constraintBottom_toTopOf="@+id/editTextNameNL"
+                    app:layout_constraintEnd_toEndOf="@+id/recy_NL"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="@+id/recy_NL"
+                    app:layout_constraintTop_toBottomOf="@+id/recy_NL"
+                    app:layout_constraintVertical_bias="0.158" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/newRcp_rcl_ingre"
@@ -536,7 +545,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <CheckBox
-                    android:id="@+id/checkBox2"
+                    android:id="@+id/chaua"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
@@ -547,34 +556,34 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
                 <CheckBox
-                    android:id="@+id/checkBox3"
+                    android:id="@+id/chauau"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="50dp"
                     android:text="Châu Âu"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/checkBox2" />
+                    app:layout_constraintTop_toTopOf="@+id/chaua" />
 
                 <CheckBox
-                    android:id="@+id/checkBox4"
+                    android:id="@+id/vietnam"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
                     android:text="Việt Nam"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
+                    app:layout_constraintTop_toBottomOf="@+id/chaua" />
 
                 <CheckBox
-                    android:id="@+id/checkBox5"
+                    android:id="@+id/thaiLan"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="50dp"
                     android:text="Thái Lan"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/checkBox3" />
+                    app:layout_constraintTop_toBottomOf="@+id/chauau" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

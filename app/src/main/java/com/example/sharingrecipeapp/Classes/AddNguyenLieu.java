@@ -1,17 +1,23 @@
 package com.example.sharingrecipeapp.Classes;
 
 public class AddNguyenLieu {
+    NewRcpIngre newRcpIngre;
     String name, donvi;
     Number soluong;
 
     public AddNguyenLieu(){}
 
-    public AddNguyenLieu(String name, Number soluong, String donvi) {
-        this.name = name;
+    public AddNguyenLieu(NewRcpIngre newRcpIngre, Number soluong) {
+
+        this.newRcpIngre = newRcpIngre;
+        this.name = newRcpIngre.getName();
         this.soluong = soluong;
-        this.donvi = donvi;
+        this.donvi = newRcpIngre.getDv();
     }
 
+    public NewRcpIngre getNewRcpIngre() {
+        return newRcpIngre;
+    }
 
     public String getName() {
         return name;

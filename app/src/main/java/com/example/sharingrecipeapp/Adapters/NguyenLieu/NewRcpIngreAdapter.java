@@ -30,7 +30,7 @@ public class NewRcpIngreAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return IngreList.size();
+        return IngreList.size() ;
     }
 
     @Override
@@ -52,6 +52,10 @@ public class NewRcpIngreAdapter extends BaseAdapter {
         ImageView img_ingre = (ImageView) convertView.findViewById(R.id.img_ingre);
         Picasso.get().load(newRcpIngre.getImg()).into(img_ingre);
         name_ingre.setText(newRcpIngre.getName());
+        if (newRcpIngre.getId().equals("add"))
+        {
+            img_ingre.setImageResource(R.drawable.baseline_add);
+        }
         return convertView;
     }
 }

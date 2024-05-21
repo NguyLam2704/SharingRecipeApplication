@@ -42,9 +42,9 @@ public class AddNguyenLieuAdapter extends RecyclerView.Adapter<AddNguyenLieuAdap
     public void onBindViewHolder(@NonNull AddNguyenLieuAdapter.MyViewHolder holder, int position) {
         if (getItemCount() != 0){
             holder.stt.setText((position + 1) + ": ");
-            holder.name.setText(addNguyenLieuList.get(position).getName());
+            holder.name.setText(addNguyenLieuList.get(position).getNewRcpIngre().getName());
             holder.sl.setText(addNguyenLieuList.get(position).getSoluong().toString());
-            holder.donvi.setText(addNguyenLieuList.get(position).getDonvi());
+            holder.donvi.setText(addNguyenLieuList.get(position).getNewRcpIngre().getDv());
 
         }
 
