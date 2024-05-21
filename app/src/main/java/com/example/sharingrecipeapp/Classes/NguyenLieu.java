@@ -26,6 +26,10 @@ public class NguyenLieu {
     public NguyenLieu() {
     }
 
+    public NguyenLieu(double SL) {
+        this.SL = SL;
+    }
+
     public NguyenLieu(String donvi, String name, String img) {
         this.donvi = donvi;
         this.name = name;

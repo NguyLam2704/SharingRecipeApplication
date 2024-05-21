@@ -78,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -99,7 +100,7 @@
         app:layout_constraintVertical_bias="1.0">
 
         <Button
-            android:id="@+id/btnAdd"
+            android:id="@+id/btnAddToGro"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/color_primary"

@@ -21,7 +21,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.sharingrecipeapp.Adapters.AddToGrocery.AdapterAddToGro;
 import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetailAdapterDonVi;
 import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetailAdapterName;
 import com.example.sharingrecipeapp.Adapters.DetailRecipe.Ingre.ListIngreInDetailAdapterSoLuong;
@@ -31,6 +33,7 @@ import com.example.sharingrecipeapp.Adapters.DetailRecipe.ViewPagerImagerAvtAdap
 import com.example.sharingrecipeapp.Classes.AutoScrollTask;
 import com.example.sharingrecipeapp.Classes.Ingredient;
 import com.example.sharingrecipeapp.Classes.Method;
+import com.example.sharingrecipeapp.Classes.NguyenLieu;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Classes.SoLuongIngre;
 import com.example.sharingrecipeapp.Fragments.NonUserFragment;
@@ -156,6 +159,7 @@ public class FoodDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                Dialog dialog = new Dialog(FoodDetailActivity.this);
                dialog.setContentView(R.layout.dialog_addtogrocery);
+               displayDialogAddToGro(dialog);
                dialog.show();
             }
         });
@@ -326,6 +330,72 @@ public class FoodDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    List<NguyenLieu> listNL_AddToGro;
+    List<String> tenNL;
+    private void displayDialogAddToGro(Dialog dialog) {
+        //anh xa va khoi tao
+        RecyclerView rvAddToGro = dialog.findViewById(R.id.recyAddtoGro);
+        listNL_AddToGro = new ArrayList<>();
+        ArrayList<Boolean> check = new ArrayList<>();
+        AdapterAddToGro adapterAddToGro = new AdapterAddToGro(listNL_AddToGro);
+        adapterAddToGro.setCheck(check);
+        rvAddToGro.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
+        rvAddToGro.setAdapter(adapterAddToGro);
+
+        //lay du lieu tu database
+        for (int i = 0; i < soLuongIngreList.size();i++){
+            check.add(new Boolean(true));
+            String name = IngreList.get(i).getName();
+            String donvi = IngreList.get(i).getDonvi();
+            String img = IngreList.get(i).getImg();
+            double sl = soLuongIngreList.get(i).getSoluong().doubleValue();
+            String id = IngreList.get(i).getId();
+
+            NguyenLieu nl = new NguyenLieu(sl,donvi,id,name,img);
+            listNL_AddToGro.add(nl);
+            adapterAddToGro.notifyDataSetChanged();
+        }
+
+        dialog.findViewById(R.id.btnAddToGro).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean empty = true;
+                for (int i = 0; i < check.size(); i++){
+                    if (check.get(i)){
+                        updateFireStore(listNL_AddToGro.get(i));
+                        empty = false;
+                    }
+                }
+                if (!empty){
+                    Toast.makeText(getBaseContext(),"Thêm nguyên liệu đã chọn thành công",Toast.LENGTH_SHORT).show();
+                }
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void updateFireStore(NguyenLieu nguyenLieu) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        Map<String,Object> data = new HashMap<>();
+        data.put("name",nguyenLieu.getName());
+        data.put("img",nguyenLieu.getImg());
+        data.put("donvi",nguyenLieu.getDonvi());
+        data.put("SL",nguyenLieu.getSL());
+        data.put("idUser",auth.getUid());
+        firebaseFirestore.collection("ListNguyenLieuMua").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Map<String,Object> updateID = new HashMap<>();
+                updateID.put("id",documentReference.getId());
+                documentReference.update(updateID);
+            }
+        });
+
+
+    }
+
+
     private void getSoluongLike(String idRecipe)
     {
         firebaseFirestore.collection("Likes").whereEqualTo("Recipes",idRecipe).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -377,6 +447,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     }
 
 
+    List<SoLuongIngre> soLuongIngreList;
     private void getSoLuongIngre(String idRecipe) {
         firebaseFirestore.collection("Recipes").document(idRecipe).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -385,7 +456,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             ArrayList<Number> doc = (ArrayList<Number>) task.getResult().get("SoLuong");
                             if(!doc.isEmpty()){
-                                List<SoLuongIngre> soLuongIngreList = new ArrayList<SoLuongIngre>();
+                                soLuongIngreList = new ArrayList<SoLuongIngre>();
                                 for (int i = 0;i<doc.size();i++){
                                     Number sl = doc.get(i);
                                     soLuongIngreList.add(new SoLuongIngre(sl));
