@@ -112,6 +112,7 @@
                     android:layout_marginStart="23dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="23dp"
+                    android:textSize="20sp"
                     android:background="@drawable/btncook_background"
                     android:backgroundTint="@color/white"
                     android:drawablePadding="8dp"
@@ -251,17 +252,24 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recy_NL"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="23dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="23dp"
+                    app:cardCornerRadius="8dp"
+                    app:strokeColor="@color/grey_background"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView22" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView22">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recy_NL"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </com.google.android.material.card.MaterialCardView>
+
 
                 <EditText
                     android:id="@+id/editTextNameNL"
@@ -304,6 +312,7 @@
                         android:layout_gravity="center"
                         android:layout_marginEnd="2dp"
                         android:layout_weight="1"
+                        android:textSize="20sp"
                         android:background="@drawable/btncook_background"
                         android:backgroundTint="@color/white"
                         android:drawablePadding="8dp"
@@ -319,6 +328,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="2dp"
                         android:layout_weight="1"
+                        android:textSize="20sp"
                         android:background="@drawable/btncook_background"
                         android:backgroundTint="@color/white"
                         android:drawablePadding="8dp"
@@ -329,12 +339,11 @@
 
                 </LinearLayout>
 
-                <TextView
+                <Button
                     android:id="@+id/btnAddNguyenLieu"
                     android:layout_width="80dp"
-                    android:layout_height="33dp"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/edittext_bound"
                     android:backgroundTint="@color/color_primary"
                     android:gravity="center"
                     android:paddingStart="8dp"
@@ -354,9 +363,9 @@
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_spinner_list"
                     app:layout_constraintBottom_toTopOf="@+id/editTextNameNL"
-                    app:layout_constraintEnd_toEndOf="@+id/recy_NL"
-                    app:layout_constraintStart_toStartOf="@+id/recy_NL"
-                    app:layout_constraintTop_toBottomOf="@+id/recy_NL"
+                    app:layout_constraintEnd_toEndOf="@+id/card2"
+                    app:layout_constraintStart_toStartOf="@+id/card2"
+                    app:layout_constraintTop_toBottomOf="@+id/card2"
                     app:layout_constraintVertical_bias="0.158" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -382,16 +391,25 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewMedthod"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/Card1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardCornerRadius="8dp"
                     android:layout_marginStart="23dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="23dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:strokeColor="@color/grey_background"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView17">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewMedthod"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <EditText
                     android:id="@+id/editTextMethod"
@@ -399,25 +417,25 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="23dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="23dp"
                     android:background="@drawable/btncook_background"
                     android:backgroundTint="@color/white"
                     android:drawablePadding="8dp"
                     android:hint="Nhập bước"
+                    android:textSize="20sp"
                     android:padding="12dp"
                     android:textColor="@color/black"
                     android:textCursorDrawable="@drawable/color_cursor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recyclerViewMedthod" />
+                    app:layout_constraintTop_toBottomOf="@+id/Card1" />
 
-                <TextView
+                <Button
                     android:id="@+id/btnAddMethod"
                     android:layout_width="80dp"
-                    android:layout_height="33dp"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/edittext_bound"
                     android:backgroundTint="@color/color_primary"
                     android:gravity="center"
                     android:paddingStart="8dp"
@@ -471,6 +489,7 @@
                         android:background="@drawable/btncook_background"
                         android:backgroundTint="@color/white"
                         android:drawablePadding="8dp"
+                        android:textSize="20sp"
                         android:hint="Nhập thời gian thực hiện"
                         android:padding="12dp"
                         android:textColor="@color/black"
@@ -498,6 +517,7 @@
                         android:backgroundTint="@color/white"
                         android:drawablePadding="8dp"
                         android:hint="Nhập ghi chú"
+                        android:textSize="20sp"
                         android:padding="12dp"
                         android:textColor="@color/black"
                         android:textCursorDrawable="@drawable/color_cursor"
@@ -573,6 +593,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginBottom="32dp"
                     android:button="@drawable/image_checkbox"
                     android:text="Việt Nam"
                     android:textSize="20sp"
@@ -586,24 +607,15 @@
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="50dp"
+                    android:layout_marginEnd="48dp"
+                    android:layout_marginBottom="32dp"
                     android:button="@drawable/image_checkbox"
                     android:text="Thái Lan"
                     android:textSize="20sp"
                     android:theme="@style/color_checkBox"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/chauau" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout16">
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

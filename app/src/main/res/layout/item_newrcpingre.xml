@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="Name"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:layout_toRightOf="@id/img_ingre"
         android:layout_centerVertical="true"
         android:layout_marginStart="8dp"/>

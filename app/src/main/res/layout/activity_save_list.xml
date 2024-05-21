@@ -34,8 +34,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/tittle_SaveRecipes"
         app:layout_constraintEnd_toStartOf="@+id/tittle_SaveRecipes"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tittle_SaveRecipes"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/tittle_SaveRecipes" />
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/Searchbar"

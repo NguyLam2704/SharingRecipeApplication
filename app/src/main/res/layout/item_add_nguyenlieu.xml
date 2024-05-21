@@ -7,10 +7,6 @@
     android:layout_height="wrap_content">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
             <ImageView
                 android:id="@+id/sothutu"
                 android:layout_width="30dp"
@@ -33,9 +29,8 @@
                 android:layout_marginStart="8dp"
                 android:paddingStart="8dp"
                 android:text="Têngfdfgfgfdg"
-                android:textAlignment="viewStart"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/sothutu"
                 app:layout_constraintStart_toEndOf="@+id/sothutu"
                 app:layout_constraintTop_toTopOf="@+id/sothutu" />
@@ -48,7 +43,7 @@
                 android:text="40"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/sothutu"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -60,10 +55,9 @@
                 android:layout_marginStart="8dp"
                 android:text="kg"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/sl"
                 app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
