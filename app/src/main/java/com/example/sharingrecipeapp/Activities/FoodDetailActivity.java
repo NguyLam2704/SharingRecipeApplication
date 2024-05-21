@@ -154,9 +154,9 @@ public class FoodDetailActivity extends AppCompatActivity {
         btnAddGro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FoodDetailActivity.this, AddToGroceryActivity.class);
-                intent.putExtra("id", idRecipe);
-                startActivity(intent);
+               Dialog dialog = new Dialog(FoodDetailActivity.this);
+               dialog.setContentView(R.layout.dialog_addtogrocery);
+               dialog.show();
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
