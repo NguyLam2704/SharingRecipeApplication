@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
@@ -54,6 +55,7 @@ public class GroceriesFragment extends Fragment {
     ImageView plus, write;
     Button AddNL;
     EditText editName, editSl, editDv;
+    TextView textView;
     RecyclerView tenNL;
 
     RecyclerView listViewNL;
@@ -87,6 +89,7 @@ public class GroceriesFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         userID = auth.getUid();
+        textView = binding.textThongbao;
 
         nguyenLieuList = new ArrayList<>();
         listNL_da_mua = new ArrayList<>();
@@ -194,12 +197,11 @@ public class GroceriesFragment extends Fragment {
 
                 deleteNLDaThem(nguyenLieuList.get(position));
                 nguyenLieuList.remove(position);
-
-                adapterListNL.notifyDataSetChanged();
             }
         });
 
         itemTouchHelper.attachToRecyclerView(listViewNL);
+
     }
 
     private void deleteNLDaThem(NguyenLieu nguyenLieu) {

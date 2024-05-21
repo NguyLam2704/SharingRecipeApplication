@@ -38,6 +38,7 @@
         android:background="@drawable/edittext_background"
         android:backgroundTint="@color/grey_background"
         android:gravity="center"
+        android:textStyle="bold"
         android:inputType="numberDecimal"
         android:text="SL"
         android:textColor="@color/black"
