@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
+    android:background="@color/grey_background"
     android:layout_height="match_parent">
 
 
@@ -11,20 +11,22 @@
         android:id="@+id/material"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         app:cardCornerRadius="18dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:cardBackgroundColor="@color/grey_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_user"
-        app:strokeColor="@color/white">
+        app:strokeColor="@color/grey_background">
 
-        <TextView
+        <Button
             android:id="@+id/btn1"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|left"
-            android:background="@color/color_primary"
+            android:backgroundTint="@color/color_primary"
             android:padding="15dp"
-            android:text="Đăng nhập vào tài khoản"
+            android:text="Đăng nhập"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -38,6 +40,8 @@
         android:layout_marginTop="124dp"
         android:src="@drawable/logo_notextorange"
         android:tint="@color/black"
+        app:civ_border_color="@color/color_primary"
+        app:civ_border_width="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,12 +49,13 @@
 
     <TextView
         android:id="@+id/btn2"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
+        android:gravity="center"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
-        android:text="Lưu và tạo công thức, lên kế hoạch bữa ăn và hơn thế"
-        android:textColor="@color/color_primary"
+        android:text="Lưu và chia sẻ công thức, lên kế hoạch bữa ăn và hơn thế"
+        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

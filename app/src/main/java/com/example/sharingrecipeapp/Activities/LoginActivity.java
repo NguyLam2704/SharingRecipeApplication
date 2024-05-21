@@ -51,12 +51,27 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         Login_btn = findViewById(R.id.login_btn);
-
         email = findViewById(R.id.login_edt_email);
         password = findViewById(R.id.login_edt_password);
         Login_progressbar = findViewById(R.id.login_progressbar);
         Login_txt_forgotpass = findViewById(R.id.login_txt_forgotpass);
         Login_txt_signup = findViewById(R.id.login_txt_signup);
+
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) email.setBackgroundResource(R.drawable.query_bound);
+                else email.setBackgroundResource(R.drawable.edittext_bound);
+            }
+        });
+
+        password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) password.setBackgroundResource(R.drawable.query_bound);
+                else password.setBackgroundResource(R.drawable.edittext_bound);
+            }
+        });
         Login_txt_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

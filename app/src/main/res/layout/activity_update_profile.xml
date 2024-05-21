@@ -28,7 +28,7 @@
             app:tint="@color/black"
             android:background="@drawable/oval_btn_background"
             android:backgroundTint="@color/grey_background"
-            android:src="@drawable/arrow_back" />
+            android:src="@drawable/arrow_back_item" />
 
         <TextView
             android:id="@+id/textView"

@@ -29,7 +29,7 @@
         android:layout_marginEnd="52dp"
         android:backgroundTint="@color/grey_background"
         android:background="@drawable/oval_btn_background"
-        android:src="@drawable/arrow_back"
+        android:src="@drawable/arrow_back_item"
         app:layout_constraintBottom_toBottomOf="@+id/tittle_Createuser"
         app:layout_constraintEnd_toStartOf="@+id/tittle_Createuser"
         app:layout_constraintHorizontal_bias="0.941"
