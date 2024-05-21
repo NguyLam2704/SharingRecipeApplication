@@ -88,9 +88,9 @@ public class FragmentExploreIngredient extends Fragment {
                 {
                     Explore_searchview_ingredients.setBackgroundResource(R.drawable.edittext_bound);
 //                    recipesList.clear();
-                    setdataRecycRandom();
+//                    setdataRecycRandom();
                 }
-//                Explore_searchIngre(newText);
+                Explore_searchIngre(newText);
                 return true;
             }
         });
