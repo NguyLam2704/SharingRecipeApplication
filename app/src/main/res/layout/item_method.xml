@@ -6,14 +6,13 @@
 
     <TextView
         android:id="@+id/buoc"
-        android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="26sp"
+        android:text="Bước "
+        android:textAlignment="center"
         android:textColor="@color/color_primary"
-        android:textStyle="bold"
-        android:text="Bước "/>
+        android:textSize="26sp"
+        android:textStyle="bold" />
     <TextView
         android:id="@+id/text_method"
         android:layout_width="match_parent"
@@ -21,7 +20,8 @@
         android:text="test"
         android:textColor="@color/black"
         android:textAlignment="gravity"
-        android:padding="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:textSize="26sp"/>
 
 </LinearLayout>

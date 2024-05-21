@@ -28,21 +28,20 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="0dp"
 
-                app:strokeColor="@color/grey_background"
+                app:layout_constraintEnd_toEndOf="parent"
 
-                app:layout_constraintEnd_toStartOf="@+id/constraintLayout5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/color_primary">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@color/white"
+                    android:layout_height="52dp"
+                    android:background="@color/color_primary"
                     app:layout_constraintEnd_toStartOf="@+id/materilcard"
                     app:layout_constraintStart_toEndOf="@+id/materilcard"
-                    app:layout_constraintTop_toTopOf="parent"
-                    >
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/backImg"
@@ -54,6 +53,19 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView24"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Công thức"
+                        android:textColor="@color/white"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -61,7 +73,7 @@
                 android:id="@+id/constraintLayout5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/card1">
 
                 <LinearLayout
@@ -80,8 +92,8 @@
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="8dp"
-                        app:strokeColor="@color/color_primary"
-                        app:cardCornerRadius="90dp">
+                        app:cardCornerRadius="90dp"
+                        app:strokeColor="@color/color_primary">
 
                         <androidx.viewpager2.widget.ViewPager2
                             android:id="@+id/viewPagerAvt"
