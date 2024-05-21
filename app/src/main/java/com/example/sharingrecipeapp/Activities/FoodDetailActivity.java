@@ -113,7 +113,7 @@ public class FoodDetailActivity extends AppCompatActivity {
 
         //Recycler không scroll
         recycIngre.setNestedScrollingEnabled(false);
-        recycMethod.setNestedScrollingEnabled(false);
+        //recycMethod.setNestedScrollingEnabled(false);
         recycSoLuong.setNestedScrollingEnabled(false);
         recycDonVi.setNestedScrollingEnabled(false);
         firebaseFirestore = FirebaseFirestore.getInstance();

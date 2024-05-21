@@ -179,7 +179,7 @@
                 android:layout_height="60dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/btn_add_recipes"
-                android:src="@drawable/baseline_add_white"
+                android:src="@drawable/plus"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

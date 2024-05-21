@@ -214,7 +214,7 @@ public class HomeFragment extends Fragment {
         recyclerViewRandom.setLayoutManager(linearLayoutManager);
 
         recipesRandomAdapter = new RecipesRandomAdapter();
-        firebaseFirestore.collection("Recipes")
+        firebaseFirestore.collection("Recipes").limit(10)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
