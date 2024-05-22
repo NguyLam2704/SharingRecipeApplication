@@ -83,8 +83,10 @@ public class FragmentExploreRecipes extends Fragment {
                 {
                     Explore_searchview_recipes.setBackgroundResource(R.drawable.edittext_bound);
 //                    recipesList.clear();
-                    setdataRecycRandom();
+                    //setdataRecycRandom();
+                    Explore_searchName(newText);
                 }
+                else {Explore_searchName(newText);}
                 return true;
             }
         });
@@ -152,10 +154,11 @@ public class FragmentExploreRecipes extends Fragment {
 //                                });
 //                                Explore_recyclerViewRandom.setAdapter(myAdapter);
                             }
+
                             if(!ResultSearchList.isEmpty())
                             {
                                 if (newtext.equals("")){
-                                    txtRecipes.setText("Một số món gợi ý");
+                                    txtRecipes.setText("Một số công thức gợi ý");
                                     Explore_adapter.setData(Explore_listRecipes,new IClickOnItemRecipe() {
                                         @Override
                                         public void onClickItemRecipe(Recipes recipes) {
@@ -183,7 +186,7 @@ public class FragmentExploreRecipes extends Fragment {
                                         onClickGoToDetailFood(recipes);
                                     }
                                 });
-                                txtRecipes.setText("Không tìm thấy kết quả phù hợp\nMột số món được yêu thích");
+                                txtRecipes.setText("Không tìm thấy kết quả phù hợp\nMột số công thức được yêu thích");
                                 Explore_recyclerViewRandom.setAdapter(Explore_adapter);
                             }
                         }
