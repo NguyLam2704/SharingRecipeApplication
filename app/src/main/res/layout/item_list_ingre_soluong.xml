@@ -18,15 +18,15 @@
             android:layout_height="24dp" />
 
         <TextView
-            android:textAlignment="viewEnd"
+            android:gravity="right"
             android:id="@+id/soluong_Ingre"
             android:layout_width="30dp"
             android:textColor="@color/black"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:text="10"
-            android:textStyle="bold"
-            android:textSize="15sp" />
+            android:textStyle="normal"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
