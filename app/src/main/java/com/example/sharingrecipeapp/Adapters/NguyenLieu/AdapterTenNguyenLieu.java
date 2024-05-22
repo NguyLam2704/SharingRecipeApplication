@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import io.github.muddz.styleabletoast.StyleableToast;
+
 public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuViewHolder> {
 
     Context context;
@@ -121,7 +123,7 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
                                     Map<String,Object> data = new HashMap<>();
                                     data.put("id",documentReference.getId());
                                     nguyenLieu.setId(documentReference.getId());
-                                    Toast.makeText(context,"Đã thêm nguyên liệu", Toast.LENGTH_SHORT).show();
+                                    StyleableToast.makeText(context,"Thêm nguyên liệu thành công", R.style.mytoast).show();
                                 }
                             });
                         }

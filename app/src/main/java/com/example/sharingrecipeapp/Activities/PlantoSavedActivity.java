@@ -204,7 +204,6 @@ public class PlantoSavedActivity extends AppCompatActivity {
                 }
             }
         });
-        StyleableToast.makeText(binding.getRoot().getContext(), "Thêm món " + recipes.getName()+" thành công", R.style.mytoast).show();
         Intent turnBack = new Intent();
         int weekOfYear = extras.getInt("weekOfYear");
         turnBack.putExtra("weekOfYear",weekOfYear);
