@@ -145,9 +145,9 @@ public class GroceriesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (adapterListNL.listEditIsEmpty()){
-                    Toast.makeText(binding.getRoot().getContext(),"Bạn cần nhập số lượng",Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(binding.getRoot().getContext(),"Bạn cần nhập số lượng",R.style.mytoast).show();
                 } else if (adapterListNL.listHasEditIs0()) {
-                    Toast.makeText(binding.getRoot().getContext(),"Số lượng phải khác 0",Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(binding.getRoot().getContext(),"Số lượng phải lớn hơn 0",R.style.mytoast).show();
                 } else {
                     adapterListNL.updateEditSL();
                     btn_edit_done.setVisibility(View.GONE);
