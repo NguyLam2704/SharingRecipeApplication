@@ -107,6 +107,7 @@ public class GroceriesFragment extends Fragment {
 
         listNLDaMua = binding.listNlDaMua;
         adapterListNLDaMua.setData(adapterListNL,nguyenLieuList);
+        adapterListNLDaMua.addBtn(btn_edit,btn_edit_done);
         listNLDaMua.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false));
         listNLDaMua.setAdapter(adapterListNLDaMua);
 
@@ -131,17 +132,22 @@ public class GroceriesFragment extends Fragment {
             }
         });
 
+
+
         btn_edit_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!adapterListNL.listEditIsEmpty()){
+                if (adapterListNL.listEditIsEmpty()){
+                    Toast.makeText(binding.getRoot().getContext(),"Bạn cần nhập số lượng",Toast.LENGTH_SHORT).show();
+                } else if (adapterListNL.listHasEditIs0()) {
+                    Toast.makeText(binding.getRoot().getContext(),"Số lượng phải khác 0",Toast.LENGTH_SHORT).show();
+                } else {
                     adapterListNL.updateEditSL();
                     btn_edit_done.setVisibility(View.GONE);
                     btn_edit.setVisibility(View.VISIBLE);
                     adapterListNL.turnOffEdit();
-                } else {
-                    Toast.makeText(binding.getRoot().getContext(),"Bạn cần nhập số lượng",Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 
@@ -150,13 +156,13 @@ public class GroceriesFragment extends Fragment {
 
     private void duringActiveBtnEdit() {
 
-        List<View> view = new ArrayList<>();
+        ArrayList<View> view = new ArrayList<>();
         view.add(binding.getRoot().findViewById(R.id.grocery_container));
-
         view.add(binding.getRoot().findViewById(R.id.list_nl_da_mua));
         view.add(binding.getRoot().findViewById(R.id.plus));
-        view.add(binding.getRoot().findViewById(R.id.checkIn_damua));
-        view.add(binding.getRoot().findViewById(R.id.SL_damua));
+        //view.add(binding.getRoot().findViewById(R.id.checkIn_damua));
+        //view.add(binding.getRoot().findViewById(R.id.SL_damua));
+
 
         for ( View v : view){
             v.setOnTouchListener(new View.OnTouchListener() {
@@ -164,7 +170,6 @@ public class GroceriesFragment extends Fragment {
                 public boolean onTouch(View v, MotionEvent event) {
                     btn_edit.setVisibility(View.VISIBLE);
                     btn_edit_done.setVisibility(View.GONE);
-                    adapterListNL.notifyDataSetChanged();
                     adapterListNL.turnOffEdit();
                     return false;
                 }
@@ -216,7 +221,6 @@ public class GroceriesFragment extends Fragment {
         });
 
         itemTouchHelper.attachToRecyclerView(listNLDaMua);
-
     }
 
     private void deleteNLDaMua(NguyenLieu nguyenLieu) {
