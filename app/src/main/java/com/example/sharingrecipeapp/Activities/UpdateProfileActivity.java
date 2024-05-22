@@ -1,9 +1,13 @@
 package com.example.sharingrecipeapp.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -39,10 +43,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class UpdateProfileActivity extends AppCompatActivity {
     BottomNavigationCustomActivity bottomNavigationCustomActivity;
@@ -54,11 +61,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firestore;
     FirebaseUser currentUser;
-    FirebaseStorage firebaseStorage;
     Uri uri;
     String old_name, old_pass, old_avatarURL;
-    ProgressBar progressBar;
-    StorageReference img_user;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -84,7 +88,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         edit_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(UpdateProfileActivity.this,"Không thể chỉnh sửa thông tin này",Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(UpdateProfileActivity.this,"Không thể chỉnh sửa thông tin này",R.style.mytoast).show();
             }
         });
         showInfo();
@@ -106,7 +110,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     edit_name.setText(old_name);
                     edit_email.setText(old_email);
                     edit_pass.setText(old_pass);
-                    Glide.with(this).load(old_avatarURL).error(R.drawable.round_account_circle).into(image_user_update);
+                    Picasso.get().load(old_avatarURL).into(image_user_update);
                 }
             });
         }
@@ -123,9 +127,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onClickUpdateProfile();
-
             }
-
         });
     }
 
@@ -160,11 +162,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
         String full_name = edit_name.getText().toString();
         String pass = edit_pass.getText().toString();
         if (full_name.isEmpty()) {
-            Toast.makeText(UpdateProfileActivity.this, "Vui lòng nhập tên người dùng!", Toast.LENGTH_SHORT).show();
+            edit_name.setError("Vui lòng nhập tên người dùng!");
             return;
         }
         if (pass.isEmpty() || pass.length() < 6) {
-            Toast.makeText(UpdateProfileActivity.this, "Mật khẩu tối thiểu 6 kí tự!", Toast.LENGTH_SHORT).show();
+            edit_pass.setError("Mật khẩu tối thiểu gồm 6 kí tự");
             return;
         }
         if(!full_name.equals(old_name) || uri!=null || !pass.equals(old_pass)){
@@ -179,7 +181,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             }
             startActivity(new Intent(UpdateProfileActivity.this,LoginActivity.class));
         }else{
-            Toast.makeText(UpdateProfileActivity.this, "Thông tin không có thay đổi", Toast.LENGTH_SHORT).show();
+            StyleableToast.makeText(UpdateProfileActivity.this, "Thông tin không có thay đổi", R.style.mytoast).show();
         }
 
     }
@@ -217,7 +219,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                                     .addOnFailureListener(new OnFailureListener() {
                                                         @Override
                                                         public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(UpdateProfileActivity.this, "Thất bại, vui lòng tử lại sau!", Toast.LENGTH_SHORT).show();
+                                                            StyleableToast.makeText(UpdateProfileActivity.this, "Thất bại, vui lòng tử lại sau!", R.style.errortoast).show();
                                                         }
                                                     });
                                         }
@@ -256,7 +258,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        Toast.makeText(UpdateProfileActivity.this, "Thất bại, vui lòng tử lại sau!", Toast.LENGTH_SHORT).show();
+                                                        StyleableToast.makeText(UpdateProfileActivity.this, "Thất bại, vui lòng tử lại sau!", R.style.errortoast).show();
                                                     }
                                                 });
                                     }
@@ -289,7 +291,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                 }
                             });
                 }else{
-                    Toast.makeText(UpdateProfileActivity.this,"Xảy ra lỗi, vui lòng thử lại sau!",Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(UpdateProfileActivity.this,"Xảy ra lỗi, vui lòng thử lại sau!",R.style.errortoast).show();
                 }
             }
         });

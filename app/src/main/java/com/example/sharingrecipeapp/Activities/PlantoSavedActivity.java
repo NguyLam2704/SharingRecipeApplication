@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +49,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class PlantoSavedActivity extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -201,10 +204,7 @@ public class PlantoSavedActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        Toast.makeText(binding.getRoot().getContext(),"Đang thêm món ăn",Toast.LENGTH_SHORT).show();
-
+        StyleableToast.makeText(binding.getRoot().getContext(), "Thêm món " + recipes.getName()+" thành công", R.style.mytoast).show();
         Intent turnBack = new Intent();
         int weekOfYear = extras.getInt("weekOfYear");
         turnBack.putExtra("weekOfYear",weekOfYear);
@@ -274,37 +274,7 @@ public class PlantoSavedActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-//                    Explore_listRecipes_suggest = new ArrayList<>();// tim lai danh sach, dieu kien có luot save lon
-//                    save_db.collection("SaveRecipes").whereArrayContains("idUsers",auth.getUid())
-//                            //.whereGreaterThanOrEqualTo("Save",2)
-//                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                                @Override
-//                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//                                    if (error != null) {
-//                                        Log.w("Error", "listen:error", error);
-//                                    }
-//                                    //lấy dữ liệu từ firebase
-//                                    for (DocumentSnapshot documentSnapshot : value.getDocuments()){
-//                                        String id = documentSnapshot.getString("id");
-//                                        String image = documentSnapshot.getString("image");
-//                                        String name = documentSnapshot.getString("name");
-//                                        String save = String.valueOf(documentSnapshot.get("save"));
-//                                        String time = documentSnapshot.getString("timecook");
-//
-//                                        Explore_listRecipes_suggest.add(new Recipes(id, image, name, save, time));
-//                                    }
-//                                }
-//                            });
-//                    Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
-//                        @Override
-//                        public void onClickItemRecipe(Recipes recipes) {
-//                            onClickGoToDetailFood(recipes);
-//                        }
-//                    });
-//                    txtIngredients.setText("Món ăn bạn tìm đang được cập nhật\nMột số món gợi ý");
-//                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
                             });
-
                 }
                 //search ko co ket qua
             }

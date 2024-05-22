@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 public class UserFragment extends Fragment {
 
@@ -80,7 +81,7 @@ public class UserFragment extends Fragment {
                     String name = value.getString("username");
                     String avatarURL = value.getString("avatar");
                     text_name.setText(name);
-                    Glide.with(this).load(avatarURL).error(R.drawable.round_account_circle).into(image_account);
+                    Picasso.get().load(avatarURL).into(image_account);
                 }
             });
         }

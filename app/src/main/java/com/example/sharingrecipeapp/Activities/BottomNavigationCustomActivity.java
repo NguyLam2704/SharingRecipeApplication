@@ -91,65 +91,6 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
             return true;
         });
 
-
-        // **
-
-//        mViewPager = findViewById(R.id.view_pager);
-//        mBottomNavigationView = findViewById(R.id.bottomNavigationView);
-//
-//
-//        fragmentArrayList.add(new HomeFragment());
-//        fragmentArrayList.add(new ExploreFragment());
-//        fragmentArrayList.add(new PlanFragment());
-//        fragmentArrayList.add(new GroceriesFragment());
-//        fragmentArrayList.add(new UserFragment());
-
-//        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentArrayList);
-//        mViewPager.setAdapter(viewPagerAdapter);
-//        mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-//            @Override
-//            public void onPageSelected(int position) {
-//                switch (position) {
-//                    case 0:
-//                        mBottomNavigationView.setSelectedItemId(R.id.home_menu);
-//                        break;
-//                    case 1:
-//                        mBottomNavigationView.setSelectedItemId(R.id.search_menu);
-//                        break;
-//                    case 2:
-//                        mBottomNavigationView.setSelectedItemId(R.id.plan_menu);
-//                        break;
-//                    case 3:
-//                        mBottomNavigationView.setSelectedItemId(R.id.mall_menu);
-//                        break;
-//                    case 4:
-//                        mBottomNavigationView.setSelectedItemId(R.id.user_menu);
-//                        break;
-//                    default:
-//                        mBottomNavigationView.setSelectedItemId(R.id.home_menu);
-//                        break;
-//                }
-//                super.onPageSelected(position);
-//            }
-//        });
-
-//        mBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                if (item.getItemId() == R.id.home_menu) {
-//                    mViewPager.setCurrentItem(0);
-//                } else if (item.getItemId() == R.id.search_menu) {
-//                    mViewPager.setCurrentItem(1);
-//                } else if (item.getItemId() == R.id.plan_menu) {
-//                    mViewPager.setCurrentItem(2);
-//                } else if (item.getItemId() == R.id.mall_menu) {
-//                    mViewPager.setCurrentItem(3);
-//                } else if (item.getItemId() == R.id.user_menu) {
-//                    mViewPager.setCurrentItem(4);
-//                }
-//                return true;
-//            }
-//        });
     }
 
     public void gotoAddRecipe(){
