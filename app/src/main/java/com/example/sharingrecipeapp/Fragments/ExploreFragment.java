@@ -1,6 +1,10 @@
 package com.example.sharingrecipeapp.Fragments;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
@@ -11,6 +15,8 @@ import android.widget.ProgressBar;
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.R;
+import com.google.android.material.tabs.TabLayoutMediator;
+
 import java.text.Normalizer;
 import java.util.regex.Pattern;
 
@@ -51,11 +57,21 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                View tabView = tab.view;
+                ObjectAnimator scaleX = ObjectAnimator.ofFloat(tabView, "scaleX", 0.5f, 1.0f);
+                ObjectAnimator scaleY = ObjectAnimator.ofFloat(tabView, "scaleY", 0.5f, 1.0f);
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(scaleX, scaleY);
+                animatorSet.setDuration(250);
+                animatorSet.start();
+
+                tabView.setElevation(10); // Shadow effect
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                View tabView = tab.view;
+                tabView.setElevation(0); // Remove shadow
             }
 
             @Override
@@ -63,6 +79,7 @@ public class ExploreFragment extends Fragment {
 
             }
         });
+
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
