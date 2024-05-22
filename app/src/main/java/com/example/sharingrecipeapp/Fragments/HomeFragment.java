@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 import com.example.sharingrecipeapp.Activities.FoodDetailActivity;
 import com.example.sharingrecipeapp.Adapters.DetailRecipe.ViewPagerImagerAvtAdapter;
+import com.example.sharingrecipeapp.Adapters.Home.AdapterUser;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.ThemeAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.iClickOnItemTheme;
@@ -30,6 +31,7 @@ import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
 import com.example.sharingrecipeapp.Classes.Theme;
+import com.example.sharingrecipeapp.Classes.User;
 import com.example.sharingrecipeapp.R;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -177,12 +179,42 @@ public class HomeFragment extends Fragment {
         bottomNavigationCustomActivity.gotoFoodDetail(recipes);
     }
 
-
+    String username;
     private void setdataRecycRandom() {
+//        List<User> userList = new ArrayList<>();
+//
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
+//        recyclerViewRandom.setLayoutManager(linearLayoutManager);
+//        AdapterUser adapterUser = new AdapterUser(userList);
+//        recyclerViewRandom.setAdapter(adapterUser);
+//
+//        firebaseFirestore.collection("Users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                for (DocumentSnapshot doc : queryDocumentSnapshots){
+//                    String avt = doc.get("avatar").toString();
+//                    String username = doc.getString("username");
+//
+//                    User user = new User(username,avt);
+//                    userList.add(user);
+//                    adapterUser.notifyDataSetChanged();
+//                }
+//            }
+//        });
+
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
         recyclerViewRandom.setLayoutManager(linearLayoutManager);
 
         recipesRandomAdapter = new RecipesRandomAdapter();
+        listRecipes = new ArrayList<>();
+        recipesRandomAdapter.setData(listRecipes, new IClickOnItemRecipe() {
+            @Override
+            public void onClickItemRecipe(Recipes recipes) {
+                onClickGoToDetailFood(recipes);
+            }
+        });
+        recyclerViewRandom.setAdapter(recipesRandomAdapter);
         firebaseFirestore.collection("Recipes").limit(10)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -191,9 +223,13 @@ public class HomeFragment extends Fragment {
                             Log.w("Error", "listen:error", error);
                             return;
                         }
-                        listRecipes = new ArrayList<>();
+
                         for (DocumentSnapshot documentSnapshot : value.getDocuments()){
                             String id = documentSnapshot.getString("id");
+
+                            DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
+
+
 
                             firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
@@ -202,21 +238,20 @@ public class HomeFragment extends Fragment {
                                     ArrayList<String> idUser = new ArrayList<>();
                                     for (QueryDocumentSnapshot doc :value)
                                     {
+                                        idUser = (ArrayList<String>) doc.get("idUsers");
+                                        String save = String.valueOf(idUser.size());
+                                        String image = documentSnapshot.getString("image");
+                                        String name = documentSnapshot.getString("name");
+                                        String time = documentSnapshot.getString("timecook");
 
-                                                                    idUser = (ArrayList<String>) doc.get("idUsers");
-                                                                    String save = String.valueOf(idUser.size());
-                                                                    String image = documentSnapshot.getString("image");
-                                                                    String name = documentSnapshot.getString("name");
-                                                                    String time = documentSnapshot.getString("timecook");
-                                                                    listRecipes.add(new Recipes(id, image, name, save,time, "Username"));
-                                                                    recipesRandomAdapter.setData(listRecipes, new IClickOnItemRecipe() {
-                                                                        @Override
-                                                                        public void onClickItemRecipe(Recipes recipes) {
-                                                                            onClickGoToDetailFood(recipes);
-                                                                        }
-                                                                    });
-                                                                    recyclerViewRandom.setAdapter(recipesRandomAdapter);
-
+                                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot doc) {
+                                                username = doc.getString("username");
+                                                listRecipes.add(new Recipes(id, image, name, save,time, username));
+                                                recipesRandomAdapter.notifyDataSetChanged();
+                                            }
+                                        });
                                             }
                                         }
                                     });
