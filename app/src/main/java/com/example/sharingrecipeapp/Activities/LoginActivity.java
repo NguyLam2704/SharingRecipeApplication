@@ -122,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             else {
                                 Login_progressbar.setVisibility(View.GONE);
+                                StyleableToast.makeText(LoginActivity.this,"Đăng nhập thành công",R.style.mytoast).show();
                                 startActivity(new Intent(LoginActivity.this, BottomNavigationCustomActivity.class));
                             }
                         }
