@@ -3,8 +3,11 @@ package com.example.sharingrecipeapp.Fragments;
 import static com.example.sharingrecipeapp.Fragments.ExploreFragment.unAccent;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -19,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
+import com.example.sharingrecipeapp.Activities.FoodDetailActivity;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 import com.example.sharingrecipeapp.Classes.Recipes;
@@ -57,6 +61,7 @@ public class FragmentExploreCook extends Fragment {
     private FirebaseAuth Explore_firebaseAuth;
     private FirebaseUser user;
     private FirebaseFirestore Explore_db;
+    RecipesAdapter myAdapter;
 
     String username;
     // TODO: Rename parameter arguments, choose names that match
@@ -89,6 +94,19 @@ public class FragmentExploreCook extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    ActivityResultLauncher<Intent> activityResultLauncher =  registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->{
+        if (result.getResultCode() == 111){
+            for (int i = 0; i < Explore_listRecipes_suggest.size(); i++){
+                if (result.getData().getExtras().get("id").toString().equals(Explore_listRecipes_suggest.get(i).getId())){
+                    Explore_listRecipes_suggest.get(i).setSave(String.valueOf(result.getData().getExtras().getString("save")));
+                }
+            }
+            myAdapter.notifyDataSetChanged();
+           displayRecipes();
+
+        }
+    });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -179,7 +197,7 @@ public class FragmentExploreCook extends Fragment {
                                 Recipes recipes = new Recipes(id,image,name,save,time,username);
                                 Explore_listRecipes_suggest.add(recipes);
                                 txtCooks.setText("Một số công thức gợi ý");
-                                RecipesAdapter myAdapter = new RecipesAdapter();
+                                myAdapter = new RecipesAdapter();
                                 myAdapter.setData( Explore_listRecipes_suggest,new IClickOnItemRecipe() {
                                     @Override
                                     public void onClickItemRecipe(Recipes recipes) {
@@ -253,7 +271,7 @@ public class FragmentExploreCook extends Fragment {
                                                 });
                                                 Recipes recipes = new Recipes(id,image,name,save,time,username);
                                                 Explore_listRecipes.add(recipes);
-                                                RecipesAdapter myAdapter = new RecipesAdapter();
+                                                myAdapter = new RecipesAdapter();
                                                 myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {
                                                     @Override
                                                     public void onClickItemRecipe(Recipes recipes) {
@@ -301,6 +319,8 @@ public class FragmentExploreCook extends Fragment {
     }
 
     private void onClickGoToDetailFood(Recipes recipes) {
-        bottomNavigationCustomActivity.gotoFoodDetail(recipes);
+        Intent intent = new Intent(getContext(), FoodDetailActivity.class);
+        intent.putExtra("id", recipes.getId());
+        activityResultLauncher.launch(intent);
     }
 }
