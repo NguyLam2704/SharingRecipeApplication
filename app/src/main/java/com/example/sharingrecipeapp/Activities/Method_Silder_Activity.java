@@ -31,11 +31,10 @@ public class Method_Silder_Activity extends AppCompatActivity {
 
     private ViewPager2 mViewPager2;
     Button btnBack;
-    TextView tb;
 
     private List<Method> mListMethod;
 
-    ImageView btn;
+    ImageView btn, phaohoa;
 
     String idRecipe;
 
@@ -54,9 +53,11 @@ public class Method_Silder_Activity extends AppCompatActivity {
 
         btn = findViewById(R.id.img_btn_back_method);
         btnBack = findViewById(R.id.btnBack);
-        tb = findViewById(R.id.textView10);
+        phaohoa = findViewById(R.id.imgPhaoHoa);
 
         mListMethod = getMethod(idRecipe);
+
+
         //mListMethod = getList();
         MethodViewPager2Adapter adapter = new MethodViewPager2Adapter(mListMethod);
         mViewPager2.setAdapter(adapter);
@@ -66,11 +67,11 @@ public class Method_Silder_Activity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 if (position == mListMethod.size() - 1) {
-                    tb.setVisibility(View.VISIBLE);
                     btnBack.setVisibility(View.VISIBLE);
+                    phaohoa.setVisibility(View.VISIBLE);
                 } else {
                     btnBack.setVisibility(View.GONE);
-                    tb.setVisibility(View.GONE);
+                    phaohoa.setVisibility(View.GONE);
                 }
             }
         });
@@ -93,6 +94,7 @@ public class Method_Silder_Activity extends AppCompatActivity {
 
     private List<Method> getMethod(String idRecipe) {
         List<Method> methodList = new ArrayList<>();
+
         firebaseFirestore.collection("Recipes").document(idRecipe).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -104,11 +106,12 @@ public class Method_Silder_Activity extends AppCompatActivity {
                                     String step =  doc.get(i);
                                     methodList.add(new Method(step));
                                 }
-
+                                methodList.add(new Method(" "));
                             }
                         }
                     }
                 });
+
         return methodList;
     }
 
