@@ -174,7 +174,7 @@ public class FragmentExploreCook extends Fragment {
                                     idUser = (ArrayList<String>) queryDocumentSnapshot1.get("idUsers");
                                 }
                                 save = String.valueOf(idUser.size());
-                                Recipes recipes = new Recipes(id,image,name,save,time);
+                                Recipes recipes = new Recipes(id,image,name,save,time,"user");
                                 Explore_listRecipes_suggest.add(recipes);
                                 txtCooks.setText("Một số công thức gợi ý");
                                 RecipesAdapter myAdapter = new RecipesAdapter();

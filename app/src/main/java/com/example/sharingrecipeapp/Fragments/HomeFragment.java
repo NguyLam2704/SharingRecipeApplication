@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
@@ -88,6 +90,10 @@ public class HomeFragment extends Fragment {
 
     private List<Method> mMethodList;
 
+    TextView txtALlRecipes;
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +106,7 @@ public class HomeFragment extends Fragment {
 
         View view =inflater.inflate(R.layout.fragment_home,container,false);
         bottomNavigationCustomActivity = (BottomNavigationCustomActivity) getActivity();
+        txtALlRecipes = view.findViewById(R.id.txtXemThem);
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -109,8 +116,10 @@ public class HomeFragment extends Fragment {
         recyclerViewRandom = (RecyclerView) view.findViewById(R.id.recyRanDom);
         recyclerViewTheme = (RecyclerView) view.findViewById(R.id.recyTheme);
         btn_create = view.findViewById(R.id.imageButton);
+        recyclerViewRandom.setNestedScrollingEnabled(false);
 
 
+//        resetList();
         //bottomNavigationCustomActivity.reload();
         setdataRecycRate();
         setdataRecycRandom();
@@ -124,14 +133,21 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        txtALlRecipes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomNavigationCustomActivity.gotoAllRecipes();
+            }
+        });
         return view;
     }
+
+
 
     String username;
     private void setdataRecycRate() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
         recyclerViewRate.setLayoutManager(linearLayoutManager);
-
         recipesAdapter = new RecipesAdapter();
         listRecipesRate = new ArrayList<>();
         recipesAdapter.setData(listRecipesRate, new IClickOnItemRecipe() {
@@ -196,9 +212,8 @@ public class HomeFragment extends Fragment {
 
     private void setdataRecycRandom() {
 
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
-        recyclerViewRandom.setLayoutManager(linearLayoutManager);
+        recyclerViewRandom.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
 
         recipesRandomAdapter = new RecipesRandomAdapter();
         listRecipes = new ArrayList<>();
@@ -222,8 +237,6 @@ public class HomeFragment extends Fragment {
                             String id = documentSnapshot.getString("id");
 
                             DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
-
-
 
                             firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
