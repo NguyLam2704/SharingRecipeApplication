@@ -2,8 +2,11 @@ package com.example.sharingrecipeapp.Fragments;
 
 import static com.example.sharingrecipeapp.Fragments.ExploreFragment.unAccent;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
+import com.example.sharingrecipeapp.Activities.FoodDetailActivity;
 import com.example.sharingrecipeapp.Adapters.Explore.ItemSearchIngreAdapter;
 import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
@@ -70,7 +74,18 @@ public class FragmentExploreIngredient extends Fragment {
         // Required empty public constructor
     }
 
+    ActivityResultLauncher<Intent> activityResultLauncher =  registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->{
+        if (result.getResultCode() == 111){
+            for (int i = 0; i < Explore_listRecipes.size(); i++){
+                if (result.getData().getExtras().get("id").toString().equals(Explore_listRecipes.get(i).getId())){
+                    Explore_listRecipes.get(i).setSave(String.valueOf(result.getData().getExtras().getString("save")));
+                }
+            }
+            Explore_adapter.notifyDataSetChanged();
+            setdataRecycRandom();
 
+        }
+    });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -342,7 +357,9 @@ public class FragmentExploreIngredient extends Fragment {
 
     }
     private void onClickGoToDetailFood(Recipes recipes) {
-        bottomNavigationCustomActivity.gotoFoodDetail(recipes);
+        Intent intent = new Intent(getContext(), FoodDetailActivity.class);
+        intent.putExtra("id", recipes.getId());
+        activityResultLauncher.launch(intent);
     }
 
 }
