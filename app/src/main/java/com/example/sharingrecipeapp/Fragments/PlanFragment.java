@@ -238,6 +238,7 @@ public class PlanFragment extends Fragment {
                 recipesList.add(recipes);
                 selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT + selectListRecipes(date).size() * RECIPE_HEIGHT );
                 recyclerView.getAdapter().notifyDataSetChanged();
+
             }
         }
     });

@@ -202,6 +202,10 @@ public class FoodDetailActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent turnHomeFrag = new Intent();
+                turnHomeFrag.putExtra("id",idRecipe);
+                turnHomeFrag.putExtra("save",save.getText().toString());
+                setResult(111,turnHomeFrag);
                 finish();
                 //reload();
 
@@ -461,6 +465,7 @@ public class FoodDetailActivity extends AppCompatActivity {
 
     }
 
+
     public void getSoluongSave(String idRecipe)
     {
         firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",idRecipe).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -478,6 +483,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                     {
                         idUser = (ArrayList<String>) doc.get("idUsers");
                     }
+
                     save.setText((String.valueOf(idUser.size())));
                 }
             }
