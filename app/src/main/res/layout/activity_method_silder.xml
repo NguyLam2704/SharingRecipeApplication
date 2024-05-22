@@ -7,6 +7,16 @@
     android:orientation="vertical"
     tools:context=".Activities.Method_Silder_Activity">
 
+    <ImageView
+        android:id="@+id/imgPhaoHoa"
+        android:layout_width="370dp"
+        android:layout_height="370dp"
+        android:src="@drawable/phaohoa"
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout17"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout17"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView3" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView3"
         android:layout_width="match_parent"
@@ -51,7 +61,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout17"
         android:layout_width="match_parent"
-        android:layout_height="520dp"
+        android:layout_height="580dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView3">
@@ -59,7 +69,7 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager_2"
             android:layout_width="match_parent"
-            android:layout_height="520dp"
+            android:layout_height="570dp"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -72,34 +82,21 @@
         android:id="@+id/constraintLayout18"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chúc mừng bạn đã hoàn thành món ăn !"
-            android:textColor="@color/color_primary"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:backgroundTint="@color/color_primary"
             android:text="Thoát"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

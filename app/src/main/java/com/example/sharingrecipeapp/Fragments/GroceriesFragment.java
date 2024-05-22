@@ -109,6 +109,7 @@ public class GroceriesFragment extends Fragment {
         listViewNL = binding.listGroceries;
         adapterListNL = new AdapterListNLDaThem(nguyenLieuList, adapterListNLDaMua, listNL_da_mua );
         adapterListNL.setEditBtn(btn_edit);
+        adapterListNL.setEditBtnDone(btn_edit_done);
         listViewNL.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false));
         listViewNL.setAdapter(adapterListNL);
 
@@ -145,13 +146,16 @@ public class GroceriesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (adapterListNL.listEditIsEmpty()){
-                    Toast.makeText(binding.getRoot().getContext(),"Bạn cần nhập số lượng",Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(binding.getRoot().getContext(),"Bạn cần nhập số lượng",R.style.mytoast).show();
                 } else if (adapterListNL.listHasEditIs0()) {
-                    Toast.makeText(binding.getRoot().getContext(),"Số lượng phải khác 0",Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(binding.getRoot().getContext(),"Số lượng phải lớn hơn 0",R.style.mytoast).show();
                 } else {
                     adapterListNL.updateEditSL();
                     btn_edit_done.setVisibility(View.GONE);
-                    btn_edit.setVisibility(View.VISIBLE);
+                    if (!nguyenLieuList.isEmpty()){
+                        btn_edit.setVisibility(View.VISIBLE);
+                    }
+
                     adapterListNL.turnOffEdit();
                 }
 
@@ -235,7 +239,6 @@ public class GroceriesFragment extends Fragment {
     }
 
     private void displayNguyenLieu() {
-        adapterListNL.turnOnBtnEdit();
         db.collection("ListNguyenLieuMua").whereEqualTo("idUser",userID).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots){
@@ -256,6 +259,8 @@ public class GroceriesFragment extends Fragment {
                         }
 
                         if (!biTrung){
+                            adapterListNL.turnOnBtnEdit();
+
                             nguyenLieuList.add(new NguyenLieu(SL,donvi,id,name,img));
                             adapterListNL.notifyDataSetChanged();
 
@@ -276,12 +281,14 @@ public class GroceriesFragment extends Fragment {
 
                 deleteNLDaThem(nguyenLieuList.get(position));
                 nguyenLieuList.remove(position);
-
-
+                adapterListNL.dataClear();
                 adapterListNL.notifyDataSetChanged();
+
                 if (nguyenLieuList.isEmpty()){
                     adapterListNL.turnOffBtnEdit();
+                    adapterListNL.turnOffBtnEditDone();
                 }
+
 
 
             }
@@ -369,7 +376,7 @@ public class GroceriesFragment extends Fragment {
         String strSL = editSl.getText().toString().trim();
         String strDonVi = editDv.getText().toString().trim();
         String img = "https://firebasestorage.googleapis.com/v0/b/fantafood-3ea80.appspot.com/o/ingredients_icon%2Flogo_gro.png?alt=media&token=3deb24f9-1edb-4a88-8963-308278a9e9ee";
-        if(TextUtils.isEmpty(strName) || TextUtils.isEmpty(strSL) || TextUtils.isEmpty(strDonVi)){
+        if(TextUtils.isEmpty(strName) || TextUtils.isEmpty(strSL) || TextUtils.isEmpty(strDonVi) || strSL.equals(".")){
             StyleableToast.makeText(requireActivity(),"Vui lòng nhập đầy đủ thông tin",R.style.mytoast).show();
         }else {
             double soluong = Double.valueOf(strSL);
@@ -407,13 +414,17 @@ public class GroceriesFragment extends Fragment {
                             }
                         });
 
+                        nguyenLieuList.add(nl);
+                        adapterListNL.dataClear();
+                        adapterListNL.notifyDataSetChanged();
+                        Toast.makeText(binding.getRoot().getContext(),"Thêm nguyên liệu thành công",Toast.LENGTH_SHORT).show();
 
                         if (nguyenLieuList.isEmpty()){
+                            adapterListNL.turnOffBtnEdit();
+                        }
+                        else {
                             adapterListNL.turnOnBtnEdit();
                         }
-                        nguyenLieuList.add(nl);
-                        adapterListNL.notifyDataSetChanged();
-
                     }
                 }
             });

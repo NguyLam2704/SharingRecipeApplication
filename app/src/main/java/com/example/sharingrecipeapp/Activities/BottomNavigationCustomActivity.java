@@ -1,5 +1,7 @@
 package com.example.sharingrecipeapp.Activities;
 
+import static android.content.Intent.getIntent;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -176,6 +178,15 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
     }
     public void gotoLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    public void reload() {
+        Intent intent = new Intent(this, BottomNavigationCustomActivity.class);
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        overridePendingTransition(0, 0);
         startActivity(intent);
     }
 

@@ -13,15 +13,16 @@
 
 
         <TextView
-            android:textAlignment="viewStart"
+            android:gravity="left"
             android:id="@+id/donvi_Ingre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="donvi"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="15sp" />
+            android:textStyle="normal"
+            android:textSize="18sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:scaleType="fitXY"

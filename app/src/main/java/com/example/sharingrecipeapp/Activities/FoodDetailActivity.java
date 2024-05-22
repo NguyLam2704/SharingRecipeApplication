@@ -72,6 +72,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     ImageView FdDetail_like_btn, FdSDetail_save_btn;
     String idRecipe;
     ViewPager2 viewPager2, viewPager2Avt;
+    BottomNavigationCustomActivity bottomNavigationCustomActivity;
     ImageView back, btncook;
     TextView username, titlefood, heart, save, timecook, note;
     RecyclerView recycIngre, recycSoLuong, recycDonVi, recycMethod;
@@ -201,7 +202,9 @@ public class FoodDetailActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               finish();
+                finish();
+                //reload();
+
             }
         });
 
@@ -621,5 +624,6 @@ public class FoodDetailActivity extends AppCompatActivity {
         intent.putExtra("id", idRecipe);
         startActivity(intent);
     }
+
 
 }

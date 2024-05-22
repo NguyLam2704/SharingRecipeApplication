@@ -1,7 +1,10 @@
 package com.example.sharingrecipeapp.Fragments;
 
 
+import static android.content.Intent.getIntent;
+
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -108,6 +111,7 @@ public class HomeFragment extends Fragment {
         btn_create = view.findViewById(R.id.imageButton);
 
 
+        //bottomNavigationCustomActivity.reload();
         setdataRecycRate();
         setdataRecycRandom();
         setdataRecycTheme();
@@ -123,14 +127,21 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-
+    String username;
     private void setdataRecycRate() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
         recyclerViewRate.setLayoutManager(linearLayoutManager);
 
         recipesAdapter = new RecipesAdapter();
-        firebaseFirestore.collection("Recipes")
-                .whereEqualTo("trending",true)
+        listRecipesRate = new ArrayList<>();
+        recipesAdapter.setData(listRecipesRate, new IClickOnItemRecipe() {
+            @Override
+            public void onClickItemRecipe(Recipes recipes) {
+                onClickGoToDetailFood(recipes);
+            }
+        });
+        recyclerViewRate.setAdapter(recipesAdapter);
+        firebaseFirestore.collection("Recipes").limit(10)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -138,9 +149,10 @@ public class HomeFragment extends Fragment {
                             Log.w("Error", "listen:error", error);
                             return;
                         }
-                        listRecipesRate = new ArrayList<>();
+
                         for (DocumentSnapshot documentSnapshot : value.getDocuments()){
                             String id = documentSnapshot.getString("id");
+                            DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
 
                             firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
@@ -157,18 +169,20 @@ public class HomeFragment extends Fragment {
                                         String name = documentSnapshot.getString("name");
                                         String save = String.valueOf(idUser.size());
                                         String time = documentSnapshot.getString("timecook");
-                                        listRecipesRate.add(new Recipes(id, image, name, save, time));
-                                        recipesAdapter.setData(listRecipesRate, new IClickOnItemRecipe() {
-                                            @Override
-                                            public void onClickItemRecipe(Recipes recipes) {
-                                                onClickGoToDetailFood(recipes);
-                                            }
-                                        });
-                                        recyclerViewRate.setAdapter(recipesAdapter);
+
+                                        if (idUser.size()>3) {
+                                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DocumentSnapshot doc) {
+                                                    username = doc.getString("username");
+                                                    listRecipesRate.add(new Recipes(id, image, name, save, time, username));
+                                                    recipesAdapter.notifyDataSetChanged();
+                                                }
+                                            });
+                                        }
                                     }
                                 }
                             });
-
                         }
 
                     }
@@ -179,28 +193,8 @@ public class HomeFragment extends Fragment {
         bottomNavigationCustomActivity.gotoFoodDetail(recipes);
     }
 
-    String username;
+
     private void setdataRecycRandom() {
-//        List<User> userList = new ArrayList<>();
-//
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
-//        recyclerViewRandom.setLayoutManager(linearLayoutManager);
-//        AdapterUser adapterUser = new AdapterUser(userList);
-//        recyclerViewRandom.setAdapter(adapterUser);
-//
-//        firebaseFirestore.collection("Users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//            @Override
-//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                for (DocumentSnapshot doc : queryDocumentSnapshots){
-//                    String avt = doc.get("avatar").toString();
-//                    String username = doc.getString("username");
-//
-//                    User user = new User(username,avt);
-//                    userList.add(user);
-//                    adapterUser.notifyDataSetChanged();
-//                }
-//            }
-//        });
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
@@ -252,9 +246,9 @@ public class HomeFragment extends Fragment {
                                                 recipesRandomAdapter.notifyDataSetChanged();
                                             }
                                         });
-                                            }
-                                        }
-                                    });
+                                    }
+                                }
+                            });
                         }
 
                     }
@@ -318,6 +312,7 @@ public class HomeFragment extends Fragment {
                 });
         return username;
     }
+
 
 
 
