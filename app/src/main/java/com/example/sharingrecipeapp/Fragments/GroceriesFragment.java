@@ -114,8 +114,30 @@ public class GroceriesFragment extends Fragment {
             }
         });
 
+        ImageView btn_edit = binding.btnEdit;
+        ImageView btn_edit_done = binding.btnEditDone;
+        btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_edit.setVisibility(View.GONE);
+                btn_edit_done.setVisibility(View.VISIBLE);
+                adapterListNL.turnOnEdit();
+            }
+        });
+
+        btn_edit_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapterListNL.updateEditSL();
+                btn_edit_done.setVisibility(View.GONE);
+                btn_edit.setVisibility(View.VISIBLE);
+                adapterListNL.turnOffEdit();
+            }
+        });
+
         return binding.getRoot();
     }
+
 
     private void displayNguyenLieuDaMua() {
         db.collection("ListNguyenLieuDaMua").whereEqualTo("idUser",userID).get()

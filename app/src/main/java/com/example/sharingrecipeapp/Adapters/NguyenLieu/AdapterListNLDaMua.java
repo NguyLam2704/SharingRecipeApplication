@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +27,11 @@ public class AdapterListNLDaMua extends RecyclerView.Adapter<ListNLDaMuaViewHold
     List<NguyenLieu> list;
     AdapterListNLDaThem adapterListNL;
 
+
+
     public AdapterListNLDaMua(List<NguyenLieu> daMua) {
         this.daMua = daMua;
+
     }
 
     public void setData(AdapterListNLDaThem adapterListNL, List<NguyenLieu> list){
@@ -84,6 +89,7 @@ public class AdapterListNLDaMua extends RecyclerView.Adapter<ListNLDaMuaViewHold
                     deleteNguyenLieuDaThem(daMua.get(position));
 
 
+
                     adapterListNL.notifyDataSetChanged();
                     daMua.remove(position);
                     notifyDataSetChanged();
@@ -97,6 +103,8 @@ public class AdapterListNLDaMua extends RecyclerView.Adapter<ListNLDaMuaViewHold
     public int getItemCount() {
         return daMua.size();
     }
+
+
 
     private void deleteNguyenLieuDaThem(NguyenLieu nguyenLieu) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
