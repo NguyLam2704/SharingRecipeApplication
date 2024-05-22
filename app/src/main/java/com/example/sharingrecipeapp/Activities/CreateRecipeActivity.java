@@ -61,6 +61,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import io.github.muddz.styleabletoast.StyleableToast;
+
 public class CreateRecipeActivity extends AppCompatActivity {
 
     EditText method, nameNL, soluongNl, donviNL;
@@ -202,6 +204,135 @@ public class CreateRecipeActivity extends AppCompatActivity {
             }
         });
 ////////////////////////////////////////////////////////////////////////////upload
+        NewRcp_btn_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                boolean isChaua = Chaua.isSelected();
+                boolean isChauau = Chauau.isSelected();
+                boolean isVietnam = Vietnam.isSelected();
+                boolean isThailan = Thailan.isSelected();
+
+                String NewRcp_name = NewRcp_edt_nameRcp.getText().toString();
+                if(TextUtils.isEmpty(NewRcp_name))
+                {
+                    NewRcp_edt_nameRcp.setError("Vui lòng nhập tên món ăn");
+                    return;
+                }
+                String NewRcp_time = NewRcp_edt_time.getText().toString();
+                if(TextUtils.isEmpty(NewRcp_time))
+                {
+                    NewRcp_edt_time.setError("Vui lòng nhập thời gian ước tính hoàn thành");
+                    return;
+                }
+                if(methodList.isEmpty())
+                {
+                    method.setError("Vui lòng nhập các bước thực hiện món ăn");
+                    return;
+                }
+                if(nguyenLieuList.isEmpty())
+                {
+                    soluongNl.setError("Vui lòng nhập thông tin nguyên liệu");
+                    return;
+                }
+                String NewRcp_note = NewRcp_edt_note.getText().toString();
+                StorageReference img_stg = NewRcp_stg.getReference().child("user/"+uri.getLastPathSegment());
+                DocumentReference user = NewRcp_db.collection("Users").document(NewRcp_user.getUid());
+                UploadTask upload_NewRcp_img = img_stg.putFile(uri);
+                upload_NewRcp_img.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                StyleableToast.makeText(CreateRecipeActivity.this,"Vui lòng nhập đầy đủ thông tin",R.style.errortoast).show();
+                                return;
+                            }
+                        })
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Task<Uri> dowloadURL = taskSnapshot.getStorage().getDownloadUrl();
+                                dowloadURL.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Map<String,Object> NewRcp = new HashMap<>();
+                                        NewRcp.put("name",NewRcp_name);
+                                        NewRcp.put("id",unAccent(NewRcp_name.replace(" ","")));
+                                        NewRcp.put("method",Arrays.asList(convertMethod(methodList)));
+                                        NewRcp.put("NguyenLieu",Arrays.asList(convertNameIngre(nguyenLieuList)));
+                                        NewRcp.put("SoLuong",Arrays.asList(convertslIngre(nguyenLieuList)));
+                                        NewRcp.put("timecook",NewRcp_time);
+                                        NewRcp.put("note",NewRcp_note);
+                                        NewRcp.put("Users", user);
+                                        NewRcp.put("chaua",isChaua);
+                                        NewRcp.put("chauau",isChauau);
+                                        NewRcp.put("vietnam",isVietnam);
+                                        NewRcp.put("thailan",isThailan);
+                                        NewRcp.put("image",uri.toString());
+                                        if(TextUtils.isEmpty(uri.toString()))
+                                        {
+                                            Toast.makeText(CreateRecipeActivity.this, "Vui lòng nhập hình ảnh món ăn", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        DocumentReference CreateNewRcp = NewRcp_db.collection("Recipes").document(unAccent(NewRcp_name.replace(" ","")));
+                                        CreateNewRcp.set(NewRcp).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Toast.makeText(CreateRecipeActivity.this, "successfully", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        ///add to nguyenlieu
+                                        NewRcp_stg.getReference().child("ingredients_icon/logo_gro.png").getDownloadUrl()
+                                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        for (AddNguyenLieu ingre : nguyenLieuList) {
+                                                            Map<String,Object> Newingre = new HashMap<>();
+                                                            Newingre.put("id", unAccent(ingre.getName().replace(" ","")));
+                                                            Newingre.put("donvi", ingre.getDonvi().toString());
+                                                            Newingre.put("name",ingre.getName().toString());
+
+                                                            DocumentReference CreateIngre = NewRcp_db.collection("NguyenLieu").document(unAccent(ingre.getName().replace(" ", "")));
+                                                            CreateIngre.update(Newingre).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                        @Override
+                                                                        public void onSuccess(Void unused) {
+                                                                            Toast.makeText(CreateRecipeActivity.this, "ok", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    })
+                                                                    .addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            Newingre.put("img",uri.toString());
+                                                                            CreateIngre.set(Newingre).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                @Override
+                                                                                public void onSuccess(Void unused) {
+
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    });
+
+                                                        }
+                                                    }
+                                                });
+
+                                    }
+                                });
+                            }
+                        });
+                    Toast.makeText(CreateRecipeActivity.this, "success", Toast.LENGTH_SHORT).show();
+                    Map<String ,Object> NewRcp_addsave = new HashMap<>();
+                    NewRcp_addsave.put("Recipes",unAccent(NewRcp_name.replace(" ","")));
+                    NewRcp_addsave.put("idUsers",Arrays.asList());
+                    NewRcp_db.collection("SaveRecipes").document(unAccent(NewRcp_name.replace(" ",""))).set(NewRcp_addsave)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                            }
+                        });
+
+
+                }
+        });
         btnAddNguyenLieu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,6 +358,11 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
     private void addNguyenLieu() {
         String strSL = soluongNl.getText().toString().trim();
+        if(TextUtils.isEmpty(strSL))
+        {
+            soluongNl.setError("Vui lòng nhập số lượng");
+            return;
+        }
         if(pos != NewRcp_IngreList.size()-1)
         {
             nguyenLieuList.add(new AddNguyenLieu(NewRcp_IngreList.get(pos),Double.parseDouble(strSL)));
@@ -234,7 +370,17 @@ public class CreateRecipeActivity extends AppCompatActivity {
         else
         {
             String strName = nameNL.getText().toString().trim();
+            if(TextUtils.isEmpty(strName))
+            {
+                nameNL.setError("Vui lòng nhập tên nguyên liệu");
+                return;
+            }
             String strDv = donviNL.getText().toString().trim();
+            if (TextUtils.isEmpty(strDv))
+            {
+                donviNL.setText("Vui lòng nhập đơn vị");
+                return;
+            }
             String img = "https://firebasestorage.googleapis.com/v0/b/fantafood-3ea80.appspot.com/o/ingredients_icon%2Flogo_gro.png?alt=media&token=3deb24f9-1edb-4a88-8963-308278a9e9ee";
             nguyenLieuList.add(new AddNguyenLieu(new NewRcpIngre(img,strName,strDv,"add"),Double.parseDouble(strSL)));
         }
@@ -259,6 +405,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
     private void addmethod() {
         String strMethod = method.getText().toString().trim();
         if(TextUtils.isEmpty(strMethod)){
+            method.setError("Vui lòng nhập các bước thực hiện");
             return;
         }
 
@@ -307,6 +454,11 @@ public class CreateRecipeActivity extends AppCompatActivity {
                     }  catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+                }
+                else
+                {
+                    StyleableToast.makeText(CreateRecipeActivity.this,"Vui lòng nhập hình ảnh món ăn",R.style.errortoast).show();
+                    return;
                 }
             }
         }
