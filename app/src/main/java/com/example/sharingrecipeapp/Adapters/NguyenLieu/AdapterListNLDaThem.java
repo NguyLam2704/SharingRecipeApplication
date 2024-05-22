@@ -38,6 +38,15 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
     List<EditText> editTextList;
 
     ImageView editBtn;
+    ImageView editBtnDone;
+
+    public ImageView getEditBtnDone() {
+        return editBtnDone;
+    }
+
+    public void setEditBtnDone(ImageView editBtnDone) {
+        this.editBtnDone = editBtnDone;
+    }
 
     public ImageView getEditBtn() {
         return editBtn;
@@ -72,7 +81,6 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
         NguyenLieu nguyenLieu = list.get(position);
 
         holder.name.setText(nguyenLieu.getName());
-
         String sl;
         if (nguyenLieu.getSL() == (int) nguyenLieu.getSL()){
             sl = String.valueOf((int) nguyenLieu.getSL());
@@ -119,10 +127,6 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
                     editTextList.remove(position);
                     editTextListOld.remove(position);
 
-                    if (list.isEmpty()){
-                        turnOffBtnEdit();
-                    }
-
                     dataClear();
                     notifyDataSetChanged();
                 }
@@ -139,6 +143,14 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
     public void dataClear(){
         editTextList.clear();
         editTextListOld.clear();
+        //list.clear();
+    }
+
+    public void turnOffBtnEditDone(){
+        editBtnDone.setVisibility(View.GONE);
+    }
+    public void turnOnBtnEditDone(){
+        editBtnDone.setVisibility(View.VISIBLE);
     }
 
     public void turnOffBtnEdit(){
@@ -167,7 +179,7 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
     }
 
     public void updateEditSL(){
-        Toast.makeText(editBtn.getContext(), String.valueOf(editTextListOld.size()),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(editBtn.getContext(), String.valueOf(editTextListOld.size()),Toast.LENGTH_SHORT).show();
         for (int i = 0; i < list.size(); i++){
             if (!editTextList.get(i).getText().toString().equals(editTextListOld.get(i))){
                 double sl = Double.valueOf(editTextList.get(i).getText().toString()) ;

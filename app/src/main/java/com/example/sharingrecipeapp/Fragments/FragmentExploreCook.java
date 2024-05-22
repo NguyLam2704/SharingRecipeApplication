@@ -271,7 +271,7 @@ public class FragmentExploreCook extends Fragment {
                         });
                         if(Explore_listRecipes.isEmpty())
                         {
-                            txtCooks.setText("Không có kết quả phù hợp");
+                            txtCooks.setText("Không có kết quả phù hợp\nMột số món được yêu thích");
                         }
                         RecipesAdapter myAdapter = new RecipesAdapter();
                         myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {

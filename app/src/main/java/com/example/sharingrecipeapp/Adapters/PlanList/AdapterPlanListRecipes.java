@@ -68,5 +68,10 @@ public class AdapterPlanListRecipes extends RecyclerView.Adapter<PlanListRecipes
     public int getItemCount() {
         return recipesList.size();
     }
+
+    public void clearData(){
+        recipesList.clear();
+    }
+
 }
 
