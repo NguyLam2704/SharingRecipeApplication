@@ -2,6 +2,7 @@ package com.example.sharingrecipeapp.Activities;
 
 import static android.content.ContentValues.TAG;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ public class SignupActivity extends AppCompatActivity  {
 //        }
 //
 //    }
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,7 +142,6 @@ public class SignupActivity extends AppCompatActivity  {
                                             StyleableToast.makeText(SignupActivity.this,"Gửi email xác thực thất bại",R.style.errortoast).show();
                                         }
                                     });
-//                                StyleableToast.makeText(SignupActivity.this,"Xác thực thành công",R.style.mytoast).show();
                             userID = Signup_auth.getCurrentUser().getUid();
                             DocumentReference Signup_document = Signup_db.collection("Users").document(userID);
                             Map<String,Object> new_user = new HashMap<>();
@@ -161,13 +162,6 @@ public class SignupActivity extends AppCompatActivity  {
                                             Signup_auth.signOut();
                                             Intent login_view = new Intent(SignupActivity.this, LoginActivity.class);
                                             startActivity(login_view);
-//                                        Login_btn.setOnClickListener(new View.OnClickListener() {
-//                                            @Override
-//                                            public void onClick(View v) {
-//                                                Intent login_view = new Intent(SignupActivity.this, BottomNavigationCustomActivity.class);
-//                                                startActivity(login_view);
-//                                            }
-//                                        });
                                             Log.d(TAG, "DocumentSnapshot added with ID: " + Signup_document.getId());
                                         }
                                     });

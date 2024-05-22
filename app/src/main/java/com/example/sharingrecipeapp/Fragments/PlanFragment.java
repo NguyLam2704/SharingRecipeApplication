@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.github.muddz.styleabletoast.StyleableToast;
+
 
 public class PlanFragment extends Fragment {
     static int RECIPE_HEIGHT = 145;//272;
@@ -114,7 +116,6 @@ public class PlanFragment extends Fragment {
                 String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
 
                 resetList();
-                //Toast.makeText(binding.getRoot().getContext(),weekID,Toast.LENGTH_SHORT).show();
 
                 PlanOfDay(weekID);
             }
@@ -133,8 +134,6 @@ public class PlanFragment extends Fragment {
                 String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
 
                 resetList();
-                //Toast.makeText(binding.getRoot().getContext(),weekID,Toast.LENGTH_SHORT).show();
-
                 PlanOfDay(weekID);
             }
         });
@@ -176,7 +175,7 @@ public class PlanFragment extends Fragment {
                 if (!recipesList.isEmpty()){
                     for (Recipes x : recipesList){
                         if (x.getId().equals(recipes.getId())){
-                            Toast.makeText(binding.getRoot().getContext(),"Món ăn bị trùng",Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(binding.getRoot().getContext(),"Món ăn đã được có trong kế hoạch",R.style.mytoast).show();
                             biTrung = true;
                             break;
                         }
@@ -204,7 +203,7 @@ public class PlanFragment extends Fragment {
                         String name = recipesList.get(position).getName();
                         String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
 
-                        Toast.makeText(binding.getRoot().getContext(), "Đã xóa " + name, Toast.LENGTH_SHORT).show();
+                        StyleableToast.makeText(binding.getRoot().getContext(), "Đã xóa món " + name, R.style.mytoast).show();
                         db.collection("PlanList").document(auth.getUid()).collection(week).document(date).update("recipes", FieldValue.arrayRemove(ID));
 
                         new Handler().postDelayed(new Runnable() {
@@ -221,8 +220,7 @@ public class PlanFragment extends Fragment {
 //                                    setting.setVisibility(View.GONE);
                                 }
                             }
-                        }, 200); // 5 seconds
-                        //Toast.makeText(binding.getRoot().getContext(), "Đã xoá món ăn", Toast.LENGTH_SHORT).show();
+                        }, 200);
                     }
                 });
                 recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false));
@@ -492,7 +490,7 @@ public class PlanFragment extends Fragment {
                 String ID = recipesList.get(position).getId();
                 String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
                 String name = recipesList.get(position).getName();
-                Toast.makeText(binding.getRoot().getContext(), "Đã xóa " + name, Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(binding.getRoot().getContext(), "Đã xóa món " + name,R.style.mytoast).show();
                 db.collection("PlanList").document(auth.getUid()).collection(week).document(date).update("recipes", FieldValue.arrayRemove(ID));
 
                 new Handler().postDelayed(new Runnable() {

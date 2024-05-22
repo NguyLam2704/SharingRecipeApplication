@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
+import com.example.sharingrecipeapp.Activities.LoginActivity;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterListNLDaMua;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterListNLDaThem;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterTenNguyenLieu;
@@ -46,6 +47,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class GroceriesFragment extends Fragment {
     static int HEIGHT = 0;
@@ -283,7 +287,7 @@ public class GroceriesFragment extends Fragment {
         String strDonVi = editDv.getText().toString().trim();
         String img = "https://firebasestorage.googleapis.com/v0/b/fantafood-3ea80.appspot.com/o/ingredients_icon%2Flogo_gro.png?alt=media&token=3deb24f9-1edb-4a88-8963-308278a9e9ee";
         if(TextUtils.isEmpty(strName) || TextUtils.isEmpty(strSL) || TextUtils.isEmpty(strDonVi)){
-            Toast.makeText(getActivity(),"Vui lòng điền đầy đủ các thông tin",Toast.LENGTH_SHORT).show();
+            StyleableToast.makeText(requireActivity(),"Vui lòng nhập đầy đủ thông tin",R.style.mytoast).show();
         }else {
             double soluong = Double.valueOf(strSL);
             //ktra xem co trung ten NL khong
@@ -291,30 +295,30 @@ public class GroceriesFragment extends Fragment {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                     boolean biTrung = false;
-                    for (DocumentSnapshot doc : queryDocumentSnapshots){
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         String dbName = doc.getString("name").toLowerCase();
-                        if (strName.toLowerCase().equals(dbName)){
-                            Toast.makeText(binding.getRoot().getContext(),"Nguyen lieu da co",Toast.LENGTH_SHORT).show();
+                        if (strName.toLowerCase().equals(dbName)) {
+                            StyleableToast.makeText(binding.getRoot().getContext(), "Nguyên liệu đã tồn tại",R.style.mytoast).show();
                             biTrung = true;
                             break;
                         }
                     }
 
-                    if (!biTrung){
-                        NguyenLieu nl = new NguyenLieu(soluong,strDonVi,"",strName,img);
+                    if (!biTrung) {
+                        NguyenLieu nl = new NguyenLieu(soluong, strDonVi, "", strName, img);
 
-                        Map<String,Object> data = new HashMap<>();
-                        data.put("name",strName);
-                        data.put("donvi",strDonVi);
-                        data.put("SL",soluong);
-                        data.put("idUser",auth.getUid());
-                        data.put("img",img);
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("name", strName);
+                        data.put("donvi", strDonVi);
+                        data.put("SL", soluong);
+                        data.put("idUser", auth.getUid());
+                        data.put("img", img);
 
                         db.collection("ListNguyenLieuMua").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Map<String,Object> data = new HashMap<>();
-                                data.put("id",documentReference.getId());
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("id", documentReference.getId());
                                 nl.setId(documentReference.getId());
                                 documentReference.update(data);
                             }
@@ -323,11 +327,9 @@ public class GroceriesFragment extends Fragment {
                         nguyenLieuList.add(nl);
                         adapterListNL.notifyDataSetChanged();
                     }
-
                 }
             });
         }
-
     }
 
 }

@@ -370,7 +370,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                     }
                 }
                 if (!empty){
-                    Toast.makeText(getBaseContext(),"Thêm nguyên liệu đã chọn thành công",Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(getBaseContext(),"Thêm nguyên liệu đã chọn thành công",R.style.mytoast).show();
                 }
                 dialog.dismiss();
             }
