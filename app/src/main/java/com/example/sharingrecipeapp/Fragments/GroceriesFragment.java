@@ -97,7 +97,6 @@ public class GroceriesFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         userID = auth.getUid();
-        textView = binding.textThongbao;
 
         nguyenLieuList = new ArrayList<>();
         listNL_da_mua = new ArrayList<>();
@@ -265,6 +264,9 @@ public class GroceriesFragment extends Fragment {
                             adapterListNL.notifyDataSetChanged();
 
                         }
+                    }
+                    if (!nguyenLieuList.isEmpty()){
+                        adapterListNL.turnOnBtnEdit();
                     }
                 });
 

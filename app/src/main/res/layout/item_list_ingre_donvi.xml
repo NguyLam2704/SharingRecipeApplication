@@ -5,31 +5,22 @@
     android:id="@+id/item_list_ingre_donvi"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    android:layout_margin="6dp">
 
 
-        <TextView
-            android:gravity="left"
-            android:id="@+id/donvi_Ingre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="donvi"
-            android:textColor="@color/black"
-            android:textStyle="normal"
-            android:textSize="18sp"
-            tools:ignore="RtlHardcoded" />
+    <TextView
+        android:id="@+id/donvi_Ingre"
+        android:layout_width="55dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        android:gravity="center|left"
+        android:text="donvi"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlHardcoded" />
 
-        <ImageView
-            android:scaleType="fitXY"
-            android:layout_margin="4dp"
-            android:layout_width="0dp"
-            android:layout_height="24dp" />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

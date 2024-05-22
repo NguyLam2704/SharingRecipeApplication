@@ -175,14 +175,15 @@ public class PlanFragment extends Fragment {
                 if (!recipesList.isEmpty()){
                     for (Recipes x : recipesList){
                         if (x.getId().equals(recipes.getId())){
-                            StyleableToast.makeText(binding.getRoot().getContext(),"Món ăn đã được có trong kế hoạch",R.style.mytoast).show();
+                            StyleableToast.makeText(binding.getRoot().getContext(),"Món ăn đã có trong kế hoạch",R.style.mytoast).show();
                             biTrung = true;
                             break;
+                        }else{
+                            StyleableToast.makeText(binding.getRoot().getContext(),"Thêm món ăn thành công",R.style.mytoast).show();
                         }
                     }
                 }
                 else {
-
                     myAdapter.setData(recipesList, new IClickOnItemRecipe() {
                     @Override
                     public void onClickItemRecipe(Recipes recipes) {
