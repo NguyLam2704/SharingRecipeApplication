@@ -1,8 +1,10 @@
 package com.example.sharingrecipeapp.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -76,16 +78,60 @@ public class Forgotpass extends AppCompatActivity {
         Forgot_auth.sendPasswordResetEmail(Forgot_getemail).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                StyleableToast.makeText(Forgotpass.this,"Vui lòng kiểm tra tin nhắn được gửi đến email",R.style.mytoast).show();
-                startActivity(new Intent(Forgotpass.this,LoginActivity.class));
-                finish();
+                Forgot_prgbar.setVisibility(View.GONE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Forgotpass.this);
+                builder.setTitle("Thông báo");
+                builder.setMessage("Vui lòng kiểm tra email và xác nhận mật khẩu mới trước khi đăng nhập");
+                builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(Forgotpass.this,LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface abc) {
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.color_primary));
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.color_primary));
+                    }
+                });
+                dialog.show();
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        StyleableToast.makeText(Forgotpass.this,"Không tìm thấy tài khoản",R.style.errortoast).show();
                         Forgot_prgbar.setVisibility(View.GONE);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Forgotpass.this);
+                        builder.setTitle("Thông báo");
+                        builder.setMessage("Không tìm thấy tài khoản");
+                        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface abc) {
+                                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.color_primary));
+                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.color_primary));
+                            }
+                        });
+                        dialog.show();
                     }
                 });
     }
