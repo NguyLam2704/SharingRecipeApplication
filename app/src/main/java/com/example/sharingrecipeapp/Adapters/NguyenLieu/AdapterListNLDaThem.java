@@ -3,11 +3,13 @@ package com.example.sharingrecipeapp.Adapters.NguyenLieu;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -114,11 +116,14 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
 
                     adapterDaMua.notifyDataSetChanged();
                     list.remove(position);
+                    editTextList.remove(position);
+                    editTextListOld.remove(position);
 
                     if (list.isEmpty()){
                         turnOffBtnEdit();
                     }
 
+                    dataClear();
                     notifyDataSetChanged();
                 }
             }
@@ -131,12 +136,25 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
         return list.size();
     }
 
+    public void dataClear(){
+        editTextList.clear();
+        editTextListOld.clear();
+    }
 
     public void turnOffBtnEdit(){
         editBtn.setVisibility(View.GONE);
     }
     public void turnOnBtnEdit(){
         editBtn.setVisibility(View.VISIBLE);
+    }
+
+    public boolean listHasEditIs0(){
+        for (EditText editText : editTextList){
+            if (editText.getText().toString().equals("0")){
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean listEditIsEmpty(){
@@ -149,7 +167,8 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
     }
 
     public void updateEditSL(){
-        for (int i = 0; i < editTextListOld.size(); i++){
+        Toast.makeText(editBtn.getContext(), String.valueOf(editTextListOld.size()),Toast.LENGTH_SHORT).show();
+        for (int i = 0; i < list.size(); i++){
             if (!editTextList.get(i).getText().toString().equals(editTextListOld.get(i))){
                 double sl = Double.valueOf(editTextList.get(i).getText().toString()) ;
                 Map<String,Object> data = new HashMap<>();
