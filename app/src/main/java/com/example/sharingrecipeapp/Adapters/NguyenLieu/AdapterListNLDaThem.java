@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +34,16 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
 
     List<String> editTextListOld;
     List<EditText> editTextList;
+
+    ImageView editBtn;
+
+    public ImageView getEditBtn() {
+        return editBtn;
+    }
+
+    public void setEditBtn(ImageView editBtn) {
+        this.editBtn = editBtn;
+    }
 
     public AdapterListNLDaThem(List<NguyenLieu> list) {
         this.list = list;
@@ -68,6 +79,7 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
         }
         holder.editText.setText(sl);
         holder.editText.setEnabled(false);
+
         //them edittext vao list
         editTextList.add(holder.editText);
         editTextListOld.add(sl);
@@ -102,6 +114,11 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
 
                     adapterDaMua.notifyDataSetChanged();
                     list.remove(position);
+
+                    if (list.isEmpty()){
+                        turnOffBtnEdit();
+                    }
+
                     notifyDataSetChanged();
                 }
             }
@@ -112,6 +129,23 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+
+    public void turnOffBtnEdit(){
+        editBtn.setVisibility(View.GONE);
+    }
+    public void turnOnBtnEdit(){
+        editBtn.setVisibility(View.VISIBLE);
+    }
+
+    public boolean listEditIsEmpty(){
+        for (EditText editText : editTextList){
+            if (editText.getText().toString().isEmpty()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void updateEditSL(){
