@@ -35,7 +35,7 @@
 
     <EditText
         android:id="@+id/editTextNumber"
-        android:layout_width="50dp"
+        android:layout_width="55dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="140dp"
         android:ems="10"
@@ -81,6 +81,5 @@
         app:layout_constraintEnd_toEndOf="@+id/addNL"
         app:layout_constraintStart_toStartOf="@+id/addNL"
         app:layout_constraintTop_toTopOf="@+id/addNL"
-        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/plan_btn_add" />
 </androidx.constraintlayout.widget.ConstraintLayout>

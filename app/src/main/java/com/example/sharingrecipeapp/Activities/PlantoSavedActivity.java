@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +49,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class PlantoSavedActivity extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -207,10 +210,6 @@ public class PlantoSavedActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        Toast.makeText(binding.getRoot().getContext(),"Đang thêm món ăn",Toast.LENGTH_SHORT).show();
-
         Intent turnBack = new Intent();
         int weekOfYear = extras.getInt("weekOfYear");
         turnBack.putExtra("weekOfYear",weekOfYear);
@@ -260,34 +259,36 @@ public class PlantoSavedActivity extends AppCompatActivity {
                                             String image = documentSnapshot.getString("image");
                                             String name = documentSnapshot.getString("name");
                                             String time = documentSnapshot.get("timecook").toString();
+
                                             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onSuccess(DocumentSnapshot snapshot) {
                                                     username = snapshot.getString("username");
-                                                    Recipes Newrcp = new Recipes(nameRecipe, image, name, save, time, username);
-                                                    if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                                                    {
-                                                        ResultSearchList.add(Newrcp);
 
-                                                    }
-                                                    if(ResultSearchList.isEmpty()) {
-                                                        soluong.setText("Không có kết quả phù hợp");
-                                                    }
-                                                    else{
-                                                        //tạm
-                                                        soluong.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
-                                                    }
-
-                                                    myAdapter = new RecipesAdapter();
-                                                    myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                                                        @Override
-                                                        public void onClickItemRecipe(Recipes recipes) {
-                                                            onClickGoToDetailFood(recipes);
-                                                        }
-                                                    });
-                                                    recyclerView.setAdapter(myAdapter);
                                                 }
                                             });
+                                            Recipes Newrcp = new Recipes(nameRecipe, image, name, save, time, username);
+                                            if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                                            {
+                                                ResultSearchList.add(Newrcp);
+                                                myAdapter.notifyDataSetChanged();
+                                            }
+                                            if(ResultSearchList.isEmpty()) {
+                                                soluong.setText("Không có kết quả phù hợp");
+                                            }
+                                            else{
+                                                //tạm
+                                                soluong.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                            }
+
+                                            myAdapter = new RecipesAdapter();
+                                            myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                                                @Override
+                                                public void onClickItemRecipe(Recipes recipes) {
+                                                    onClickGoToDetailFood(recipes);
+                                                }
+                                            });
+                                            recyclerView.setAdapter(myAdapter);
                                         }
                                     }
                                 });

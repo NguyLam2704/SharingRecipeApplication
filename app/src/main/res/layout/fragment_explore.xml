@@ -59,8 +59,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/color_primary"
-            app:tabRippleColor="@null"
-            android:background="@color/grey_background"
+            app:tabTextColor="@color/text_color"
+            android:elevation="0dp"
+            android:backgroundTint="@color/grey_background"
             app:tabSelectedTextColor="@color/color_primary">
 
             <com.google.android.material.tabs.TabItem
@@ -79,7 +80,7 @@
                 android:id="@+id/tab_daubep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Đầu bếp" />
+                android:text="Người dùng" />
         </com.google.android.material.tabs.TabLayout>
 
 <!--        <com.example.sharingrecipeapp.Fragments.ExploreCustomViewPager-->

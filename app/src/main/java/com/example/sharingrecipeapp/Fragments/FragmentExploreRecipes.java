@@ -15,14 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
+
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
 import com.example.sharingrecipeapp.Classes.Recipes;
@@ -31,6 +30,11 @@ import com.example.sharingrecipeapp.databinding.FragmentExploreBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+
+import com.example.sharingrecipeapp.Classes.Recipes;
+import com.example.sharingrecipeapp.R;
+
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,23 +47,18 @@ import java.util.List;
 
 
 public class FragmentExploreRecipes extends Fragment {
-
-
-    private FragmentExploreBinding binding;
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
     TextView txtRecipes;
-    RecipesAdapter Explore_recipesAdapter;
+
     SearchView Explore_searchview_recipes;
-    ProgressBar Explore_progressbar;
-    LinearLayout Explore_linear;
-    ResultExploreAdapter Explore_adapter;
+
+    RecipesAdapter Explore_adapter;
     private RecyclerView Explore_recyclerViewRandom;
     private List<Recipes> Explore_listRecipes;
     List<Recipes> Explore_listRecipes_suggest; // danh sach goi y
-    private FirebaseAuth Explore_firebaseAuth;
     private FirebaseFirestore Explore_db;
-    List<String> List_ingre_db;
 
+    String username;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,12 +87,13 @@ public class FragmentExploreRecipes extends Fragment {
                     Explore_searchview_recipes.setBackgroundResource(R.drawable.edittext_bound);
 //                    recipesList.clear();
                     setdataRecycRandom();
+                    //Explore_searchName(newText);
                 }
+                //else {Explore_searchName(newText);}
                 return true;
             }
         });
         Explore_recyclerViewRandom = (RecyclerView) view.findViewById(R.id.explore_recycler_recipes);
-        Explore_firebaseAuth = FirebaseAuth.getInstance();
         Explore_db = FirebaseFirestore.getInstance();
         setdataRecycRandom();
 
@@ -102,7 +102,8 @@ public class FragmentExploreRecipes extends Fragment {
         return view;
     }
 
-    String username;
+
+
     private void Explore_searchName(String newtext)
     {
         Explore_listRecipes_suggest = new ArrayList<>();// tim lai danh sach, dieu kien có luot save lon
@@ -119,7 +120,7 @@ public class FragmentExploreRecipes extends Fragment {
 
                 for (DocumentSnapshot documentSnapshot : value.getDocuments()){
                     String id = documentSnapshot.getString("id");
-                    DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
+
 
                     String image = documentSnapshot.getString("image");
                     String name = documentSnapshot.getString("name");
@@ -135,65 +136,66 @@ public class FragmentExploreRecipes extends Fragment {
                                 }
                                 String save = String.valueOf(idUser.size());
                                 Integer userSize = idUser.size();
+                                DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
                                 docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot snapshot) {
                                         username = snapshot.getString("username");
-                                        Recipes Newrcp = new Recipes(id, image, name, save, time, "username");
-                                        Explore_listRecipes.add(Newrcp);
-                                        if (userSize>3){
-                                            Explore_listRecipes_suggest.add(Newrcp);
-                                        }
-                                        if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                                        {
-                                            ResultSearchList.add(Newrcp);
-                                        }
 
-                                        if(ResultSearchList.isEmpty()) {
-                                            txtRecipes.setText("Không có kết quả phù hợp");
-                                        }
-                                        else{
-                                            //tạm
-                                            txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
-                                        }
-
-                                        if(!ResultSearchList.isEmpty())
-                                        {
-                                            if (newtext.equals("")){
-                                                txtRecipes.setText("Một số món gợi ý");
-                                                Explore_adapter.setData(Explore_listRecipes,new IClickOnItemRecipe() {
-                                                    @Override
-                                                    public void onClickItemRecipe(Recipes recipes) {
-                                                        onClickGoToDetailFood(recipes);
-                                                    }
-                                                });
-                                            }else
-                                            {
-                                                txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
-                                                Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                                                    @Override
-                                                    public void onClickItemRecipe(Recipes recipes) {
-                                                        onClickGoToDetailFood(recipes);
-                                                    }
-                                                });
-                                            }
-
-                                            Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-
-                                        }
-                                        else{
-                                            Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
-                                                @Override
-                                                public void onClickItemRecipe(Recipes recipes) {
-                                                    onClickGoToDetailFood(recipes);
-                                                }
-                                            });
-                                            txtRecipes.setText("Không tìm thấy kết quả phù hợp\nMột số món được yêu thích");
-                                            Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-                                        }
                                     }
                                 });
+                                Recipes Newrcp = new Recipes(id, image, name, save, time, username);
+                                Explore_listRecipes.add(Newrcp);
+                                if (userSize>3){
+                                    Explore_listRecipes_suggest.add(Newrcp);
+                                }
+                                if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                                {
+                                    ResultSearchList.add(Newrcp);
+                                }
 
+                                if(ResultSearchList.isEmpty()) {
+                                    txtRecipes.setText("Không có kết quả phù hợp");
+                                }
+                                else{
+                                    //tạm
+                                    txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                }
+
+                                if(!ResultSearchList.isEmpty())
+                                {
+                                    if (newtext.equals("")){
+                                        txtRecipes.setText("Một số món gợi ý");
+                                        Explore_adapter.setData(Explore_listRecipes,new IClickOnItemRecipe() {
+                                            @Override
+                                            public void onClickItemRecipe(Recipes recipes) {
+                                                onClickGoToDetailFood(recipes);
+                                            }
+                                        });
+                                    }else
+                                    {
+                                        txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                        Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                                            @Override
+                                            public void onClickItemRecipe(Recipes recipes) {
+                                                onClickGoToDetailFood(recipes);
+                                            }
+                                        });
+                                    }
+
+                                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+
+                                }
+                                else{
+                                    Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
+                                        @Override
+                                        public void onClickItemRecipe(Recipes recipes) {
+                                            onClickGoToDetailFood(recipes);
+                                        }
+                                    });
+                                    txtRecipes.setText("Không tìm thấy kết quả phù hợp\nMột số món được yêu thích");
+                                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+                                }
 
 
                             }
@@ -206,7 +208,7 @@ public class FragmentExploreRecipes extends Fragment {
 
                 }
 
-                }
+            }
 //                for (Recipes recipes : Explore_listRecipes)
 //                {
 //                    if(unAccent(recipes.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
@@ -280,13 +282,12 @@ public class FragmentExploreRecipes extends Fragment {
         });
     }
 
-
     private void setdataRecycRandom()
     {
         GridLayoutManager Explore_gridlayoutMng = new GridLayoutManager(getContext(),2);
         Explore_recyclerViewRandom.setLayoutManager(Explore_gridlayoutMng);
 
-        Explore_adapter = new ResultExploreAdapter();
+        Explore_adapter = new RecipesAdapter();
         Explore_listRecipes = new ArrayList<>();
         Explore_adapter.setData(Explore_listRecipes, new IClickOnItemRecipe() {
             @Override
@@ -295,7 +296,7 @@ public class FragmentExploreRecipes extends Fragment {
             }
         });
         Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-        Explore_db.collection("Recipes")
+        Explore_db.collection("Recipes").limit(10)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -307,7 +308,7 @@ public class FragmentExploreRecipes extends Fragment {
                         for (DocumentSnapshot documentSnapshot : value.getDocuments()){
                             String id = documentSnapshot.getString("id");
                             DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
-                            Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).limit(10).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
@@ -322,15 +323,22 @@ public class FragmentExploreRecipes extends Fragment {
                                         String image = documentSnapshot.getString("image");
                                         String name = documentSnapshot.getString("name");
                                         String time = documentSnapshot.getString("timecook");
-
-                                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                             @Override
-                                            public void onSuccess(DocumentSnapshot snapshot) {
-                                                username= snapshot.getString("username");
-                                                Explore_listRecipes.add(new Recipes(id, image, name, save, time, "luan"));
+                                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                                username= value.getString("username");
+                                                Explore_listRecipes.add(new Recipes(id, image, name, save, time, username));
                                                 Explore_adapter.notifyDataSetChanged();
                                             }
                                         });
+//                                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                            @Override
+//                                            public void onSuccess(DocumentSnapshot snapshot) {
+//                                                username= snapshot.getString("username");
+//                                                Explore_listRecipes.add(new Recipes(id, image, name, save, time, username));
+//                                                Explore_adapter.notifyDataSetChanged();
+//                                            }
+//                                        });
                                     }
                                 }
                             });

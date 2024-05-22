@@ -35,7 +35,7 @@
         android:text="TextView"
         android:textColor="@color/black"
         android:textFontWeight="400"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="@id/cardView"

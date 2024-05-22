@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.github.muddz.styleabletoast.StyleableToast;
+
 
 public class PlanFragment extends Fragment {
     static int RECIPE_HEIGHT = 145;//272;
@@ -114,7 +116,6 @@ public class PlanFragment extends Fragment {
                 String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
 
                 resetList();
-                //Toast.makeText(binding.getRoot().getContext(),weekID,Toast.LENGTH_SHORT).show();
 
                 PlanOfDay(weekID);
             }
@@ -133,8 +134,6 @@ public class PlanFragment extends Fragment {
                 String weekID = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
 
                 resetList();
-                //Toast.makeText(binding.getRoot().getContext(),weekID,Toast.LENGTH_SHORT).show();
-
                 PlanOfDay(weekID);
             }
         });
@@ -162,6 +161,7 @@ public class PlanFragment extends Fragment {
 //            new Handler().postDelayed(new Runnable() {
 //                public void run() {
 
+
                 calendar.set(Calendar.WEEK_OF_YEAR,result.getData().getExtras().getInt("weekOfYear"));
                 String id = result.getData().getStringExtra("id");
                 String date = result.getData().getStringExtra("date");
@@ -176,21 +176,23 @@ public class PlanFragment extends Fragment {
                 if (!recipesList.isEmpty()){
                     for (Recipes x : recipesList){
                         if (x.getId().equals(recipes.getId())){
-                            Toast.makeText(binding.getRoot().getContext(),"Món ăn bị trùng",Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(binding.getRoot().getContext(),"Món ăn đã có trong kế hoạch",R.style.mytoast).show();
                             biTrung = true;
                             break;
+                        }else{
+                            StyleableToast.makeText(binding.getRoot().getContext(),"Thêm món ăn thành công",R.style.mytoast).show();
                         }
                     }
                 }
                 else {
-
                     myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+
                     @Override
                     public void onClickItemRecipe(Recipes recipes) {
                         onClickGoToDetailFood(recipes);
                     }
-                    });
-                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                });
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
                     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                         return false;
@@ -204,7 +206,7 @@ public class PlanFragment extends Fragment {
                         String name = recipesList.get(position).getName();
                         String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
 
-                        Toast.makeText(binding.getRoot().getContext(), "Đã xóa " + name, Toast.LENGTH_SHORT).show();
+                        StyleableToast.makeText(binding.getRoot().getContext(), "Đã xóa món " + name, R.style.mytoast).show();
                         db.collection("PlanList").document(auth.getUid()).collection(week).document(date).update("recipes", FieldValue.arrayRemove(ID));
 
                         new Handler().postDelayed(new Runnable() {
@@ -221,8 +223,7 @@ public class PlanFragment extends Fragment {
 //                                    setting.setVisibility(View.GONE);
                                 }
                             }
-                        }, 200); // 5 seconds
-                        //Toast.makeText(binding.getRoot().getContext(), "Đã xoá món ăn", Toast.LENGTH_SHORT).show();
+                        }, 200);
                     }
                 });
                 recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.VERTICAL, false));
@@ -233,11 +234,12 @@ public class PlanFragment extends Fragment {
 //                selectBtnSetting(date).setVisibility(View.VISIBLE);
             }
 
-                if (!biTrung){
-                    recipesList.add(recipes);
-                    selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT + selectRecycleView(date).getHeight() );
-                    recyclerView.getAdapter().notifyDataSetChanged();
-                }
+            if (!biTrung){
+                recipesList.add(recipes);
+                selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT + selectListRecipes(date).size() * RECIPE_HEIGHT );
+                recyclerView.getAdapter().notifyDataSetChanged();
+
+            }
         }
     });
 
@@ -354,6 +356,7 @@ public class PlanFragment extends Fragment {
         }
     }
 
+    int numberSize;
 
     private void PlanOfDay(String weekID){
         turnOffRecyclerView();
@@ -374,7 +377,10 @@ public class PlanFragment extends Fragment {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.get("recipes") != null){
                                 List<String> listFromDB = (List<String>) documentSnapshot.get("recipes");
-
+                                numberSize = listFromDB.size();
+//                                if (i.equals("Thu2")){
+//                                    Toast.makeText(binding.getRoot().getContext(),String.valueOf(listFromDB.size()),Toast.LENGTH_SHORT).show();
+//                                }
 
                                 //
                                 if (!listFromDB.isEmpty()){
@@ -449,7 +455,7 @@ public class PlanFragment extends Fragment {
                         selectRecycleView(date).getAdapter().notifyDataSetChanged();
 
                         if (id.equals(list.get(list.size()-1))){
-                            selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT * list.size());
+                            selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT * numberSize);
                         }
 
 
@@ -492,7 +498,7 @@ public class PlanFragment extends Fragment {
                 String ID = recipesList.get(position).getId();
                 String week = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
                 String name = recipesList.get(position).getName();
-                Toast.makeText(binding.getRoot().getContext(), "Đã xóa " + name, Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(binding.getRoot().getContext(), "Đã xóa món " + name,R.style.mytoast).show();
                 db.collection("PlanList").document(auth.getUid()).collection(week).document(date).update("recipes", FieldValue.arrayRemove(ID));
 
                 new Handler().postDelayed(new Runnable() {
@@ -520,7 +526,7 @@ public class PlanFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
 //        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),0);
-               // linearLayout.getOrientation());
+        // linearLayout.getOrientation());
 
 //        recyclerView.addItemDecoration(dividerItemDecoration);
 

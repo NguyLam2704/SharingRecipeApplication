@@ -2,7 +2,7 @@ package com.example.sharingrecipeapp.Fragments;
 
 import static com.example.sharingrecipeapp.Fragments.ExploreFragment.unAccent;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -15,21 +15,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+
 import android.widget.TextView;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
-import com.example.sharingrecipeapp.Activities.FoodDetailActivity;
-import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.R;
-import com.example.sharingrecipeapp.databinding.FragmentExploreBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -49,22 +46,19 @@ import java.util.regex.Pattern;
  */
 public class FragmentExploreCook extends Fragment {
 
-    private FragmentExploreBinding binding;
+
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
     TextView txtCooks;
-    RecipesAdapter Explore_recipesAdapter;
+
     SearchView Explore_searchview_cook;
-    ProgressBar Explore_progressbar;
-    LinearLayout Explore_linear_ingredients;
-    ResultExploreAdapter Explore_adapter;
     private RecyclerView Explore_recyclerView;
     private List<Recipes> Explore_listRecipes;
     List<Recipes> Explore_listRecipes_suggest; // goi ý
     private FirebaseAuth Explore_firebaseAuth;
     private FirebaseUser user;
     private FirebaseFirestore Explore_db;
-    List<String> List_ingre_db;
 
+    String username;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -149,7 +143,7 @@ public class FragmentExploreCook extends Fragment {
     }
     private void displayRecipes(){
         Explore_listRecipes_suggest = new ArrayList<>();
-        Explore_db.collection("Recipes").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        Explore_db.collection("Recipes").limit(10).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null)
@@ -162,7 +156,8 @@ public class FragmentExploreCook extends Fragment {
                     String id = queryDocumentSnapshot.getString("id");
                     String name = queryDocumentSnapshot.getString("name");
                     String time = queryDocumentSnapshot.get("timecook").toString();
-                    Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    DocumentReference docRef = queryDocumentSnapshot.getDocumentReference("Users");
+                    Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).limit(10).addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                             ArrayList<String> idUser = new ArrayList<>();
@@ -174,7 +169,14 @@ public class FragmentExploreCook extends Fragment {
                                     idUser = (ArrayList<String>) queryDocumentSnapshot1.get("idUsers");
                                 }
                                 save = String.valueOf(idUser.size());
-                                Recipes recipes = new Recipes(id,image,name,save,time,"user");
+                                docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        username = value.getString("username");
+
+                                    }
+                                });
+                                Recipes recipes = new Recipes(id,image,name,save,time,username);
                                 Explore_listRecipes_suggest.add(recipes);
                                 txtCooks.setText("Một số công thức gợi ý");
                                 RecipesAdapter myAdapter = new RecipesAdapter();
@@ -227,6 +229,7 @@ public class FragmentExploreCook extends Fragment {
                                     String id = queryDocumentSnapshot1.getString("id");
                                     String name = queryDocumentSnapshot1.getString("name");
                                     String time = queryDocumentSnapshot1.get("timecook").toString();
+                                    DocumentReference docRef = queryDocumentSnapshot1.getDocumentReference("Users");
                                     Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                         @Override
                                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -242,7 +245,13 @@ public class FragmentExploreCook extends Fragment {
                                                     idUser = (ArrayList<String>) queryDocumentSnapshot2.get("idUsers");
                                                 }
                                                 save = String.valueOf(idUser.size());
-                                                Recipes recipes = new Recipes(id,image,name,save,time);
+                                                docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                                        username = value.getString("username");
+                                                    }
+                                                });
+                                                Recipes recipes = new Recipes(id,image,name,save,time,username);
                                                 Explore_listRecipes.add(recipes);
                                                 RecipesAdapter myAdapter = new RecipesAdapter();
                                                 myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {
@@ -262,7 +271,7 @@ public class FragmentExploreCook extends Fragment {
                         });
                         if(Explore_listRecipes.isEmpty())
                         {
-                            txtCooks.setText("Không có kết quả phù hợp");
+                            txtCooks.setText("Không có kết quả phù hợp\nMột số món được yêu thích");
                         }
                         RecipesAdapter myAdapter = new RecipesAdapter();
                         myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {
@@ -273,7 +282,9 @@ public class FragmentExploreCook extends Fragment {
                         });
                         Explore_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                         Explore_recyclerView.setAdapter(myAdapter);
+                        break;
                     }
+
                 }
             }
         });

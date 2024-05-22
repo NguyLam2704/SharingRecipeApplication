@@ -4,10 +4,12 @@ import static com.example.sharingrecipeapp.Fragments.ExploreFragment.unAccent;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -17,15 +19,19 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
+import com.example.sharingrecipeapp.Adapters.Explore.ItemSearchIngreAdapter;
 import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
+import com.example.sharingrecipeapp.Classes.NewRcpIngre;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.R;
 import com.example.sharingrecipeapp.databinding.FragmentExploreBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,6 +41,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -48,14 +55,17 @@ public class FragmentExploreIngredient extends Fragment {
     LinearLayout Explore_linear_ingredients;
     List<Recipes> Explore_listRecipes_suggest; // goi ý
     TextView txtIngredients;
-    ResultExploreAdapter Explore_adapter;
-    private RecyclerView Explore_recyclerViewRandom;
+    RecipesAdapter Explore_adapter;
+    ItemSearchIngreAdapter ItemIngreAdapter;
+    private RecyclerView Explore_recyclerViewRandom, Explore_item_searchIngre;
     private List<Recipes> Explore_listRecipes;
     private FirebaseAuth Explore_firebaseAuth;
+    List<NewRcpIngre> IngreList;
     private FirebaseFirestore Explore_db;
+    LinearLayoutManager linearLayoutManager;
     List<String> List_ingre_db;
-
-
+    String username ;
+    ArrayList<String> idUser;
     public FragmentExploreIngredient() {
         // Required empty public constructor
     }
@@ -70,14 +80,14 @@ public class FragmentExploreIngredient extends Fragment {
         bottomNavigationCustomActivity = (BottomNavigationCustomActivity) getActivity();
         Explore_searchview_ingredients = (SearchView) view.findViewById(R.id.explore_searchbar_ingredients);
         txtIngredients= (TextView) view.findViewById(R.id.txt_explore_ingredient);
-        txtIngredients.setText("Một số món gợi ý");
+        txtIngredients.setText("Một số công thức gợi ý");
         Explore_searchview_ingredients.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
 //                Explore_searchName(query);
                 Explore_searchview_ingredients.setBackgroundResource(R.drawable.edittext_bound);
                 Explore_searchIngre(query);
-                return false;
+                return true;
             }
 
             @Override
@@ -90,15 +100,20 @@ public class FragmentExploreIngredient extends Fragment {
 //                    recipesList.clear();
                     setdataRecycRandom();
                 }
-//                Explore_searchIngre(newText);
+
+                //Explore_searchIngre(newText);
                 return true;
+
             }
         });
 
         Explore_recyclerViewRandom = (RecyclerView) view.findViewById(R.id.explore_recycler_ingredient);
+        Explore_item_searchIngre = (RecyclerView) view.findViewById( R.id.recy_item_searchIngre);
         Explore_firebaseAuth = FirebaseAuth.getInstance();
         Explore_db = FirebaseFirestore.getInstance();
+        linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
         setdataRecycRandom();
+//        getFullIngre();
 
 
         return view;
@@ -107,6 +122,10 @@ public class FragmentExploreIngredient extends Fragment {
 
     private void Explore_searchIngre(String newtext)
     {
+
+        String[] textquery = newtext.split(",");
+        List<String> listquery = new ArrayList<>();
+        Collections.addAll(listquery, textquery);
         List<Recipes> ResultSearchList = new ArrayList<>();
         Explore_listRecipes_suggest=new ArrayList<>();
 
@@ -124,7 +143,7 @@ public class FragmentExploreIngredient extends Fragment {
                     String image = documentSnapshot.getString("image");
                     String name = documentSnapshot.getString("name");
                     String time = documentSnapshot.getString("timecook");
-
+                    DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
                     List<String> nguyenlieu = (List<String>) documentSnapshot.get("NguyenLieu");
 
 //
@@ -141,32 +160,41 @@ public class FragmentExploreIngredient extends Fragment {
                     Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                            ArrayList<String> idUser = new ArrayList<>();
+                             idUser = new ArrayList<>();
 
                             for (QueryDocumentSnapshot doc :value) {
                                 if (doc.get("idUsers") != null) {
                                     idUser = (ArrayList<String>) doc.get("idUsers");
                                 }
                                 String save = String.valueOf(idUser.size());
-                                Recipes Newrcp = new Recipes(id, image, name, save, time);
+
+                                        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        username = value.getString("username");
+
+                                    }
+                                });
+                                Recipes Newrcp = new Recipes(id, image, name, save, time,username);
                                 Explore_listRecipes.add(Newrcp);
                                 if (idUser.size()>3){
                                     Explore_listRecipes_suggest.add(Newrcp);
                                 }
-
-//                                if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-//                                {
-//                                    ResultSearchList.add(Newrcp);
-//                                }
-
-                              for (String ingres_item : nguyenlieu)
-                              {
-                                  if(unAccent(ingres_item.replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                                Recipes recipes = new Recipes(id,image,name,save,time,username);
+                                for (String txt : listquery) {
+                                    if(ResultSearchList.contains(recipes))
                                     {
-                                        ResultSearchList.add(new Recipes(id, image, name, save, time));
                                         break;
                                     }
-                              }
+                                    for (String ingres_item : nguyenlieu) {
+                                        if (unAccent(ingres_item.replace(" ", "")).toLowerCase().contains(unAccent(txt.toLowerCase().replace(" ", ""))))
+                                        {
+                                            ResultSearchList.add(recipes);
+                                            Explore_adapter.notifyDataSetChanged();
+                                            break;
+                                        }
+                                    }
+                                }
 
 
                             }
@@ -234,24 +262,24 @@ public class FragmentExploreIngredient extends Fragment {
 
 
     //chuyển có dấu thành không dấu
-    public static String unAccent(String s) {
-        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
-        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        if (s.equals("Đ") || s.equals("đ"))
-        {
-            return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replace("đ", "d");
-        }
-        return pattern.matcher(temp).replaceAll("").replace('đ','d').replace('Đ','D');
-
-    }
+//    public static String unAccent(String s) {
+//        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+//        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+//        if (s.equals("Đ") || s.equals("đ"))
+//        {
+//            return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replace("đ", "d");
+//        }
+//        return pattern.matcher(temp).replaceAll("").replace('đ','d').replace('Đ','D');
+//
+//    }
 
     private void setdataRecycRandom()
     {
         GridLayoutManager Explore_gridlayoutMng = new GridLayoutManager(getContext(),2);
         Explore_recyclerViewRandom.setLayoutManager(Explore_gridlayoutMng);
-        Explore_adapter = new ResultExploreAdapter();
+        Explore_adapter = new RecipesAdapter();
 
-        Explore_db.collection("Recipes").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        Explore_db.collection("Recipes").limit(10).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -265,6 +293,7 @@ public class FragmentExploreIngredient extends Fragment {
                     String image = documentSnapshot.getString("image");
                     String name = documentSnapshot.getString("name");
                     String time = documentSnapshot.getString("timecook");
+                    DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
 
 
                     Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -277,15 +306,26 @@ public class FragmentExploreIngredient extends Fragment {
                                     idUser = (ArrayList<String>) doc.get("idUsers");
                                 }
                                 String save = String.valueOf(idUser.size());
-                                Recipes Newrcp = new Recipes(id, image, name, save, time);
-                                Explore_listRecipes.add(Newrcp);
-                                Explore_adapter.setData(Explore_listRecipes, new IClickOnItemRecipe() {
+                                docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                     @Override
-                                    public void onClickItemRecipe(Recipes recipes) {
-                                        onClickGoToDetailFood(recipes);
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        String username= value.getString("username");
+                                        Recipes Newrcp = new Recipes(id, image, name, save, time,username);
+                                        Explore_listRecipes.add(Newrcp);
+                                        Explore_adapter.notifyDataSetChanged();
+                                        Explore_adapter.setData(Explore_listRecipes, new IClickOnItemRecipe() {
+                                            @Override
+                                            public void onClickItemRecipe(Recipes recipes) {
+                                                onClickGoToDetailFood(recipes);
+                                            }
+                                        });
+                                        Explore_recyclerViewRandom.setAdapter(Explore_adapter);
                                     }
                                 });
-                                Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+
+
+
+
 
                             }
 

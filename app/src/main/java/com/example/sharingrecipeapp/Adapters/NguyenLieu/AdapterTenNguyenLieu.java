@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import io.github.muddz.styleabletoast.StyleableToast;
+
 public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuViewHolder> {
 
     Context context;
@@ -80,7 +82,7 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
                     EditText sl = holder.editText;
 
                     //Check xem edit text co rong hay khong
-                    if (!sl.getText().toString().isEmpty() && !sl.getText().toString().equals("0")){
+                    if (!sl.getText().toString().isEmpty() && !sl.getText().toString().equals("0") && !sl.getText().toString().equals(".")){
                         Double soluong = Double.valueOf(sl.getText().toString());
                         nguyenLieu.setSL(soluong);
 
@@ -95,10 +97,18 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
 
                         // Cap nhat lai list nguyen lieu
                         if (!biTrung) {
+                            if (NL_Da_Them.isEmpty()){
+                                adapterListNL.turnOffBtnEditDone();
+                                adapterListNL.turnOffBtnEdit();
+                            }
+                            else {
+                                adapterListNL.turnOnBtnEdit();
+                            }
                             NL_Da_Them.add(nguyenLieu);
                         }
 
                         //Cap nhat lai ListView
+                        adapterListNL.dataClear();
                         adapterListNL.notifyDataSetChanged();
 
                         //Day du lieu len FireStore
@@ -118,7 +128,7 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
                                     Map<String,Object> data = new HashMap<>();
                                     data.put("id",documentReference.getId());
                                     nguyenLieu.setId(documentReference.getId());
-                                    Toast.makeText(context,"Đã thêm nguyên liệu", Toast.LENGTH_SHORT).show();
+                                    StyleableToast.makeText(context,"Thêm nguyên liệu thành công", R.style.mytoast).show();
                                 }
                             });
                         }
