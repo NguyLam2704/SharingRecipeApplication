@@ -55,7 +55,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
         android:text="Lưu và chia sẻ công thức, lên kế hoạch bữa ăn và hơn thế"
-        android:textColor="@color/black"
+        android:textColor="@color/color_primary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
