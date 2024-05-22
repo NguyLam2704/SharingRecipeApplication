@@ -28,19 +28,19 @@
 
         <TextView
             android:id="@+id/method_text"
-            android:paddingTop="11dp"
-            android:paddingStart="4dp"
-            android:paddingBottom="11dp"
-            android:paddingEnd="10dp"
-            android:layout_marginStart="90dp"
-            android:textAlignment="gravity"
-            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="90dp"
+            android:background="@color/white"
             android:backgroundTint="@color/white"
-            android:textSize="18sp"
+            android:paddingStart="4dp"
+            android:paddingTop="11dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="11dp"
+            android:text="Bắc chảo lên bếp, cho vào chảo 1 ít dầu ăn rồi cho hành tím băm vào phi thơm.  Khi hành thơm, bạn cho tôm, thịt vào chảo cùng 1/2 muỗng cà phê tiêu, 1/2 muỗng cà phê bột ngọt, 1/3 muỗng cà phê muối, 1 muỗng cà phê nước mắm. Xào đều nhân với lửa vừa đến khi chín hoàn toàn.  Kế đến, cho vào chảo hành tây, cà rốt, nấm hương và tiếp tục xào đến khi rau củ chín."
+            android:textAlignment="gravity"
             android:textColor="@color/black"
-            android:text="Bắc chảo lên bếp, cho vào chảo 1 ít dầu ăn rồi cho hành tím băm vào phi thơm.  Khi hành thơm, bạn cho tôm, thịt vào chảo cùng 1/2 muỗng cà phê tiêu, 1/2 muỗng cà phê bột ngọt, 1/3 muỗng cà phê muối, 1 muỗng cà phê nước mắm. Xào đều nhân với lửa vừa đến khi chín hoàn toàn.  Kế đến, cho vào chảo hành tây, cà rốt, nấm hương và tiếp tục xào đến khi rau củ chín." />
+            android:textSize="18sp" />
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

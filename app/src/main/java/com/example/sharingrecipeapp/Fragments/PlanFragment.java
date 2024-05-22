@@ -161,30 +161,32 @@ public class PlanFragment extends Fragment {
 //            new Handler().postDelayed(new Runnable() {
 //                public void run() {
 
-            calendar.set(Calendar.WEEK_OF_YEAR,result.getData().getExtras().getInt("weekOfYear"));
-            String id = result.getData().getStringExtra("id");
-            String date = result.getData().getStringExtra("date");
-            String name = result.getData().getStringExtra("name");
-            String img = result.getData().getStringExtra("img");
-            Recipes recipes = new Recipes(id,name,img);
-            recyclerView = selectRecycleView(date);
-            List<Recipes> recipesList = selectListRecipes(date);
-            AdapterPlanListRecipes myAdapter = new AdapterPlanListRecipes();
 
-            boolean biTrung = false;
-            if (!recipesList.isEmpty()){
-                for (Recipes x : recipesList){
-                    if (x.getId().equals(recipes.getId())){
-                        StyleableToast.makeText(binding.getRoot().getContext(),"Món ăn đã có trong kế hoạch",R.style.mytoast).show();
-                        biTrung = true;
-                        break;
-                    }else{
-                        StyleableToast.makeText(binding.getRoot().getContext(),"Thêm món ăn thành công",R.style.mytoast).show();
+                calendar.set(Calendar.WEEK_OF_YEAR,result.getData().getExtras().getInt("weekOfYear"));
+                String id = result.getData().getStringExtra("id");
+                String date = result.getData().getStringExtra("date");
+                String name = result.getData().getStringExtra("name");
+                String img = result.getData().getStringExtra("img");
+                Recipes recipes = new Recipes(id,name,img);
+                recyclerView = selectRecycleView(date);
+                List<Recipes> recipesList = selectListRecipes(date);
+                AdapterPlanListRecipes myAdapter = new AdapterPlanListRecipes();
+
+                boolean biTrung = false;
+                if (!recipesList.isEmpty()){
+                    for (Recipes x : recipesList){
+                        if (x.getId().equals(recipes.getId())){
+                            StyleableToast.makeText(binding.getRoot().getContext(),"Món ăn đã có trong kế hoạch",R.style.mytoast).show();
+                            biTrung = true;
+                            break;
+                        }else{
+                            StyleableToast.makeText(binding.getRoot().getContext(),"Thêm món ăn thành công",R.style.mytoast).show();
+                        }
                     }
                 }
-            }
-            else {
-                myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+                else {
+                    myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+
                     @Override
                     public void onClickItemRecipe(Recipes recipes) {
                         onClickGoToDetailFood(recipes);

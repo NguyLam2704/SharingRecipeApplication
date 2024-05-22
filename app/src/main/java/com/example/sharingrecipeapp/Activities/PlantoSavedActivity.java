@@ -60,6 +60,8 @@ public class PlantoSavedActivity extends AppCompatActivity {
     FirebaseFirestore db;
     TextView soluong;
     Integer number = 0;
+
+    RecipesAdapter myAdapter;
     List <Recipes> ResultSearchList;
 
     List<Recipes> recipesList;
@@ -121,7 +123,14 @@ public class PlantoSavedActivity extends AppCompatActivity {
 
     }
 
+    String username;
     private void displaySavedRecipes(){
+
+        recyclerView.setLayoutManager(new GridLayoutManager(binding.getRoot().getContext(), 2));
+
+        myAdapter = new RecipesAdapter();
+        recipesList = new ArrayList<>();
+
         db.collection("SaveRecipes").whereArrayContains("idUsers",auth.getUid()).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
@@ -129,10 +138,11 @@ public class PlantoSavedActivity extends AppCompatActivity {
                         for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
                             tenRecipes.add(documentSnapshot.get("Recipes").toString());
                         }
-                        recipesList = new ArrayList<>();
+
                         for (String i : tenRecipes){
                             db.collection("Recipes").document(i).get()
                                     .addOnSuccessListener(documentSnapshot -> {
+                                        DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
                                         db.collection("SaveRecipes").whereEqualTo("Recipes",i).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                             @Override
                                             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -148,38 +158,34 @@ public class PlantoSavedActivity extends AppCompatActivity {
                                                     String image = documentSnapshot.getString("image");
                                                     String name = documentSnapshot.getString("name");
                                                     String time = documentSnapshot.getString("timecook");
-                                                    Recipes recipes = new Recipes(i,image,name,save,time);
-                                                    recipesList.add(recipes);
-                                                    if (i == tenRecipes.get(tenRecipes.size()-1)){
-                                                        RecipesAdapter myAdapter = new RecipesAdapter();
-                                                        myAdapter.setData(recipesList, new IClickOnItemRecipe() {
-                                                            @Override
-                                                            public void onClickItemRecipe(Recipes recipes) {
-                                                                onClickGoToDetailFood(recipes);
-                                                            }
-                                                        });
-                                                        recyclerView.setLayoutManager(new GridLayoutManager(binding.getRoot().getContext(), 2));
-                                                        recyclerView.setAdapter(myAdapter);
-                                                    }
-//                                                    recipesRandomAdapter.setData(listRecipes, new IClickOnItemRecipe() {
-//                                                        @Override
-//                                                        public void onClickItemRecipe(Recipes recipes) {
-//                                                            onClickGoToDetailFood(recipes);
-//                                                        }
-//                                                    });
-//                                                    recyclerViewRandom.setAdapter(recipesRandomAdapter);
+
+                                                    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentSnapshot snapshot) {
+
+                                                                //myAdapter.notifyDataSetChanged();
+                                                                username = snapshot.getString("username");
+                                                                Recipes recipes = new Recipes(i,image,name,save,time,username);
+                                                                recipesList.add(recipes);
+                                                                soluong.setText("Bạn đã lưu được " + recipesList.size() +" món ăn");
+                                                            myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+                                                                @Override
+                                                                public void onClickItemRecipe(Recipes recipes) {
+                                                                    onClickGoToDetailFood(recipes);
+                                                                }
+                                                            });
+                                                            recyclerView.setAdapter(myAdapter);
+                                                        }
+                                                    });
                                                 }
                                             }
                                         });
-                                        number++;
-                                        soluong.setText("Bạn đã lưu được " + String.valueOf(number) +" món ăn");
                                     });
                         }
                     }
                 });
-
-
     }
+
 
 
     private void onClickGoToDetailFood(Recipes recipes) {
@@ -204,7 +210,6 @@ public class PlantoSavedActivity extends AppCompatActivity {
                 }
             }
         });
-        StyleableToast.makeText(binding.getRoot().getContext(), "Thêm món " + recipes.getName()+" thành công", R.style.mytoast).show();
         Intent turnBack = new Intent();
         int weekOfYear = extras.getInt("weekOfYear");
         turnBack.putExtra("weekOfYear",weekOfYear);
@@ -221,6 +226,7 @@ public class PlantoSavedActivity extends AppCompatActivity {
     private void save_searchName(String newtext)
     {
         ResultSearchList = new ArrayList<>();
+
         db.collection("SaveRecipes").whereArrayContains("idUsers",auth.getUid()).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -237,46 +243,55 @@ public class PlantoSavedActivity extends AppCompatActivity {
                 for (String nameRecipe : tenRecipes){
                     db.collection("Recipes").document(nameRecipe).get()
                             .addOnSuccessListener(documentSnapshot -> {
-                                String image = documentSnapshot.getString("image");
-                                String name = documentSnapshot.getString("name");
-                                String time = documentSnapshot.get("timecook").toString();
+                                DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
+
 
                                 db.collection("SaveRecipes").whereEqualTo("Recipes",nameRecipe).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                     @Override
                                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                                         ArrayList<String> idUser = new ArrayList<>();
-                                        String save;
+
                                         for (QueryDocumentSnapshot doc :value) {
                                             if (doc.get("idUsers") != null) {
                                                 idUser = (ArrayList<String>) doc.get("idUsers");
                                             }
-                                            save = String.valueOf(idUser.size());
-                                            Recipes Newrcp = new Recipes(nameRecipe, image, name, save, time);
-                                            if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                                            {
-                                                ResultSearchList.add(Newrcp);
-                                            }
-                                            if(ResultSearchList.isEmpty()) {
-                                                soluong.setText("Không có kết quả phù hợp");
-                                            }
-                                            else{
-                                                //tạm
-                                                soluong.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
-                                            }
-                                            RecipesAdapter myAdapter = new RecipesAdapter();
-                                            myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                                            String save = String.valueOf(idUser.size());
+                                            String image = documentSnapshot.getString("image");
+                                            String name = documentSnapshot.getString("name");
+                                            String time = documentSnapshot.get("timecook").toString();
+                                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                 @Override
-                                                public void onClickItemRecipe(Recipes recipes) {
-                                                    onClickGoToDetailFood(recipes);
+                                                public void onSuccess(DocumentSnapshot snapshot) {
+                                                    username = snapshot.getString("username");
+                                                    Recipes Newrcp = new Recipes(nameRecipe, image, name, save, time, username);
+                                                    if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                                                    {
+                                                        ResultSearchList.add(Newrcp);
+
+                                                    }
+                                                    if(ResultSearchList.isEmpty()) {
+                                                        soluong.setText("Không có kết quả phù hợp");
+                                                    }
+                                                    else{
+                                                        //tạm
+                                                        soluong.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                                    }
+
+                                                    myAdapter = new RecipesAdapter();
+                                                    myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                                                        @Override
+                                                        public void onClickItemRecipe(Recipes recipes) {
+                                                            onClickGoToDetailFood(recipes);
+                                                        }
+                                                    });
+                                                    recyclerView.setAdapter(myAdapter);
                                                 }
                                             });
-                                            recyclerView.setAdapter(myAdapter);
                                         }
                                     }
                                 });
                             });
                 }
-                //search ko co ket qua
             }
 
         });
