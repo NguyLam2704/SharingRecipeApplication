@@ -20,7 +20,7 @@
         android:drawablePadding="8dp"
         android:hint="Số lượng"
         android:padding="12dp"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:textColor="@color/black"
         android:textCursorDrawable="@drawable/color_cursor"
         app:layout_constraintStart_toStartOf="parent"
