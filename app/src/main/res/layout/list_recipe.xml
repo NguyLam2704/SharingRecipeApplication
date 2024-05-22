@@ -103,28 +103,29 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            app:strokeColor="#9FA0AC"
-            app:cardCornerRadius="0dp"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/textView_title"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:lines="2"
-                android:background="@color/color_primary"
-                android:gravity="center"
-                android:maxLines="2"
-                android:text="Tên món ăn"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/imageView_food"
-                app:layout_constraintStart_toStartOf="@+id/imageView_food"
-                app:layout_constraintTop_toBottomOf="@+id/imageView_food" />
-        </com.google.android.material.card.MaterialCardView>
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:strokeColor="@color/color_primary"
+    app:cardCornerRadius="0dp"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView_title"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:lines="2"
+            android:background="@color/color_primary"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="Tên món ăn"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_food"
+            app:layout_constraintStart_toStartOf="@+id/imageView_food"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_food" />
+</com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

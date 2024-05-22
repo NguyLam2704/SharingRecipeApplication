@@ -15,11 +15,13 @@
         android:theme="@style/Theme.SharingRecipeApp"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.AllRecipesActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.SharedListActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.AddToGroceryActivity"
-
             android:exported="false" />
         <activity
             android:name=".Activities.CreateRecipeActivity"
@@ -47,8 +49,8 @@
             android:exported="false" />
         <activity
             android:name=".Activities.BottomNavigationCustomActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Activities.WelcomeActivity"
             android:exported="true">
@@ -61,6 +63,7 @@
         <activity android:name=".Activities.FoodDetailActivity" />
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.SignupActivity" />
+
     </application>
 
 </manifest>

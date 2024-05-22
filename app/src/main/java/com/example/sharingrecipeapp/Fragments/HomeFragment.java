@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -22,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
@@ -90,6 +92,8 @@ public class HomeFragment extends Fragment {
 
     private List<Method> mMethodList;
 
+    TextView btnAllRecipe;
+
     ActivityResultLauncher<Intent> activityResultLauncher =  registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->{
         if (result.getResultCode() == 111){
             for (int i = 0; i < listRecipes.size(); i++){
@@ -131,6 +135,7 @@ public class HomeFragment extends Fragment {
         recyclerViewRandom = (RecyclerView) view.findViewById(R.id.recyRanDom);
         recyclerViewTheme = (RecyclerView) view.findViewById(R.id.recyTheme);
         btn_create = view.findViewById(R.id.imageButton);
+        btnAllRecipe = view.findViewById(R.id.txtXemThem);
 
 
         //bottomNavigationCustomActivity.reload();
@@ -146,6 +151,12 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btnAllRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomNavigationCustomActivity.gotoAllRecipes();
+            }
+        });
         return view;
     }
 
@@ -253,8 +264,7 @@ public class HomeFragment extends Fragment {
     private void setdataRecycRandom() {
 
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
-        recyclerViewRandom.setLayoutManager(linearLayoutManager);
+        recyclerViewRandom.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
 
         recipesRandomAdapter = new RecipesRandomAdapter();
         listRecipes = new ArrayList<>();

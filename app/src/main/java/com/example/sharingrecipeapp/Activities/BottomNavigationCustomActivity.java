@@ -46,7 +46,6 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
     ActivityBottomNavigationCustomBinding binding;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +56,7 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         replaceFragment(new HomeFragment());
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
+
 
 
 
@@ -190,6 +190,10 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void gotoAllRecipes(){
+        Intent intent = new Intent(this, AllRecipesActivity.class);
+        startActivity(intent);
+    }
 }
 
 
