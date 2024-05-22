@@ -1,9 +1,12 @@
 package com.example.sharingrecipeapp.Adapters.NguyenLieu;
 
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +19,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,13 +29,32 @@ public class AdapterListNLDaMua extends RecyclerView.Adapter<ListNLDaMuaViewHold
     List<NguyenLieu> list;
     AdapterListNLDaThem adapterListNL;
 
+    ImageView btn_edit,btn_edit_done;
+
+
+
     public AdapterListNLDaMua(List<NguyenLieu> daMua) {
         this.daMua = daMua;
+
     }
 
     public void setData(AdapterListNLDaThem adapterListNL, List<NguyenLieu> list){
         this.adapterListNL = adapterListNL;
         this.list = list;
+    }
+
+    public void addBtn(ImageView a, ImageView b){
+        this.btn_edit = a;
+        this.btn_edit_done = b;
+    }
+
+    public void turnOnBtn(){
+        btn_edit.setVisibility(View.VISIBLE);
+        btn_edit_done.setVisibility(View.GONE);
+    }
+    public void turnOffBtn(){
+        btn_edit.setVisibility(View.GONE);
+        //btn_edit_done.setVisibility(View.GONE);
     }
 
     @NonNull
@@ -61,6 +84,13 @@ public class AdapterListNLDaMua extends RecyclerView.Adapter<ListNLDaMuaViewHold
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (list.isEmpty()){
+                    turnOffBtn();
+                }else {
+                    turnOnBtn();
+                }
+                adapterListNL.turnOffEdit();
+
                 NguyenLieu nl = daMua.get(position);
                 boolean biTrung = false;
                 int nlDaThemPosition = 0;
@@ -84,6 +114,11 @@ public class AdapterListNLDaMua extends RecyclerView.Adapter<ListNLDaMuaViewHold
                     deleteNguyenLieuDaThem(daMua.get(position));
 
 
+                    if (list.size() == 1){
+                        adapterListNL.turnOnBtnEdit();
+                    }
+
+                    adapterListNL.dataClear();
                     adapterListNL.notifyDataSetChanged();
                     daMua.remove(position);
                     notifyDataSetChanged();
@@ -97,6 +132,8 @@ public class AdapterListNLDaMua extends RecyclerView.Adapter<ListNLDaMuaViewHold
     public int getItemCount() {
         return daMua.size();
     }
+
+
 
     private void deleteNguyenLieuDaThem(NguyenLieu nguyenLieu) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

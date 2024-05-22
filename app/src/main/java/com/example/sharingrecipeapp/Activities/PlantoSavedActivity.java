@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +49,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class PlantoSavedActivity extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -207,10 +210,7 @@ public class PlantoSavedActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        Toast.makeText(binding.getRoot().getContext(),"Đang thêm món ăn",Toast.LENGTH_SHORT).show();
-
+        StyleableToast.makeText(binding.getRoot().getContext(), "Thêm món " + recipes.getName()+" thành công", R.style.mytoast).show();
         Intent turnBack = new Intent();
         int weekOfYear = extras.getInt("weekOfYear");
         turnBack.putExtra("weekOfYear",weekOfYear);

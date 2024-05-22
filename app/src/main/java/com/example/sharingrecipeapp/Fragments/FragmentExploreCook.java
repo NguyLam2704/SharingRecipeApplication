@@ -2,7 +2,7 @@ package com.example.sharingrecipeapp.Fragments;
 
 import static com.example.sharingrecipeapp.Fragments.ExploreFragment.unAccent;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -15,22 +15,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+
 import android.widget.TextView;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
-import com.example.sharingrecipeapp.Activities.FoodDetailActivity;
-import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.R;
-import com.example.sharingrecipeapp.databinding.FragmentExploreBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -49,21 +45,18 @@ import java.util.regex.Pattern;
  */
 public class FragmentExploreCook extends Fragment {
 
-    private FragmentExploreBinding binding;
+
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
     TextView txtCooks;
-    RecipesAdapter Explore_recipesAdapter;
+
     SearchView Explore_searchview_cook;
-    ProgressBar Explore_progressbar;
-    LinearLayout Explore_linear_ingredients;
-    ResultExploreAdapter Explore_adapter;
     private RecyclerView Explore_recyclerView;
     private List<Recipes> Explore_listRecipes;
     List<Recipes> Explore_listRecipes_suggest; // goi ý
     private FirebaseAuth Explore_firebaseAuth;
     private FirebaseUser user;
     private FirebaseFirestore Explore_db;
-    List<String> List_ingre_db;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -273,7 +266,9 @@ public class FragmentExploreCook extends Fragment {
                         });
                         Explore_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                         Explore_recyclerView.setAdapter(myAdapter);
+                        break;
                     }
+
                 }
             }
         });

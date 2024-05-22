@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sharingrecipeapp.Classes.AddNguyenLieu;
 import com.example.sharingrecipeapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class AddNguyenLieuAdapter extends RecyclerView.Adapter<AddNguyenLieuAdap
     @Override
     public void onBindViewHolder(@NonNull AddNguyenLieuAdapter.MyViewHolder holder, int position) {
         if (getItemCount() != 0){
+            Picasso.get().load(addNguyenLieuList.get(position).getImg()).into(holder.imageView);
             holder.name.setText(addNguyenLieuList.get(position).getNewRcpIngre().getName());
             holder.sl.setText(addNguyenLieuList.get(position).getSoluong().toString());
             holder.donvi.setText(addNguyenLieuList.get(position).getNewRcpIngre().getDv());

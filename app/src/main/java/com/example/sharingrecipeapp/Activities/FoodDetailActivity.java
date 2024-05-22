@@ -151,6 +151,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         btncook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(FoodDetailActivity.this, Method_Silder_Activity.class);
                 intent.putExtra("id", idRecipe);
                 startActivity(intent);
@@ -160,10 +161,42 @@ public class FoodDetailActivity extends AppCompatActivity {
         btnAddGro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Dialog dialog = new Dialog(FoodDetailActivity.this);
-               dialog.setContentView(R.layout.dialog_addtogrocery);
-               displayDialogAddToGro(dialog);
-               dialog.show();
+                if(current_user != null) {
+                    Dialog dialog = new Dialog(FoodDetailActivity.this);
+                    dialog.setContentView(R.layout.dialog_addtogrocery);
+                    displayDialogAddToGro(dialog);
+                    dialog.show();
+                }
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(FoodDetailActivity.this);
+                    builder.setTitle("Thông báo");
+                    builder.setMessage("Vui lòng đăng nhập để tiếp tục");
+                    builder.setPositiveButton("Đăng nhập", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Intent intent = new Intent(FoodDetailActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                    builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface abc) {
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.color_primary));
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.color_primary));
+                        }
+                    });
+                    dialog.show();
+                }
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -373,7 +406,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                     }
                 }
                 if (!empty){
-                    Toast.makeText(getBaseContext(),"Thêm nguyên liệu đã chọn thành công",Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(getBaseContext(),"Thêm nguyên liệu đã chọn thành công",R.style.mytoast).show();
                 }
                 dialog.dismiss();
             }

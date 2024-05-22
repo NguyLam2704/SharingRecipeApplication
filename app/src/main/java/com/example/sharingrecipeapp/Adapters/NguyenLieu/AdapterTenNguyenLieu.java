@@ -95,6 +95,9 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
 
                         // Cap nhat lai list nguyen lieu
                         if (!biTrung) {
+                            if (NL_Da_Them.isEmpty()){
+                                adapterListNL.turnOnBtnEdit();
+                            }
                             NL_Da_Them.add(nguyenLieu);
                         }
 

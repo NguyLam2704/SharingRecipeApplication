@@ -4,10 +4,12 @@ import static com.example.sharingrecipeapp.Fragments.ExploreFragment.unAccent;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -17,11 +19,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
+import com.example.sharingrecipeapp.Adapters.Explore.ItemSearchIngreAdapter;
 import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
+import com.example.sharingrecipeapp.Classes.NewRcpIngre;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.R;
 import com.example.sharingrecipeapp.databinding.FragmentExploreBinding;
@@ -35,6 +40,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -49,10 +55,13 @@ public class FragmentExploreIngredient extends Fragment {
     List<Recipes> Explore_listRecipes_suggest; // goi ý
     TextView txtIngredients;
     ResultExploreAdapter Explore_adapter;
-    private RecyclerView Explore_recyclerViewRandom;
+    ItemSearchIngreAdapter ItemIngreAdapter;
+    private RecyclerView Explore_recyclerViewRandom, Explore_item_searchIngre;
     private List<Recipes> Explore_listRecipes;
     private FirebaseAuth Explore_firebaseAuth;
+    List<NewRcpIngre> IngreList;
     private FirebaseFirestore Explore_db;
+    LinearLayoutManager linearLayoutManager;
     List<String> List_ingre_db;
 
 
@@ -88,17 +97,20 @@ public class FragmentExploreIngredient extends Fragment {
                 {
                     Explore_searchview_ingredients.setBackgroundResource(R.drawable.edittext_bound);
 //                    recipesList.clear();
-                    setdataRecycRandom();
+//                    setdataRecycRandom();
                 }
-//                Explore_searchIngre(newText);
+                Explore_searchIngre(newText);
                 return true;
             }
         });
 
         Explore_recyclerViewRandom = (RecyclerView) view.findViewById(R.id.explore_recycler_ingredient);
+        Explore_item_searchIngre = (RecyclerView) view.findViewById( R.id.recy_item_searchIngre);
         Explore_firebaseAuth = FirebaseAuth.getInstance();
         Explore_db = FirebaseFirestore.getInstance();
+        linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
         setdataRecycRandom();
+//        getFullIngre();
 
 
         return view;
@@ -107,6 +119,10 @@ public class FragmentExploreIngredient extends Fragment {
 
     private void Explore_searchIngre(String newtext)
     {
+
+        String[] textquery = newtext.split(",");
+        List<String> listquery = new ArrayList<>();
+        Collections.addAll(listquery, textquery);
         List<Recipes> ResultSearchList = new ArrayList<>();
         Explore_listRecipes_suggest=new ArrayList<>();
 
@@ -124,7 +140,6 @@ public class FragmentExploreIngredient extends Fragment {
                     String image = documentSnapshot.getString("image");
                     String name = documentSnapshot.getString("name");
                     String time = documentSnapshot.getString("timecook");
-
                     List<String> nguyenlieu = (List<String>) documentSnapshot.get("NguyenLieu");
 
 //
@@ -158,15 +173,29 @@ public class FragmentExploreIngredient extends Fragment {
 //                                {
 //                                    ResultSearchList.add(Newrcp);
 //                                }
-
-                              for (String ingres_item : nguyenlieu)
-                              {
-                                  if(unAccent(ingres_item.replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                            for (String txt : listquery) {
+                                for (String ingres_item : nguyenlieu) {
+                                    if (unAccent(ingres_item.replace(" ", "")).toLowerCase().contains(unAccent(txt.toLowerCase().replace(" ", ""))))
                                     {
-                                        ResultSearchList.add(new Recipes(id, image, name, save, time));
+                                        Recipes recipes = new Recipes(id,image,name,save,time);
+                                        if(ResultSearchList.contains(recipes))
+                                        {
+
+                                        }
+                                        else {
+//                                        for(Recipes testing : ResultSearchList)
+//                                        {
+//                                            if(testing.equals(recipes))
+//                                            {
+//                                                ResultSearchList.remove(testing);
+//                                            }
+//                                        }
+                                        ResultSearchList.add(recipes);}
                                         break;
                                     }
-                              }
+                                }
+
+                            }
 
 
                             }
@@ -234,16 +263,16 @@ public class FragmentExploreIngredient extends Fragment {
 
 
     //chuyển có dấu thành không dấu
-    public static String unAccent(String s) {
-        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
-        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        if (s.equals("Đ") || s.equals("đ"))
-        {
-            return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replace("đ", "d");
-        }
-        return pattern.matcher(temp).replaceAll("").replace('đ','d').replace('Đ','D');
-
-    }
+//    public static String unAccent(String s) {
+//        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+//        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+//        if (s.equals("Đ") || s.equals("đ"))
+//        {
+//            return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replace("đ", "d");
+//        }
+//        return pattern.matcher(temp).replaceAll("").replace('đ','d').replace('Đ','D');
+//
+//    }
 
     private void setdataRecycRandom()
     {
@@ -301,6 +330,35 @@ public class FragmentExploreIngredient extends Fragment {
         });
 
     }
+
+//    private void getFullIngre()
+//    {
+//        IngreList = new ArrayList<>();
+//        Explore_db.collection("NguyenLieu").addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                if (error != null)
+//                {
+//                    return;
+//                }
+//                    for(QueryDocumentSnapshot queryDocumentSnapshot : value)
+//                    {
+//                        String img = queryDocumentSnapshot.getString("img");
+//                        String id = queryDocumentSnapshot.getString("id");
+//                        String dv = queryDocumentSnapshot.getString("dv");
+//                        String name = queryDocumentSnapshot.getString("name");
+//                        IngreList.add(new NewRcpIngre(img,name,dv,id));
+//                    }
+//
+//                    ItemIngreAdapter = new ItemSearchIngreAdapter();
+//                    ItemIngreAdapter.setData(IngreList);
+//                    Explore_item_searchIngre.setLayoutManager(linearLayoutManager);
+//                    Explore_item_searchIngre.setAdapter(ItemIngreAdapter);
+//            }
+//
+//
+//        });
+//    }
     private void onClickGoToDetailFood(Recipes recipes) {
         bottomNavigationCustomActivity.gotoFoodDetail(recipes);
     }

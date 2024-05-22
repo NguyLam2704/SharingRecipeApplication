@@ -65,7 +65,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/line_save_background"
         android:padding="3dp"
-        android:text="Bạn đã chia sẻ .... món ăn"
+        android:text="Bạn đã chia sẻ 0 món ăn"
         android:textAlignment="center"
         android:textColor="#9F9F9F"
         android:textSize="15sp"

@@ -235,7 +235,8 @@ public class CreateRecipeActivity extends AppCompatActivity {
         {
             String strName = nameNL.getText().toString().trim();
             String strDv = donviNL.getText().toString().trim();
-            nguyenLieuList.add(new AddNguyenLieu(new NewRcpIngre("",strName,strDv,"add"),Double.parseDouble(strSL)));
+            String img = "https://firebasestorage.googleapis.com/v0/b/fantafood-3ea80.appspot.com/o/ingredients_icon%2Flogo_gro.png?alt=media&token=3deb24f9-1edb-4a88-8963-308278a9e9ee";
+            nguyenLieuList.add(new AddNguyenLieu(new NewRcpIngre(img,strName,strDv,"add"),Double.parseDouble(strSL)));
         }
         nguyenLieuAdapter.notifyDataSetChanged();
         recy_nguyenlieu.scrollToPosition(nguyenLieuList.size() - 1);
@@ -310,7 +311,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
             }
         }
     });
-//    ////////////////////////////////////////////////////////////////////
+
 //    chuan hoa chuoi
     public static String unAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
@@ -373,4 +374,3 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
 }
 
-////////

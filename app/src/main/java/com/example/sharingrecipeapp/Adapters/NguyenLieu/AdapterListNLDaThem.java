@@ -1,9 +1,15 @@
 package com.example.sharingrecipeapp.Adapters.NguyenLieu;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +34,30 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
     AdapterListNLDaMua adapterDaMua;
     List<NguyenLieu> daMua;
 
+    List<String> editTextListOld;
+    List<EditText> editTextList;
+
+    ImageView editBtn;
+
+    public ImageView getEditBtn() {
+        return editBtn;
+    }
+
+    public void setEditBtn(ImageView editBtn) {
+        this.editBtn = editBtn;
+    }
+
     public AdapterListNLDaThem(List<NguyenLieu> list) {
         this.list = list;
+
     }
 
     public AdapterListNLDaThem(List<NguyenLieu> list, AdapterListNLDaMua adapterDaMua, List<NguyenLieu> daMua) {
         this.list = list;
         this.adapterDaMua = adapterDaMua;
         this.daMua = daMua;
+        editTextList = new ArrayList<>();
+        editTextListOld = new ArrayList<>();
     }
 
     @NonNull
@@ -58,6 +81,11 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
         }
         holder.editText.setText(sl);
         holder.editText.setEnabled(false);
+
+        //them edittext vao list
+        editTextList.add(holder.editText);
+        editTextListOld.add(sl);
+
 
         holder.donvi.setText(nguyenLieu.getDonvi());
         Picasso.get().load(nguyenLieu.getImg()).into(holder.imageView);
@@ -88,6 +116,14 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
 
                     adapterDaMua.notifyDataSetChanged();
                     list.remove(position);
+                    editTextList.remove(position);
+                    editTextListOld.remove(position);
+
+                    if (list.isEmpty()){
+                        turnOffBtnEdit();
+                    }
+
+                    dataClear();
                     notifyDataSetChanged();
                 }
             }
@@ -98,6 +134,63 @@ public class AdapterListNLDaThem extends RecyclerView.Adapter<ListNLDaThemViewHo
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void dataClear(){
+        editTextList.clear();
+        editTextListOld.clear();
+    }
+
+    public void turnOffBtnEdit(){
+        editBtn.setVisibility(View.GONE);
+    }
+    public void turnOnBtnEdit(){
+        editBtn.setVisibility(View.VISIBLE);
+    }
+
+    public boolean listHasEditIs0(){
+        for (EditText editText : editTextList){
+            if (editText.getText().toString().equals("0")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean listEditIsEmpty(){
+        for (EditText editText : editTextList){
+            if (editText.getText().toString().isEmpty()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void updateEditSL(){
+        Toast.makeText(editBtn.getContext(), String.valueOf(editTextListOld.size()),Toast.LENGTH_SHORT).show();
+        for (int i = 0; i < list.size(); i++){
+            if (!editTextList.get(i).getText().toString().equals(editTextListOld.get(i))){
+                double sl = Double.valueOf(editTextList.get(i).getText().toString()) ;
+                Map<String,Object> data = new HashMap<>();
+                data.put("SL",sl);
+                list.get(i).setSL(sl);
+
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("ListNguyenLieuMua").document(list.get(i).getId()).update(data);
+            }
+        }
+    }
+
+    public void turnOnEdit(){
+        for (EditText i : editTextList){
+            i.setEnabled(true);
+        }
+    }
+
+    public void turnOffEdit(){
+        for (EditText i : editTextList){
+            i.setEnabled(false);
+        }
     }
 
     private void deleteNguyenLieuDaThem(NguyenLieu nguyenLieu) {

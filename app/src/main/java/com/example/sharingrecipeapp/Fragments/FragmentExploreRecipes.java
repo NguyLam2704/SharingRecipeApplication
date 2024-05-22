@@ -15,14 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
 import com.example.sharingrecipeapp.Adapters.Explore.ResultExploreAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.IClickOnItemRecipe;
+
 import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 import com.example.sharingrecipeapp.Adapters.Home.RecipesRandomAdapter;
 import com.example.sharingrecipeapp.Classes.Recipes;
@@ -31,6 +29,11 @@ import com.example.sharingrecipeapp.databinding.FragmentExploreBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+
+import com.example.sharingrecipeapp.Classes.Recipes;
+import com.example.sharingrecipeapp.R;
+
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,22 +46,17 @@ import java.util.List;
 
 
 public class FragmentExploreRecipes extends Fragment {
-
-
-    private FragmentExploreBinding binding;
     private BottomNavigationCustomActivity bottomNavigationCustomActivity;
     TextView txtRecipes;
-    RecipesAdapter Explore_recipesAdapter;
+
     SearchView Explore_searchview_recipes;
-    ProgressBar Explore_progressbar;
-    LinearLayout Explore_linear;
+
     ResultExploreAdapter Explore_adapter;
     private RecyclerView Explore_recyclerViewRandom;
     private List<Recipes> Explore_listRecipes;
     List<Recipes> Explore_listRecipes_suggest; // danh sach goi y
-    private FirebaseAuth Explore_firebaseAuth;
     private FirebaseFirestore Explore_db;
-    List<String> List_ingre_db;
+
 
 
     @Override
@@ -87,13 +85,14 @@ public class FragmentExploreRecipes extends Fragment {
                 {
                     Explore_searchview_recipes.setBackgroundResource(R.drawable.edittext_bound);
 //                    recipesList.clear();
-                    setdataRecycRandom();
+                    //setdataRecycRandom();
+                    Explore_searchName(newText);
                 }
+                else {Explore_searchName(newText);}
                 return true;
             }
         });
         Explore_recyclerViewRandom = (RecyclerView) view.findViewById(R.id.explore_recycler_recipes);
-        Explore_firebaseAuth = FirebaseAuth.getInstance();
         Explore_db = FirebaseFirestore.getInstance();
         setdataRecycRandom();
 
@@ -133,24 +132,47 @@ public class FragmentExploreRecipes extends Fragment {
                                 if (doc.get("idUsers") != null) {
                                     idUser = (ArrayList<String>) doc.get("idUsers");
                                 }
-                                String save = String.valueOf(idUser.size());
-                                Integer userSize = idUser.size();
-                                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot snapshot) {
-                                        username = snapshot.getString("username");
-                                        Recipes Newrcp = new Recipes(id, image, name, save, time, "username");
-                                        Explore_listRecipes.add(Newrcp);
-                                        if (userSize>3){
-                                            Explore_listRecipes_suggest.add(Newrcp);
-                                        }
-                                        if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                                        {
-                                            ResultSearchList.add(Newrcp);
-                                        }
 
-                                        if(ResultSearchList.isEmpty()) {
-                                            txtRecipes.setText("Không có kết quả phù hợp");
+
+                                String save = String.valueOf(idUser.size());
+                                Recipes Newrcp = new Recipes(id, image, name, save, time);
+                                Explore_listRecipes.add(Newrcp);
+                                if (idUser.size()>3){
+                                    Explore_listRecipes_suggest.add(Newrcp);
+                                }
+                                if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                                {
+                                    ResultSearchList.add(Newrcp);
+                                    break;
+                                }
+
+
+                                if(ResultSearchList.isEmpty()) {
+                                    txtRecipes.setText("Không có kết quả phù hợp");
+                                }
+                                else{
+                                    //tạm
+                                    txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                }
+                                //RecipesAdapter myAdapter = new RecipesAdapter();
+//                                myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+//                                    @Override
+//                                    public void onClickItemRecipe(Recipes recipes) {
+//                                        onClickGoToDetailFood(recipes);
+//                                    }
+//                                });
+//                                Explore_recyclerViewRandom.setAdapter(myAdapter);
+                            }
+
+                            if(!ResultSearchList.isEmpty())
+                            {
+                                if (newtext.equals("")){
+                                    txtRecipes.setText("Một số công thức gợi ý");
+                                    Explore_adapter.setData(Explore_listRecipes,new IClickOnItemRecipe() {
+                                        @Override
+                                        public void onClickItemRecipe(Recipes recipes) {
+                                            onClickGoToDetailFood(recipes);
+                                          
                                         }
                                         else{
                                             //tạm
@@ -195,6 +217,10 @@ public class FragmentExploreRecipes extends Fragment {
                                 });
 
 
+
+
+                                txtRecipes.setText("Không tìm thấy kết quả phù hợp\nMột số công thức được yêu thích");
+                                Explore_recyclerViewRandom.setAdapter(Explore_adapter);
 
                             }
 

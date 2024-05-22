@@ -9,14 +9,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
+import com.example.sharingrecipeapp.Activities.LoginActivity;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterListNLDaMua;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterListNLDaThem;
 import com.example.sharingrecipeapp.Adapters.NguyenLieu.AdapterTenNguyenLieu;
@@ -42,9 +45,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class GroceriesFragment extends Fragment {
     static int HEIGHT = 0;
@@ -54,6 +61,7 @@ public class GroceriesFragment extends Fragment {
     ImageView plus, write;
     Button AddNL;
     EditText editName, editSl, editDv;
+    TextView textView;
     RecyclerView tenNL;
 
     RecyclerView listViewNL;
@@ -66,6 +74,8 @@ public class GroceriesFragment extends Fragment {
     FirebaseFirestore db;
     FirebaseAuth auth;
     String userID;
+    ImageView btn_edit;
+    ImageView btn_edit_done;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -87,24 +97,30 @@ public class GroceriesFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         userID = auth.getUid();
+        textView = binding.textThongbao;
 
         nguyenLieuList = new ArrayList<>();
         listNL_da_mua = new ArrayList<>();
+        btn_edit = binding.btnEdit;
+        btn_edit_done = binding.btnEditDone;
 
         adapterListNLDaMua = new AdapterListNLDaMua(listNL_da_mua);
 
         listViewNL = binding.listGroceries;
         adapterListNL = new AdapterListNLDaThem(nguyenLieuList, adapterListNLDaMua, listNL_da_mua );
+        adapterListNL.setEditBtn(btn_edit);
         listViewNL.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false));
         listViewNL.setAdapter(adapterListNL);
 
         listNLDaMua = binding.listNlDaMua;
         adapterListNLDaMua.setData(adapterListNL,nguyenLieuList);
+        adapterListNLDaMua.addBtn(btn_edit,btn_edit_done);
         listNLDaMua.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false));
         listNLDaMua.setAdapter(adapterListNLDaMua);
 
         displayNguyenLieu();
         displayNguyenLieuDaMua();
+
 
         plus = binding.plus;
         plus.setOnClickListener(new View.OnClickListener() {
@@ -113,9 +129,72 @@ public class GroceriesFragment extends Fragment {
                 DialogAdd();
             }
         });
+        btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_edit.setVisibility(View.GONE);
+                btn_edit_done.setVisibility(View.VISIBLE);
+                adapterListNL.turnOnEdit();
+                duringActiveBtnEdit();
+            }
+        });
+
+
+
+        btn_edit_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (adapterListNL.listEditIsEmpty()){
+                    StyleableToast.makeText(binding.getRoot().getContext(),"Bạn cần nhập số lượng",R.style.mytoast).show();
+                } else if (adapterListNL.listHasEditIs0()) {
+                    StyleableToast.makeText(binding.getRoot().getContext(),"Số lượng phải lớn hơn 0",R.style.mytoast).show();
+                } else {
+                    adapterListNL.updateEditSL();
+                    btn_edit_done.setVisibility(View.GONE);
+                    btn_edit.setVisibility(View.VISIBLE);
+                    adapterListNL.turnOffEdit();
+                }
+
+            }
+        });
 
         return binding.getRoot();
     }
+
+    private void duringActiveBtnEdit() {
+
+        ArrayList<View> view = new ArrayList<>();
+        view.add(binding.getRoot().findViewById(R.id.grocery_container));
+        view.add(binding.getRoot().findViewById(R.id.list_nl_da_mua));
+        view.add(binding.getRoot().findViewById(R.id.plus));
+        //view.add(binding.getRoot().findViewById(R.id.checkIn_damua));
+        //view.add(binding.getRoot().findViewById(R.id.SL_damua));
+
+
+        for ( View v : view){
+            v.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    btn_edit.setVisibility(View.VISIBLE);
+                    btn_edit_done.setVisibility(View.GONE);
+                    adapterListNL.turnOffEdit();
+                    return false;
+                }
+            });
+        }
+
+        View v = binding.getRoot().findViewById(R.id.checkIn);
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                btn_edit.setVisibility(View.VISIBLE);
+                btn_edit_done.setVisibility(View.GONE);
+                adapterListNL.turnOffEdit();
+                return false;
+            }
+        });
+    }
+
 
     private void displayNguyenLieuDaMua() {
         db.collection("ListNguyenLieuDaMua").whereEqualTo("idUser",userID).get()
@@ -156,6 +235,7 @@ public class GroceriesFragment extends Fragment {
     }
 
     private void displayNguyenLieu() {
+        adapterListNL.turnOnBtnEdit();
         db.collection("ListNguyenLieuMua").whereEqualTo("idUser",userID).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots){
@@ -178,9 +258,11 @@ public class GroceriesFragment extends Fragment {
                         if (!biTrung){
                             nguyenLieuList.add(new NguyenLieu(SL,donvi,id,name,img));
                             adapterListNL.notifyDataSetChanged();
+
                         }
                     }
                 });
+
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
@@ -195,11 +277,18 @@ public class GroceriesFragment extends Fragment {
                 deleteNLDaThem(nguyenLieuList.get(position));
                 nguyenLieuList.remove(position);
 
+
                 adapterListNL.notifyDataSetChanged();
+                if (nguyenLieuList.isEmpty()){
+                    adapterListNL.turnOffBtnEdit();
+                }
+
+
             }
         });
 
         itemTouchHelper.attachToRecyclerView(listViewNL);
+
     }
 
     private void deleteNLDaThem(NguyenLieu nguyenLieu) {
@@ -281,7 +370,7 @@ public class GroceriesFragment extends Fragment {
         String strDonVi = editDv.getText().toString().trim();
         String img = "https://firebasestorage.googleapis.com/v0/b/fantafood-3ea80.appspot.com/o/ingredients_icon%2Flogo_gro.png?alt=media&token=3deb24f9-1edb-4a88-8963-308278a9e9ee";
         if(TextUtils.isEmpty(strName) || TextUtils.isEmpty(strSL) || TextUtils.isEmpty(strDonVi)){
-            Toast.makeText(getActivity(),"Vui lòng điền đầy đủ các thông tin",Toast.LENGTH_SHORT).show();
+            StyleableToast.makeText(requireActivity(),"Vui lòng nhập đầy đủ thông tin",R.style.mytoast).show();
         }else {
             double soluong = Double.valueOf(strSL);
             //ktra xem co trung ten NL khong
@@ -289,43 +378,46 @@ public class GroceriesFragment extends Fragment {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                     boolean biTrung = false;
-                    for (DocumentSnapshot doc : queryDocumentSnapshots){
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         String dbName = doc.getString("name").toLowerCase();
-                        if (strName.toLowerCase().equals(dbName)){
-                            Toast.makeText(binding.getRoot().getContext(),"Nguyen lieu da co",Toast.LENGTH_SHORT).show();
+                        if (strName.toLowerCase().equals(dbName)) {
+                            StyleableToast.makeText(binding.getRoot().getContext(), "Nguyên liệu đã tồn tại",R.style.mytoast).show();
                             biTrung = true;
                             break;
                         }
                     }
 
-                    if (!biTrung){
-                        NguyenLieu nl = new NguyenLieu(soluong,strDonVi,"",strName,img);
+                    if (!biTrung) {
+                        NguyenLieu nl = new NguyenLieu(soluong, strDonVi, "", strName, img);
 
-                        Map<String,Object> data = new HashMap<>();
-                        data.put("name",strName);
-                        data.put("donvi",strDonVi);
-                        data.put("SL",soluong);
-                        data.put("idUser",auth.getUid());
-                        data.put("img",img);
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("name", strName);
+                        data.put("donvi", strDonVi);
+                        data.put("SL", soluong);
+                        data.put("idUser", auth.getUid());
+                        data.put("img", img);
 
                         db.collection("ListNguyenLieuMua").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Map<String,Object> data = new HashMap<>();
-                                data.put("id",documentReference.getId());
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("id", documentReference.getId());
                                 nl.setId(documentReference.getId());
                                 documentReference.update(data);
                             }
                         });
 
+
+                        if (nguyenLieuList.isEmpty()){
+                            adapterListNL.turnOnBtnEdit();
+                        }
                         nguyenLieuList.add(nl);
                         adapterListNL.notifyDataSetChanged();
-                    }
 
+                    }
                 }
             });
         }
-
     }
 
 }
