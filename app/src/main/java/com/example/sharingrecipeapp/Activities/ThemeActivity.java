@@ -21,6 +21,7 @@ import com.example.sharingrecipeapp.Adapters.Home.RecipesAdapter;
 import com.example.sharingrecipeapp.Classes.AutoScrollTask;
 import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -76,9 +77,19 @@ public class ThemeActivity extends AppCompatActivity {
 
     }
 
+    String username;
     private void getDataRecy(String idTheme) {
 
+        listRecipes = new ArrayList<>();
         recipesAdapter = new RecipesAdapter();
+        recipesAdapter.setData(listRecipes, new IClickOnItemRecipe() {
+            @Override
+            public void onClickItemRecipe(Recipes recipes) {
+                onClickGoToDetailFood(recipes);
+            }
+        });
+        recycFoodTheme.setAdapter(recipesAdapter);
+
         firebaseFirestore.collection("Recipes").whereEqualTo(idTheme, true)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -87,9 +98,10 @@ public class ThemeActivity extends AppCompatActivity {
                             Log.w("Error", "listen:error", error);
                             return;
                         }
-                        listRecipes = new ArrayList<>();
+
                         for (DocumentSnapshot documentSnapshot : value.getDocuments()){
                             String id = documentSnapshot.getString("id");
+                            DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
                             firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -102,14 +114,15 @@ public class ThemeActivity extends AppCompatActivity {
                                         String image = documentSnapshot.getString("image");
                                         String name = documentSnapshot.getString("name");
                                         String time = documentSnapshot.getString("timecook");
-                                        listRecipes.add(new Recipes(id, image, name, save, time));
-                                        recipesAdapter.setData(listRecipes, new IClickOnItemRecipe() {
+                                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                             @Override
-                                            public void onClickItemRecipe(Recipes recipes) {
-                                                onClickGoToDetailFood(recipes);
+                                            public void onSuccess(DocumentSnapshot snapshot) {
+                                                username = snapshot.getString("username");
+                                                listRecipes.add(new Recipes(id, image, name, save, time, username));
+                                                recipesAdapter.notifyDataSetChanged();
                                             }
                                         });
-                                        recycFoodTheme.setAdapter(recipesAdapter);
+
                                     }
                                 }
                             });

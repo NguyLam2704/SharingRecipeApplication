@@ -33,9 +33,12 @@ public class MethodViewPager2Adapter extends RecyclerView.Adapter<MethodViewPage
         if (method == null){
             return;
         }
-
         holder.text.setText(method.getStep());
-        holder.buoc.setText("Bước "+(position+1)+"/"+(mListMethod.size())+": ");
+        if((position+1) != mListMethod.size()) {
+            holder.buoc.setText("Bước " + (position + 1) + "/" + (mListMethod.size() - 1) + ": ");
+        } else {
+            holder.buoc.setText("Đã hoàn thành                                 Xin chúc mừng !!");
+        }
     }
 
     @Override
