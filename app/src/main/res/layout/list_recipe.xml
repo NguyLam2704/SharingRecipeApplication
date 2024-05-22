@@ -105,7 +105,7 @@
         <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:strokeColor="#9FA0AC"
+    app:strokeColor="@color/color_primary"
     app:cardCornerRadius="0dp"
     android:layout_width="160dp"
     android:layout_height="wrap_content">
