@@ -7,7 +7,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.sharingrecipeapp.Adapters.DetailRecipe.ListMethodInDetailAdapter;
 import com.example.sharingrecipeapp.Adapters.MethodViewPager2Adapter;
@@ -22,14 +24,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.relex.circleindicator.CircleIndicator3;
 
 public class Method_Silder_Activity extends AppCompatActivity {
 
     FirebaseFirestore firebaseFirestore;
 
     private ViewPager2 mViewPager2;
-    private CircleIndicator3 mCircleIndicator3;
+    Button btnBack;
+    TextView tb;
 
     private List<Method> mListMethod;
 
@@ -49,16 +51,36 @@ public class Method_Silder_Activity extends AppCompatActivity {
 
 
         mViewPager2 = findViewById(R.id.view_pager_2);
-        mCircleIndicator3 = findViewById(R.id.circle_indicator_3);
+
         btn = findViewById(R.id.img_btn_back_method);
+        btnBack = findViewById(R.id.btnBack);
+        tb = findViewById(R.id.textView10);
 
         mListMethod = getMethod(idRecipe);
         //mListMethod = getList();
         MethodViewPager2Adapter adapter = new MethodViewPager2Adapter(mListMethod);
         mViewPager2.setAdapter(adapter);
 
-        mCircleIndicator3.setViewPager(mViewPager2);
+        mViewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                if (position == mListMethod.size() - 1) {
+                    tb.setVisibility(View.VISIBLE);
+                    btnBack.setVisibility(View.VISIBLE);
+                } else {
+                    btnBack.setVisibility(View.GONE);
+                    tb.setVisibility(View.GONE);
+                }
+            }
+        });
 
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

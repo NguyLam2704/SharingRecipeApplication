@@ -28,14 +28,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/txt_explore_cook"
-            android:layout_width="match_parent"
+            android:layout_width="290dp"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:text="Có bao nhieu ket qua theo yeu cau"
-            android:paddingLeft="15dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/line_save_background"
+            android:padding="3dp"
+            android:text="Một số công thức gợi ý"
+            android:textAlignment="center"
+            android:textColor="#9F9F9F"
             android:textSize="14sp"
-            android:textColor="@color/color_primary"/>
+            android:textStyle="normal"/>
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">

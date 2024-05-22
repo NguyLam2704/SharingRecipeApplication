@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -44,6 +45,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +74,8 @@ public class GroceriesFragment extends Fragment {
     FirebaseFirestore db;
     FirebaseAuth auth;
     String userID;
+    ImageView btn_edit;
+    ImageView btn_edit_done;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -97,11 +101,14 @@ public class GroceriesFragment extends Fragment {
 
         nguyenLieuList = new ArrayList<>();
         listNL_da_mua = new ArrayList<>();
+        btn_edit = binding.btnEdit;
+        btn_edit_done = binding.btnEditDone;
 
         adapterListNLDaMua = new AdapterListNLDaMua(listNL_da_mua);
 
         listViewNL = binding.listGroceries;
         adapterListNL = new AdapterListNLDaThem(nguyenLieuList, adapterListNLDaMua, listNL_da_mua );
+        adapterListNL.setEditBtn(btn_edit);
         listViewNL.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false));
         listViewNL.setAdapter(adapterListNL);
 
@@ -113,6 +120,7 @@ public class GroceriesFragment extends Fragment {
         displayNguyenLieu();
         displayNguyenLieuDaMua();
 
+
         plus = binding.plus;
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,9 +128,68 @@ public class GroceriesFragment extends Fragment {
                 DialogAdd();
             }
         });
+        btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_edit.setVisibility(View.GONE);
+                btn_edit_done.setVisibility(View.VISIBLE);
+                adapterListNL.turnOnEdit();
+                duringActiveBtnEdit();
+            }
+        });
+
+        btn_edit_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!adapterListNL.listEditIsEmpty()){
+                    adapterListNL.updateEditSL();
+                    btn_edit_done.setVisibility(View.GONE);
+                    btn_edit.setVisibility(View.VISIBLE);
+                    adapterListNL.turnOffEdit();
+                } else {
+                    Toast.makeText(binding.getRoot().getContext(),"Bạn cần nhập số lượng",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         return binding.getRoot();
     }
+
+    private void duringActiveBtnEdit() {
+
+        List<View> view = new ArrayList<>();
+        view.add(binding.getRoot().findViewById(R.id.grocery_container));
+
+        view.add(binding.getRoot().findViewById(R.id.list_nl_da_mua));
+        view.add(binding.getRoot().findViewById(R.id.plus));
+        view.add(binding.getRoot().findViewById(R.id.checkIn_damua));
+        view.add(binding.getRoot().findViewById(R.id.SL_damua));
+
+        for ( View v : view){
+            v.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    btn_edit.setVisibility(View.VISIBLE);
+                    btn_edit_done.setVisibility(View.GONE);
+                    adapterListNL.notifyDataSetChanged();
+                    adapterListNL.turnOffEdit();
+                    return false;
+                }
+            });
+        }
+
+        View v = binding.getRoot().findViewById(R.id.checkIn);
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                btn_edit.setVisibility(View.VISIBLE);
+                btn_edit_done.setVisibility(View.GONE);
+                adapterListNL.turnOffEdit();
+                return false;
+            }
+        });
+    }
+
 
     private void displayNguyenLieuDaMua() {
         db.collection("ListNguyenLieuDaMua").whereEqualTo("idUser",userID).get()
@@ -156,6 +223,7 @@ public class GroceriesFragment extends Fragment {
         });
 
         itemTouchHelper.attachToRecyclerView(listNLDaMua);
+
     }
 
     private void deleteNLDaMua(NguyenLieu nguyenLieu) {
@@ -163,6 +231,7 @@ public class GroceriesFragment extends Fragment {
     }
 
     private void displayNguyenLieu() {
+        adapterListNL.turnOnBtnEdit();
         db.collection("ListNguyenLieuMua").whereEqualTo("idUser",userID).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots){
@@ -185,6 +254,7 @@ public class GroceriesFragment extends Fragment {
                         if (!biTrung){
                             nguyenLieuList.add(new NguyenLieu(SL,donvi,id,name,img));
                             adapterListNL.notifyDataSetChanged();
+
                         }
                     }
                 });
@@ -201,6 +271,14 @@ public class GroceriesFragment extends Fragment {
 
                 deleteNLDaThem(nguyenLieuList.get(position));
                 nguyenLieuList.remove(position);
+
+
+                adapterListNL.notifyDataSetChanged();
+                if (nguyenLieuList.isEmpty()){
+                    adapterListNL.turnOffBtnEdit();
+                }
+
+
             }
         });
 
@@ -324,8 +402,13 @@ public class GroceriesFragment extends Fragment {
                             }
                         });
 
+
+                        if (nguyenLieuList.isEmpty()){
+                            adapterListNL.turnOnBtnEdit();
+                        }
                         nguyenLieuList.add(nl);
                         adapterListNL.notifyDataSetChanged();
+
                     }
                 }
             });
