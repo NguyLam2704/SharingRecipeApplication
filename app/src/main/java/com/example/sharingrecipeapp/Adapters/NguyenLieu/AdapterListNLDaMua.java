@@ -89,6 +89,9 @@ public class AdapterListNLDaMua extends RecyclerView.Adapter<ListNLDaMuaViewHold
                     deleteNguyenLieuDaThem(daMua.get(position));
 
 
+                    if (list.size() == 1){
+                        adapterListNL.turnOnBtnEdit();
+                    }
 
                     adapterListNL.notifyDataSetChanged();
                     daMua.remove(position);
