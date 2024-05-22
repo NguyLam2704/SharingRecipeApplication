@@ -15,10 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -52,6 +54,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -219,10 +222,15 @@ public class CreateRecipeActivity extends AppCompatActivity {
                     NewRcp_edt_nameRcp.setError("Vui lòng nhập tên món ăn");
                     return;
                 }
-                String NewRcp_time = NewRcp_edt_time.getText().toString();
-                if(TextUtils.isEmpty(NewRcp_time))
+//                ImageView[] imgRcp = {NewRcp_img_imgRcp};
+//                if(imgRcp.length == 0){
+//                    Toast.makeText(CreateRecipeActivity.this, "Vui lòng thêm ảnh!!", Toast.LENGTH_LONG).show();
+//                }
+
+
+                if(nguyenLieuList.isEmpty())
                 {
-                    NewRcp_edt_time.setError("Vui lòng nhập thời gian ước tính hoàn thành");
+                    soluongNl.setError("Vui lòng nhập thông tin nguyên liệu");
                     return;
                 }
                 if(methodList.isEmpty())
@@ -230,9 +238,10 @@ public class CreateRecipeActivity extends AppCompatActivity {
                     method.setError("Vui lòng nhập các bước thực hiện món ăn");
                     return;
                 }
-                if(nguyenLieuList.isEmpty())
+                String NewRcp_time = NewRcp_edt_time.getText().toString();
+                if(TextUtils.isEmpty(NewRcp_time))
                 {
-                    soluongNl.setError("Vui lòng nhập thông tin nguyên liệu");
+                    NewRcp_edt_time.setError("Vui lòng nhập thời gian ước tính hoàn thành");
                     return;
                 }
                 String NewRcp_note = NewRcp_edt_note.getText().toString();
@@ -294,7 +303,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
                                                             CreateIngre.update(Newingre).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override
                                                                         public void onSuccess(Void unused) {
-                                                                            Toast.makeText(CreateRecipeActivity.this, "ok", Toast.LENGTH_SHORT).show();
+                                                                            Toast.makeText(CreateRecipeActivity.this, "Successfully", Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     })
                                                                     .addOnFailureListener(new OnFailureListener() {
@@ -319,6 +328,8 @@ public class CreateRecipeActivity extends AppCompatActivity {
                             }
                         });
                     Toast.makeText(CreateRecipeActivity.this, "success", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CreateRecipeActivity.this, BottomNavigationCustomActivity.class);
+                    startActivity(intent);
                     Map<String ,Object> NewRcp_addsave = new HashMap<>();
                     NewRcp_addsave.put("Recipes",unAccent(NewRcp_name.replace(" ","")));
                     NewRcp_addsave.put("idUsers",Arrays.asList());
@@ -329,7 +340,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
                                 Log.d(TAG, "DocumentSnapshot successfully written!");
                             }
                         });
-
 
                 }
         });
@@ -524,5 +534,12 @@ public class CreateRecipeActivity extends AppCompatActivity {
         return arrSlngre;
     }
 
+    private String convertImageViewToString(ImageView imageView) {
+        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
 }
 
