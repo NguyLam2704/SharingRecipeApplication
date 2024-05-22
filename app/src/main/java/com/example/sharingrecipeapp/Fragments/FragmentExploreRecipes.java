@@ -134,10 +134,9 @@ public class FragmentExploreRecipes extends Fragment {
 
                 //lấy dữ liệu từ firebase
 
-                for (DocumentSnapshot documentSnapshot : value.getDocuments()){
+                for (QueryDocumentSnapshot documentSnapshot : value){
                     String id = documentSnapshot.getString("id");
-
-
+                    DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
                     String image = documentSnapshot.getString("image");
                     String name = documentSnapshot.getString("name");
                     String time = documentSnapshot.getString("timecook");
@@ -145,73 +144,75 @@ public class FragmentExploreRecipes extends Fragment {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                             ArrayList<String> idUser = new ArrayList<>();
-
                             for (QueryDocumentSnapshot doc :value) {
                                 if (doc.get("idUsers") != null) {
                                     idUser = (ArrayList<String>) doc.get("idUsers");
                                 }
                                 String save = String.valueOf(idUser.size());
                                 Integer userSize = idUser.size();
-                                DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
                                 docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot snapshot) {
                                         username = snapshot.getString("username");
+//                                        Recipes Newrcp = new Recipes(id, image, name, save, time, username);
 
+                                        Toast.makeText(requireActivity(), username, Toast.LENGTH_SHORT).show();
+                                        Recipes Newrcp = new Recipes(id, image, name, save, time, username);
+                                        Explore_listRecipes.add(Newrcp);
+                                        if (userSize>3){
+                                            Explore_listRecipes_suggest.add(Newrcp);
+                                        }
+                                        if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                                        {
+                                            ResultSearchList.add(Newrcp);
+                                        }
+
+                                        if(ResultSearchList.isEmpty()) {
+                                            txtRecipes.setText("Không có kết quả phù hợp");
+                                        }
+                                        else{
+                                            //tạm
+                                            txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                        }
+
+                                        if(!ResultSearchList.isEmpty())
+                                        {
+                                            if (newtext.equals("")){
+                                                txtRecipes.setText("Một số món gợi ý");
+                                                Explore_adapter.setData(Explore_listRecipes,new IClickOnItemRecipe() {
+                                                    @Override
+                                                    public void onClickItemRecipe(Recipes recipes) {
+                                                        onClickGoToDetailFood(recipes);
+                                                    }
+                                                });
+                                            }else
+                                            {
+                                                txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                                Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                                                    @Override
+                                                    public void onClickItemRecipe(Recipes recipes) {
+                                                        onClickGoToDetailFood(recipes);
+                                                    }
+                                                });
+                                            }
+
+                                            Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+
+                                        }
+                                        else{
+                                            Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
+                                                @Override
+                                                public void onClickItemRecipe(Recipes recipes) {
+                                                    onClickGoToDetailFood(recipes);
+                                                }
+                                            });
+                                            txtRecipes.setText("Không tìm thấy kết quả phù hợp\nMột số món được yêu thích");
+                                            Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+                                        }
                                     }
                                 });
-                                Recipes Newrcp = new Recipes(id, image, name, save, time, username);
-                                Explore_listRecipes.add(Newrcp);
-                                if (userSize>3){
-                                    Explore_listRecipes_suggest.add(Newrcp);
-                                }
-                                if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                                {
-                                    ResultSearchList.add(Newrcp);
-                                }
+//                                Toast.makeText(requireActivity(), username, Toast.LENGTH_SHORT).show();
 
-                                if(ResultSearchList.isEmpty()) {
-                                    txtRecipes.setText("Không có kết quả phù hợp");
-                                }
-                                else{
-                                    //tạm
-                                    txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
-                                }
-
-                                if(!ResultSearchList.isEmpty())
-                                {
-                                    if (newtext.equals("")){
-                                        txtRecipes.setText("Một số món gợi ý");
-                                        Explore_adapter.setData(Explore_listRecipes,new IClickOnItemRecipe() {
-                                            @Override
-                                            public void onClickItemRecipe(Recipes recipes) {
-                                                onClickGoToDetailFood(recipes);
-                                            }
-                                        });
-                                    }else
-                                    {
-                                        txtRecipes.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
-                                        Explore_adapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                                            @Override
-                                            public void onClickItemRecipe(Recipes recipes) {
-                                                onClickGoToDetailFood(recipes);
-                                            }
-                                        });
-                                    }
-
-                                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-
-                                }
-                                else{
-                                    Explore_adapter.setData(Explore_listRecipes_suggest,new IClickOnItemRecipe() {
-                                        @Override
-                                        public void onClickItemRecipe(Recipes recipes) {
-                                            onClickGoToDetailFood(recipes);
-                                        }
-                                    });
-                                    txtRecipes.setText("Không tìm thấy kết quả phù hợp\nMột số món được yêu thích");
-                                    Explore_recyclerViewRandom.setAdapter(Explore_adapter);
-                                }
 
 
                             }
