@@ -244,7 +244,7 @@ public class SaveListActivity extends AppCompatActivity {
                                                         if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
                                                         {
                                                             ResultSearchList.add(Newrcp);
-                                                            myAdapter.notifyDataSetChanged();
+                                                            //myAdapter.notifyDataSetChanged();
                                                         }
                                                         if(ResultSearchList.isEmpty()) {
                                                             soluong.setText("Không có kết quả phù hợp");
