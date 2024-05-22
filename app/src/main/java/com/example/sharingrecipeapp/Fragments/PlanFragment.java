@@ -161,6 +161,7 @@ public class PlanFragment extends Fragment {
 //            new Handler().postDelayed(new Runnable() {
 //                public void run() {
 
+
                 calendar.set(Calendar.WEEK_OF_YEAR,result.getData().getExtras().getInt("weekOfYear"));
                 String id = result.getData().getStringExtra("id");
                 String date = result.getData().getStringExtra("date");
@@ -185,12 +186,13 @@ public class PlanFragment extends Fragment {
                 }
                 else {
                     myAdapter.setData(recipesList, new IClickOnItemRecipe() {
+
                     @Override
                     public void onClickItemRecipe(Recipes recipes) {
                         onClickGoToDetailFood(recipes);
                     }
-                    });
-                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                });
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
                     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                         return false;
@@ -232,11 +234,12 @@ public class PlanFragment extends Fragment {
 //                selectBtnSetting(date).setVisibility(View.VISIBLE);
             }
 
-                if (!biTrung){
-                    recipesList.add(recipes);
-                    selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT + selectRecycleView(date).getHeight() );
-                    recyclerView.getAdapter().notifyDataSetChanged();
-                }
+            if (!biTrung){
+                recipesList.add(recipes);
+                selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT + selectListRecipes(date).size() * RECIPE_HEIGHT );
+                recyclerView.getAdapter().notifyDataSetChanged();
+
+            }
         }
     });
 
@@ -353,6 +356,7 @@ public class PlanFragment extends Fragment {
         }
     }
 
+    int numberSize;
 
     private void PlanOfDay(String weekID){
         turnOffRecyclerView();
@@ -373,7 +377,10 @@ public class PlanFragment extends Fragment {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.get("recipes") != null){
                                 List<String> listFromDB = (List<String>) documentSnapshot.get("recipes");
-
+                                numberSize = listFromDB.size();
+//                                if (i.equals("Thu2")){
+//                                    Toast.makeText(binding.getRoot().getContext(),String.valueOf(listFromDB.size()),Toast.LENGTH_SHORT).show();
+//                                }
 
                                 //
                                 if (!listFromDB.isEmpty()){
@@ -448,7 +455,7 @@ public class PlanFragment extends Fragment {
                         selectRecycleView(date).getAdapter().notifyDataSetChanged();
 
                         if (id.equals(list.get(list.size()-1))){
-                            selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT * list.size());
+                            selectRecycleView(date).setMinimumHeight(RECIPE_HEIGHT * numberSize);
                         }
 
 
@@ -519,7 +526,7 @@ public class PlanFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
 //        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),0);
-               // linearLayout.getOrientation());
+        // linearLayout.getOrientation());
 
 //        recyclerView.addItemDecoration(dividerItemDecoration);
 

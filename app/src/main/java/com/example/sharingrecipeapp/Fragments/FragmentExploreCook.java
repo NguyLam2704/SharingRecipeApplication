@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -57,7 +58,7 @@ public class FragmentExploreCook extends Fragment {
     private FirebaseUser user;
     private FirebaseFirestore Explore_db;
 
-
+    String username;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -142,7 +143,7 @@ public class FragmentExploreCook extends Fragment {
     }
     private void displayRecipes(){
         Explore_listRecipes_suggest = new ArrayList<>();
-        Explore_db.collection("Recipes").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        Explore_db.collection("Recipes").limit(10).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null)
@@ -155,7 +156,8 @@ public class FragmentExploreCook extends Fragment {
                     String id = queryDocumentSnapshot.getString("id");
                     String name = queryDocumentSnapshot.getString("name");
                     String time = queryDocumentSnapshot.get("timecook").toString();
-                    Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    DocumentReference docRef = queryDocumentSnapshot.getDocumentReference("Users");
+                    Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).limit(10).addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                             ArrayList<String> idUser = new ArrayList<>();
@@ -167,7 +169,14 @@ public class FragmentExploreCook extends Fragment {
                                     idUser = (ArrayList<String>) queryDocumentSnapshot1.get("idUsers");
                                 }
                                 save = String.valueOf(idUser.size());
-                                Recipes recipes = new Recipes(id,image,name,save,time);
+                                docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        username = value.getString("username");
+
+                                    }
+                                });
+                                Recipes recipes = new Recipes(id,image,name,save,time,username);
                                 Explore_listRecipes_suggest.add(recipes);
                                 txtCooks.setText("Một số công thức gợi ý");
                                 RecipesAdapter myAdapter = new RecipesAdapter();
@@ -220,6 +229,7 @@ public class FragmentExploreCook extends Fragment {
                                     String id = queryDocumentSnapshot1.getString("id");
                                     String name = queryDocumentSnapshot1.getString("name");
                                     String time = queryDocumentSnapshot1.get("timecook").toString();
+                                    DocumentReference docRef = queryDocumentSnapshot1.getDocumentReference("Users");
                                     Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                         @Override
                                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -235,7 +245,13 @@ public class FragmentExploreCook extends Fragment {
                                                     idUser = (ArrayList<String>) queryDocumentSnapshot2.get("idUsers");
                                                 }
                                                 save = String.valueOf(idUser.size());
-                                                Recipes recipes = new Recipes(id,image,name,save,time);
+                                                docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                                        username = value.getString("username");
+                                                    }
+                                                });
+                                                Recipes recipes = new Recipes(id,image,name,save,time,username);
                                                 Explore_listRecipes.add(recipes);
                                                 RecipesAdapter myAdapter = new RecipesAdapter();
                                                 myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {

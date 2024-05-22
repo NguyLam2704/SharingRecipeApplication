@@ -7,10 +7,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -20,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import com.example.sharingrecipeapp.Activities.BottomNavigationCustomActivity;
@@ -88,6 +92,28 @@ public class HomeFragment extends Fragment {
 
     private List<Method> mMethodList;
 
+    TextView btnAllRecipe;
+
+    ActivityResultLauncher<Intent> activityResultLauncher =  registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->{
+        if (result.getResultCode() == 111){
+            for (int i = 0; i < listRecipes.size(); i++){
+                if (result.getData().getExtras().get("id").toString().equals(listRecipes.get(i).getId())){
+                    listRecipes.get(i).setSave(String.valueOf(result.getData().getExtras().getString("save")));
+                }
+            }
+            recipesRandomAdapter.notifyDataSetChanged();
+
+
+//            for (int i = 0; i < listRecipesRate.size(); i++){
+//                if (result.getData().getExtras().get("id").toString().equals(listRecipesRate.get(i).getId())){
+//                    listRecipesRate.get(i).setSave(String.valueOf(result.getData().getExtras().getString("save")));
+//                }
+//            }
+//            recipesAdapter.notifyDataSetChanged();
+            setdataRecycRate();
+        }
+});
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +135,7 @@ public class HomeFragment extends Fragment {
         recyclerViewRandom = (RecyclerView) view.findViewById(R.id.recyRanDom);
         recyclerViewTheme = (RecyclerView) view.findViewById(R.id.recyTheme);
         btn_create = view.findViewById(R.id.imageButton);
+        btnAllRecipe = view.findViewById(R.id.txtXemThem);
 
 
         //bottomNavigationCustomActivity.reload();
@@ -124,6 +151,12 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btnAllRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomNavigationCustomActivity.gotoAllRecipes();
+            }
+        });
         return view;
     }
 
@@ -154,35 +187,65 @@ public class HomeFragment extends Fragment {
                             String id = documentSnapshot.getString("id");
                             DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
 
-                            firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                @Override
-                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
-                                    ArrayList<String> idUser = new ArrayList<>();
-                                    for (QueryDocumentSnapshot doc :value)
-                                    {
-                                        if(doc.get("idUsers") != null)
-                                        {
-                                            idUser = (ArrayList<String>) doc.get("idUsers");
-                                        }
-                                        String image = documentSnapshot.getString("image");
-                                        String name = documentSnapshot.getString("name");
-                                        String save = String.valueOf(idUser.size());
-                                        String time = documentSnapshot.getString("timecook");
-
-                                        if (idUser.size()>3) {
-                                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onSuccess(DocumentSnapshot doc) {
-                                                    username = doc.getString("username");
-                                                    listRecipesRate.add(new Recipes(id, image, name, save, time, username));
-                                                    recipesAdapter.notifyDataSetChanged();
+                            firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            ArrayList<String> idUser = new ArrayList<>();
+                                            for (QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                                            {
+                                                if(doc.get("idUsers") != null)
+                                                {
+                                                    idUser = (ArrayList<String>) doc.get("idUsers");
                                                 }
-                                            });
+                                                String image = documentSnapshot.getString("image");
+                                                String name = documentSnapshot.getString("name");
+                                                String save = String.valueOf(idUser.size());
+                                                String time = documentSnapshot.getString("timecook");
+
+                                                if (idUser.size()>3) {
+                                                    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentSnapshot doc) {
+                                                            username = doc.getString("username");
+                                                            listRecipesRate.add(new Recipes(id, image, name, save, time, username));
+                                                            recipesAdapter.notifyDataSetChanged();
+                                                        }
+                                                    });
+                                                }
+                                            }
                                         }
-                                    }
-                                }
-                            });
+                                    });
+
+//                            firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                                @Override
+//                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//
+//                                    ArrayList<String> idUser = new ArrayList<>();
+//                                    for (QueryDocumentSnapshot doc :value)
+//                                    {
+//                                        if(doc.get("idUsers") != null)
+//                                        {
+//                                            idUser = (ArrayList<String>) doc.get("idUsers");
+//                                        }
+//                                        String image = documentSnapshot.getString("image");
+//                                        String name = documentSnapshot.getString("name");
+//                                        String save = String.valueOf(idUser.size());
+//                                        String time = documentSnapshot.getString("timecook");
+//
+//                                        if (idUser.size()>3) {
+//                                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                                @Override
+//                                                public void onSuccess(DocumentSnapshot doc) {
+//                                                    username = doc.getString("username");
+//                                                    listRecipesRate.add(new Recipes(id, image, name, save, time, username));
+//                                                    recipesAdapter.notifyDataSetChanged();
+//                                                }
+//                                            });
+//                                        }
+//                                    }
+//                                }
+//                            });
                         }
 
                     }
@@ -190,15 +253,18 @@ public class HomeFragment extends Fragment {
     }
 
     private void onClickGoToDetailFood(Recipes recipes) {
-        bottomNavigationCustomActivity.gotoFoodDetail(recipes);
+        Intent intent = new Intent(getContext(), FoodDetailActivity.class);
+        intent.putExtra("id", recipes.getId());
+        activityResultLauncher.launch(intent);
+
+        //bottomNavigationCustomActivity.gotoFoodDetail(recipes);
     }
 
 
     private void setdataRecycRandom() {
 
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false);
-        recyclerViewRandom.setLayoutManager(linearLayoutManager);
+        recyclerViewRandom.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
 
         recipesRandomAdapter = new RecipesRandomAdapter();
         listRecipes = new ArrayList<>();

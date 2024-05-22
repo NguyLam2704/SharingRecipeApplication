@@ -259,34 +259,36 @@ public class PlantoSavedActivity extends AppCompatActivity {
                                             String image = documentSnapshot.getString("image");
                                             String name = documentSnapshot.getString("name");
                                             String time = documentSnapshot.get("timecook").toString();
+
                                             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onSuccess(DocumentSnapshot snapshot) {
                                                     username = snapshot.getString("username");
-                                                    Recipes Newrcp = new Recipes(nameRecipe, image, name, save, time, username);
-                                                    if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                                                    {
-                                                        ResultSearchList.add(Newrcp);
 
-                                                    }
-                                                    if(ResultSearchList.isEmpty()) {
-                                                        soluong.setText("Không có kết quả phù hợp");
-                                                    }
-                                                    else{
-                                                        //tạm
-                                                        soluong.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
-                                                    }
-
-                                                    myAdapter = new RecipesAdapter();
-                                                    myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                                                        @Override
-                                                        public void onClickItemRecipe(Recipes recipes) {
-                                                            onClickGoToDetailFood(recipes);
-                                                        }
-                                                    });
-                                                    recyclerView.setAdapter(myAdapter);
                                                 }
                                             });
+                                            Recipes Newrcp = new Recipes(nameRecipe, image, name, save, time, username);
+                                            if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                                            {
+                                                ResultSearchList.add(Newrcp);
+                                                myAdapter.notifyDataSetChanged();
+                                            }
+                                            if(ResultSearchList.isEmpty()) {
+                                                soluong.setText("Không có kết quả phù hợp");
+                                            }
+                                            else{
+                                                //tạm
+                                                soluong.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                            }
+
+                                            myAdapter = new RecipesAdapter();
+                                            myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+                                                @Override
+                                                public void onClickItemRecipe(Recipes recipes) {
+                                                    onClickGoToDetailFood(recipes);
+                                                }
+                                            });
+                                            recyclerView.setAdapter(myAdapter);
                                         }
                                     }
                                 });

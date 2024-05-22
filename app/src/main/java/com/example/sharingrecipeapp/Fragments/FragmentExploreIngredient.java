@@ -31,6 +31,7 @@ import com.example.sharingrecipeapp.Classes.Recipes;
 import com.example.sharingrecipeapp.R;
 import com.example.sharingrecipeapp.databinding.FragmentExploreBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,7 +55,7 @@ public class FragmentExploreIngredient extends Fragment {
     LinearLayout Explore_linear_ingredients;
     List<Recipes> Explore_listRecipes_suggest; // goi ý
     TextView txtIngredients;
-    ResultExploreAdapter Explore_adapter;
+    RecipesAdapter Explore_adapter;
     ItemSearchIngreAdapter ItemIngreAdapter;
     private RecyclerView Explore_recyclerViewRandom, Explore_item_searchIngre;
     private List<Recipes> Explore_listRecipes;
@@ -63,8 +64,8 @@ public class FragmentExploreIngredient extends Fragment {
     private FirebaseFirestore Explore_db;
     LinearLayoutManager linearLayoutManager;
     List<String> List_ingre_db;
-
-
+    String username ;
+    ArrayList<String> idUser;
     public FragmentExploreIngredient() {
         // Required empty public constructor
     }
@@ -86,7 +87,7 @@ public class FragmentExploreIngredient extends Fragment {
 //                Explore_searchName(query);
                 Explore_searchview_ingredients.setBackgroundResource(R.drawable.edittext_bound);
                 Explore_searchIngre(query);
-                return false;
+                return true;
             }
 
             @Override
@@ -99,8 +100,10 @@ public class FragmentExploreIngredient extends Fragment {
 //                    recipesList.clear();
                     setdataRecycRandom();
                 }
+
                 //Explore_searchIngre(newText);
                 return true;
+
             }
         });
 
@@ -140,6 +143,7 @@ public class FragmentExploreIngredient extends Fragment {
                     String image = documentSnapshot.getString("image");
                     String name = documentSnapshot.getString("name");
                     String time = documentSnapshot.getString("timecook");
+                    DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
                     List<String> nguyenlieu = (List<String>) documentSnapshot.get("NguyenLieu");
 
 //
@@ -156,46 +160,41 @@ public class FragmentExploreIngredient extends Fragment {
                     Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                            ArrayList<String> idUser = new ArrayList<>();
+                             idUser = new ArrayList<>();
 
                             for (QueryDocumentSnapshot doc :value) {
                                 if (doc.get("idUsers") != null) {
                                     idUser = (ArrayList<String>) doc.get("idUsers");
                                 }
                                 String save = String.valueOf(idUser.size());
-                                Recipes Newrcp = new Recipes(id, image, name, save, time);
+
+                                        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        username = value.getString("username");
+
+                                    }
+                                });
+                                Recipes Newrcp = new Recipes(id, image, name, save, time,username);
                                 Explore_listRecipes.add(Newrcp);
                                 if (idUser.size()>3){
                                     Explore_listRecipes_suggest.add(Newrcp);
                                 }
-
-//                                if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-//                                {
-//                                    ResultSearchList.add(Newrcp);
-//                                }
-                            for (String txt : listquery) {
-                                for (String ingres_item : nguyenlieu) {
-                                    if (unAccent(ingres_item.replace(" ", "")).toLowerCase().contains(unAccent(txt.toLowerCase().replace(" ", ""))))
+                                Recipes recipes = new Recipes(id,image,name,save,time,username);
+                                for (String txt : listquery) {
+                                    if(ResultSearchList.contains(recipes))
                                     {
-                                        Recipes recipes = new Recipes(id,image,name,save,time);
-                                        if(ResultSearchList.contains(recipes))
-                                        {
-
-                                        }
-                                        else {
-//                                        for(Recipes testing : ResultSearchList)
-//                                        {
-//                                            if(testing.equals(recipes))
-//                                            {
-//                                                ResultSearchList.remove(testing);
-//                                            }
-//                                        }
-                                        ResultSearchList.add(recipes);}
                                         break;
                                     }
+                                    for (String ingres_item : nguyenlieu) {
+                                        if (unAccent(ingres_item.replace(" ", "")).toLowerCase().contains(unAccent(txt.toLowerCase().replace(" ", ""))))
+                                        {
+                                            ResultSearchList.add(recipes);
+                                            Explore_adapter.notifyDataSetChanged();
+                                            break;
+                                        }
+                                    }
                                 }
-
-                            }
 
 
                             }
@@ -278,9 +277,9 @@ public class FragmentExploreIngredient extends Fragment {
     {
         GridLayoutManager Explore_gridlayoutMng = new GridLayoutManager(getContext(),2);
         Explore_recyclerViewRandom.setLayoutManager(Explore_gridlayoutMng);
-        Explore_adapter = new ResultExploreAdapter();
+        Explore_adapter = new RecipesAdapter();
 
-        Explore_db.collection("Recipes").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        Explore_db.collection("Recipes").limit(10).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -294,6 +293,7 @@ public class FragmentExploreIngredient extends Fragment {
                     String image = documentSnapshot.getString("image");
                     String name = documentSnapshot.getString("name");
                     String time = documentSnapshot.getString("timecook");
+                    DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
 
 
                     Explore_db.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -306,15 +306,26 @@ public class FragmentExploreIngredient extends Fragment {
                                     idUser = (ArrayList<String>) doc.get("idUsers");
                                 }
                                 String save = String.valueOf(idUser.size());
-                                Recipes Newrcp = new Recipes(id, image, name, save, time);
-                                Explore_listRecipes.add(Newrcp);
-                                Explore_adapter.setData(Explore_listRecipes, new IClickOnItemRecipe() {
+                                docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                     @Override
-                                    public void onClickItemRecipe(Recipes recipes) {
-                                        onClickGoToDetailFood(recipes);
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        String username= value.getString("username");
+                                        Recipes Newrcp = new Recipes(id, image, name, save, time,username);
+                                        Explore_listRecipes.add(Newrcp);
+                                        Explore_adapter.notifyDataSetChanged();
+                                        Explore_adapter.setData(Explore_listRecipes, new IClickOnItemRecipe() {
+                                            @Override
+                                            public void onClickItemRecipe(Recipes recipes) {
+                                                onClickGoToDetailFood(recipes);
+                                            }
+                                        });
+                                        Explore_recyclerViewRandom.setAdapter(Explore_adapter);
                                     }
                                 });
-                                Explore_recyclerViewRandom.setAdapter(Explore_adapter);
+
+
+
+
 
                             }
 
@@ -330,35 +341,6 @@ public class FragmentExploreIngredient extends Fragment {
         });
 
     }
-
-//    private void getFullIngre()
-//    {
-//        IngreList = new ArrayList<>();
-//        Explore_db.collection("NguyenLieu").addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//                if (error != null)
-//                {
-//                    return;
-//                }
-//                    for(QueryDocumentSnapshot queryDocumentSnapshot : value)
-//                    {
-//                        String img = queryDocumentSnapshot.getString("img");
-//                        String id = queryDocumentSnapshot.getString("id");
-//                        String dv = queryDocumentSnapshot.getString("dv");
-//                        String name = queryDocumentSnapshot.getString("name");
-//                        IngreList.add(new NewRcpIngre(img,name,dv,id));
-//                    }
-//
-//                    ItemIngreAdapter = new ItemSearchIngreAdapter();
-//                    ItemIngreAdapter.setData(IngreList);
-//                    Explore_item_searchIngre.setLayoutManager(linearLayoutManager);
-//                    Explore_item_searchIngre.setAdapter(ItemIngreAdapter);
-//            }
-//
-//
-//        });
-//    }
     private void onClickGoToDetailFood(Recipes recipes) {
         bottomNavigationCustomActivity.gotoFoodDetail(recipes);
     }
