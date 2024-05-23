@@ -101,6 +101,7 @@ public class FragmentExploreRecipes extends Fragment {
                 if(newText.equals(""))
                 {
                     Explore_searchview_recipes.setBackgroundResource(R.drawable.edittext_bound);
+                    txtRecipes.setText("Một số công thức gợi ý");
 //                    recipesList.clear();
                     setdataRecycRandom();
                     //Explore_searchName(newText);
@@ -156,7 +157,6 @@ public class FragmentExploreRecipes extends Fragment {
                                         username = snapshot.getString("username");
 //                                        Recipes Newrcp = new Recipes(id, image, name, save, time, username);
 
-                                        Toast.makeText(requireActivity(), username, Toast.LENGTH_SHORT).show();
                                         Recipes Newrcp = new Recipes(id, image, name, save, time, username);
                                         Explore_listRecipes.add(Newrcp);
                                         if (userSize>3){

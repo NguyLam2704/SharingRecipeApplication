@@ -159,7 +159,7 @@
                     android:id="@+id/recyRanDom"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="12dp"
                     android:clipToPadding="false"
                     android:paddingTop="4dp"
                     android:paddingEnd="12dp"

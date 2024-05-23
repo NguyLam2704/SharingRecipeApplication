@@ -131,6 +131,7 @@ public class AdapterTenNguyenLieu extends RecyclerView.Adapter<TenNguyenLieuView
                                     StyleableToast.makeText(context,"Thêm nguyên liệu thành công", R.style.mytoast).show();
                                 }
                             });
+                            adapterListNL.turnOnBtnEdit();
                         }
                     } else {
                         Toast.makeText(context,"Bạn cần thêm số lượng", Toast.LENGTH_SHORT).show();

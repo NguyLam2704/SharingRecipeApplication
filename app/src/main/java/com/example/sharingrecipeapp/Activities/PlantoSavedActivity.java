@@ -226,6 +226,14 @@ public class PlantoSavedActivity extends AppCompatActivity {
     private void save_searchName(String newtext)
     {
         ResultSearchList = new ArrayList<>();
+        myAdapter = new RecipesAdapter();
+        myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
+            @Override
+            public void onClickItemRecipe(Recipes recipes) {
+                onClickGoToDetailFood(recipes);
+            }
+        });
+        recyclerView.setAdapter(myAdapter);
 
         db.collection("SaveRecipes").whereArrayContains("idUsers",auth.getUid()).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -264,31 +272,24 @@ public class PlantoSavedActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(DocumentSnapshot snapshot) {
                                                     username = snapshot.getString("username");
-
+                                                    Recipes Newrcp = new Recipes(nameRecipe, image, name, save, time, username);
+                                                    if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                                                    {
+                                                        ResultSearchList.add(Newrcp);
+                                                        myAdapter.notifyDataSetChanged();
+                                                    }
+                                                    if(ResultSearchList.isEmpty()) {
+                                                        soluong.setText("Không có kết quả phù hợp");
+                                                    }
+                                                    else{
+                                                        //tạm
+                                                        soluong.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                                    }
                                                 }
                                             });
-                                            Recipes Newrcp = new Recipes(nameRecipe, image, name, save, time, username);
-                                            if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                                            {
-                                                ResultSearchList.add(Newrcp);
-                                                myAdapter.notifyDataSetChanged();
-                                            }
-                                            if(ResultSearchList.isEmpty()) {
-                                                soluong.setText("Không có kết quả phù hợp");
-                                            }
-                                            else{
-                                                //tạm
-                                                soluong.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
-                                            }
 
-                                            myAdapter = new RecipesAdapter();
-                                            myAdapter.setData(ResultSearchList,new IClickOnItemRecipe() {
-                                                @Override
-                                                public void onClickItemRecipe(Recipes recipes) {
-                                                    onClickGoToDetailFood(recipes);
-                                                }
-                                            });
-                                            recyclerView.setAdapter(myAdapter);
+
+
                                         }
                                     }
                                 });

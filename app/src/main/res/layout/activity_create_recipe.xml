@@ -317,6 +317,7 @@
                         android:backgroundTint="@color/white"
                         android:drawablePadding="8dp"
                         android:hint="Số lượng"
+                        android:inputType="number"
                         android:padding="12dp"
                         android:textColor="@color/black"
                         android:textCursorDrawable="@drawable/color_cursor" />
