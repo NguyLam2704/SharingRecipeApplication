@@ -1,5 +1,7 @@
 package com.example.sharingrecipeapp.Activities;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -42,6 +44,17 @@ public class AllRecipesActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
+    ActivityResultLauncher<Intent> activityResultLauncher =  registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->{
+        if (result.getResultCode() == 111){
+            for (int i = 0; i < listRecipes.size(); i++){
+                if (result.getData().getExtras().get("id").toString().equals(listRecipes.get(i).getId())){
+                    listRecipes.get(i).setSave(String.valueOf(result.getData().getExtras().getString("save")));
+                }
+            }
+            recipesAdapter.notifyDataSetChanged();
+        }
+    });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +89,7 @@ public class AllRecipesActivity extends AppCompatActivity {
             }
         });
         recyRecipes.setAdapter(recipesAdapter);
-        firebaseFirestore.collection("Recipes")
+        firebaseFirestore.collection("Recipes").orderBy("name")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -90,32 +103,31 @@ public class AllRecipesActivity extends AppCompatActivity {
 
                             DocumentReference docRef = documentSnapshot.getDocumentReference("Users");
 
+                            firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            ArrayList<String> idUser = new ArrayList<>();
+                                            for (QueryDocumentSnapshot doc :queryDocumentSnapshots)
+                                            {
+                                                idUser = (ArrayList<String>) doc.get("idUsers");
+                                                String save = String.valueOf(idUser.size());
+                                                String image = documentSnapshot.getString("image");
+                                                String name = documentSnapshot.getString("name");
+                                                String time = documentSnapshot.getString("timecook");
 
-
-                            firebaseFirestore.collection("SaveRecipes").whereEqualTo("Recipes",id).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                @Override
-                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
-                                    ArrayList<String> idUser = new ArrayList<>();
-                                    for (QueryDocumentSnapshot doc :value)
-                                    {
-                                        idUser = (ArrayList<String>) doc.get("idUsers");
-                                        String save = String.valueOf(idUser.size());
-                                        String image = documentSnapshot.getString("image");
-                                        String name = documentSnapshot.getString("name");
-                                        String time = documentSnapshot.getString("timecook");
-
-                                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onSuccess(DocumentSnapshot doc) {
-                                                username = doc.getString("username");
-                                                listRecipes.add(new Recipes(id, image, name, save,time, username));
-                                                recipesAdapter.notifyDataSetChanged();
+                                                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentSnapshot doc) {
+                                                        username = doc.getString("username");
+                                                        listRecipes.add(new Recipes(id, image, name, save,time, username));
+                                                        recipesAdapter.notifyDataSetChanged();
+                                                    }
+                                                });
                                             }
-                                        });
-                                    }
-                                }
-                            });
+                                        }
+                                    });
+
                         }
 
                     }
@@ -125,7 +137,7 @@ public class AllRecipesActivity extends AppCompatActivity {
     private void onClickGoToDetailFood(Recipes recipes) {
         Intent intent = new Intent(this, FoodDetailActivity.class);
         intent.putExtra("id", recipes.getId());
-        startActivity(intent);
+        activityResultLauncher.launch(intent);
     }
 
 }
