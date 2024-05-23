@@ -83,7 +83,7 @@ dependencies {
     implementation ("com.firebaseui:firebase-ui-auth:8.0.2")
     // FirebaseUI for Cloud Storage
     implementation ("com.firebaseui:firebase-ui-storage:8.0.2")
-
+    implementation ("nl.dionsegijn:konfetti-xml:2.0.4")
 //    implementation ("com.android.support:cardview-v7:28.0.0")
 
 
