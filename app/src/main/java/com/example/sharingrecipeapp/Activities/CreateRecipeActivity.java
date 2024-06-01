@@ -276,6 +276,8 @@ public class CreateRecipeActivity extends AppCompatActivity {
                                         NewRcp.put("vietnam",isVietnam);
                                         NewRcp.put("thailan",isThailan);
                                         NewRcp.put("image",uri.toString());
+                                        NewRcp.put("save",0);
+                                        NewRcp.put("like",0);
                                         if(TextUtils.isEmpty(uri.toString()))
                                         {
                                             Toast.makeText(CreateRecipeActivity.this, "Vui lòng nhập hình ảnh món ăn", Toast.LENGTH_SHORT).show();
@@ -285,7 +287,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
                                         CreateNewRcp.set(NewRcp).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
-                                                Toast.makeText(CreateRecipeActivity.this, "successfully", Toast.LENGTH_SHORT).show();
+
                                             }
                                         });
                                         ///add to nguyenlieu
@@ -303,7 +305,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
                                                             CreateIngre.update(Newingre).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override
                                                                         public void onSuccess(Void unused) {
-                                                                            Toast.makeText(CreateRecipeActivity.this, "Successfully", Toast.LENGTH_SHORT).show();
+
                                                                         }
                                                                     })
                                                                     .addOnFailureListener(new OnFailureListener() {
@@ -327,7 +329,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
                                 });
                             }
                         });
-                    Toast.makeText(CreateRecipeActivity.this, "success", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(CreateRecipeActivity.this, BottomNavigationCustomActivity.class);
                     startActivity(intent);
                     Map<String ,Object> NewRcp_addsave = new HashMap<>();

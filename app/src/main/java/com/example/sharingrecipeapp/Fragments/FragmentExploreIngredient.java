@@ -110,6 +110,7 @@ public class FragmentExploreIngredient extends Fragment {
                 if(newText.equals(""))
                 {
                     Explore_searchview_ingredients.setBackgroundResource(R.drawable.edittext_bound);
+                    txtIngredients.setText("Một số công thức gợi ý");
 //                    recipesList.clear();
                     setdataRecycRandom();
                 }

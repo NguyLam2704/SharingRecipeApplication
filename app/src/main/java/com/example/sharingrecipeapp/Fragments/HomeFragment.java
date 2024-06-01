@@ -147,6 +147,7 @@ public class HomeFragment extends Fragment {
         btn_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 bottomNavigationCustomActivity.gotoAddRecipe();
             }
         });
@@ -264,7 +265,7 @@ public class HomeFragment extends Fragment {
     private void setdataRecycRandom() {
 
 
-        recyclerViewRandom.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
+        recyclerViewRandom.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false));
 
         recipesRandomAdapter = new RecipesRandomAdapter();
         listRecipes = new ArrayList<>();

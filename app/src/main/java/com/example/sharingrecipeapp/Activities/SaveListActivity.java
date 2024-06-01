@@ -240,24 +240,24 @@ public class SaveListActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(DocumentSnapshot snapshot) {
                                                     username = snapshot.getString("username");
+                                                    Recipes Newrcp = new Recipes(nameRecipe, image, name, save, time, username);
+                                                    if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
+                                                    {
+                                                        ResultSearchList.add(Newrcp);
+//                                                break;
+                                                        myAdapter.notifyDataSetChanged();
 
+                                                    }
+                                                    if(ResultSearchList.isEmpty()) {
+                                                        soluong.setText("Không có kết quả phù hợp");
+                                                    }
+                                                    else{
+                                                        //tạm
+                                                        soluong.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
+                                                    }
                                                 }
                                             });
-                                            Recipes Newrcp = new Recipes(nameRecipe, image, name, save, time, username);
-                                            if(unAccent(Newrcp.getName().replace(" ","")).toLowerCase().contains(unAccent(newtext.toLowerCase().replace(" ",""))))
-                                            {
-                                                ResultSearchList.add(Newrcp);
-//                                                break;
-                                               myAdapter.notifyDataSetChanged();
 
-                                            }
-                                            if(ResultSearchList.isEmpty()) {
-                                                soluong.setText("Không có kết quả phù hợp");
-                                            }
-                                            else{
-                                                //tạm
-                                                soluong.setText("Có "+ResultSearchList.size()+" kết quả phù hợp");
-                                            }
 
 
                                         }

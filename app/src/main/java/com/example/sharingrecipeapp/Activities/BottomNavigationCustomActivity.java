@@ -96,8 +96,36 @@ public class BottomNavigationCustomActivity extends AppCompatActivity {
     }
 
     public void gotoAddRecipe(){
-        Intent intent = new Intent(this, CreateRecipeActivity.class);
-        startActivity(intent);
+        if(currentUser==null){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thông báo");
+        builder.setMessage("Vui lòng đăng nhập để tiếp tục");
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(BottomNavigationCustomActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface abc) {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.color_primary));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.color_primary));
+            }
+        });
+        dialog.show();
+        }else{
+            Intent intent = new Intent(BottomNavigationCustomActivity.this, CreateRecipeActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void gotoFoodDetail(Recipes recipes) {

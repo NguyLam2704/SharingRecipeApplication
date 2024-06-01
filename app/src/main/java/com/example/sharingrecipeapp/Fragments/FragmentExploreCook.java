@@ -148,6 +148,7 @@ public class FragmentExploreCook extends Fragment {
                 {
                     Explore_searchview_cook.setBackgroundResource(R.drawable.edittext_bound);
 //                    recipesList.clear();
+                    txtCooks.setText("Một số công thức gợi ý");
                     displayRecipes();
                 }
                 return true;
@@ -193,7 +194,7 @@ public class FragmentExploreCook extends Fragment {
                                         username = value.getString("username");
                                         Recipes recipes = new Recipes(id,image,name,save,time,username);
                                         Explore_listRecipes_suggest.add(recipes);
-                                        txtCooks.setText("Một số công thức gợi ý");
+
                                         myAdapter = new RecipesAdapter();
                                         myAdapter.setData( Explore_listRecipes_suggest,new IClickOnItemRecipe() {
                                             @Override
@@ -279,9 +280,22 @@ public class FragmentExploreCook extends Fragment {
                                                         Explore_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                                                         Explore_recyclerView.setAdapter(myAdapter);
                                                         txtCooks.setText("Có " + Explore_listRecipes.size() +" kết quả phù hợp");
+                                                        if(Explore_listRecipes.isEmpty())
+                                                        {
+                                                            txtCooks.setText("Không có kết quả phù hợp\nMột số món được yêu thích");
+                                                            displayRecipes();
+                                                        }
+//                                                        RecipesAdapter myAdapter = new RecipesAdapter();
+//                                                        myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {
+//                                                            @Override
+//                                                            public void onClickItemRecipe(Recipes recipes) {
+//                                                                onClickGoToDetailFood(recipes);
+//                                                            }
+//                                                        });
+//                                                        Explore_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+//                                                        Explore_recyclerView.setAdapter(myAdapter);
                                                     }
                                                 });
-
                                             }
 
                                         }
@@ -289,19 +303,19 @@ public class FragmentExploreCook extends Fragment {
                                 }
                             }
                         });
-                        if(Explore_listRecipes.isEmpty())
-                        {
-                            txtCooks.setText("Không có kết quả phù hợp\nMột số món được yêu thích");
-                        }
-                        RecipesAdapter myAdapter = new RecipesAdapter();
-                        myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {
-                            @Override
-                            public void onClickItemRecipe(Recipes recipes) {
-                                onClickGoToDetailFood(recipes);
-                            }
-                        });
-                        Explore_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                        Explore_recyclerView.setAdapter(myAdapter);
+//                        if(Explore_listRecipes.isEmpty())
+//                        {
+//                            txtCooks.setText("Không có kết quả phù hợp\nMột số món được yêu thích");
+//                        }
+//                        RecipesAdapter myAdapter = new RecipesAdapter();
+//                        myAdapter.setData( Explore_listRecipes,new IClickOnItemRecipe() {
+//                            @Override
+//                            public void onClickItemRecipe(Recipes recipes) {
+//                                onClickGoToDetailFood(recipes);
+//                            }
+//                        });
+//                        Explore_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+//                        Explore_recyclerView.setAdapter(myAdapter);
 
                     }
 
